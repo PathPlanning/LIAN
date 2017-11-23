@@ -12,7 +12,7 @@ Given two distinct traversable cells (star and goal), and angle limitation (valu
 Besides angle limitation we also want out path to be stable and do not have turns after every meter. For this reason there is a parameter - delta, which describes the desirable length of every step. But the necessity to initialize fixed delta could cause dead-end situation near huge obstacles. In order to solve the problem: there are more parameters which define minimal value of the step and also the rule of increasing/decreasing this value.
 
 
-Algorithm supports XML files as input and output format. Input file contains map and environment representation (see *"Input and Output files"* or [samples](https://github.com/PathPlanning/LIAN/tree/master/examples))
+Algorithm supports XML files as input and output format. Input file contains map and environment representation (see __"Input and Output files"__ or [samples](https://github.com/PathPlanning/LIAN/tree/master/examples))
 
 ## Getting Started
 
@@ -56,8 +56,8 @@ Both files are an XML file with a specific structure.
 Input file should contain:
 
 * Mandatory tag `<map>`. It describes the environment.
-    * `<height>` and `<width>` - mandatory tags that define size of the map. Origin is in the upper left corner. (0,0) - is upper left, (*width*-1, *height*-1) is lower right.
-    * `<startx>` and `<starty>` - mandatory tags that define horizontal (X) and vertical (Y) offset of the start location from the upper left corner. Legal values for *startx* are [0, .., *width*-1], for *starty* - [0, .., *height*-1].
+    * `<height>` and `<width>` - mandatory tags that define size of the map. Origin is in the upper left corner. (0,0) - is upper left, (*width* - 1, *height* - 1) is lower right.
+    * `<startx>` and `<starty>` - mandatory tags that define horizontal (X) and vertical (Y) offset of the start location from the upper left corner. Legal values for *startx* are [0, .., *width* - 1], for *starty* - [0, .., *height* - 1].
     * `<finishx>` and `<finishy>` - mandatory tags that horizontal (X) and vertical (Y) offset of the goal location.
     * `<grid>` - mandatory tag that describes the square grid constituting the map. It consists of `<row>` tags. Each `<row>` contains a sequence of "0" and "1" separated by blanks. "0" stands for traversable cell, "1" - for not traversable (actually any other figure but "0" can be used instead of "1").
     * `<cellsize>` - optional tag that defines the size of one cell. One might add it to calculate scaled length of the path.
