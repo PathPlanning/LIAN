@@ -3,11 +3,11 @@ project(LianSearch)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wall -Wextra")
 set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
 set(SOURCE_FILES
-	main.cpp
+	    main.cpp
     	tinyxml/tinyxmlparser.cpp
     	tinyxml/tinyxmlerror.cpp
     	tinyxml/tinyxml.cpp
-   	tinyxml/tinystr.cpp
+   	  tinyxml/tinystr.cpp
     	liansearch.cpp
     	openlist.cpp
     	config.cpp
@@ -16,9 +16,9 @@ set(SOURCE_FILES
     	xmllogger.cpp)
 
 set(HEADER_FILES
-	tinyxml/tinyxml.h
-    	tinyxml/tinystr.h
-    	searchresult.h
+	  tinyxml/tinyxml.h
+    tinyxml/tinystr.h
+  	searchresult.h
    	gl_const.h
    	liansearch.h
    	node.h

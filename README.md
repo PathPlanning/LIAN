@@ -1,5 +1,7 @@
 # LIAN
 
+[![Build Status](https://travis-ci.org/PathPlanning/LIAN.svg?branch=master)](https://travis-ci.org/PathPlanning/LIAN)
+
 LIAN (from "limited angle") - heuristic search algorithm for generating smooth paths for single-shot grid-based 2D path finding.
 
 ## Description
