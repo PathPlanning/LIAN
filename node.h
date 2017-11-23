@@ -15,15 +15,15 @@ struct Node {
     bool    pathToParent;
     int     i, j;
     int     radius;
-    float   F;
-    float   g;
+    double  F;
+    double  g;
     float   c; // curvature euristic component
 
-    Node() : i(-1), j(-1), F(std::numeric_limits<float>::infinity()), g(std::numeric_limits<float>::infinity()),
+    Node() : i(-1), j(-1), F(std::numeric_limits<double>::infinity()), g(std::numeric_limits<double>::infinity()),
     c(-1), parent(nullptr), pathToParent(false), radius(CN_PTD_D) {}
 
-    Node(int x, int y, float F_=std::numeric_limits<float>::infinity(), float g_=std::numeric_limits<float>::infinity(), float c_=-1) :  i(x), j(y), F(F_), g(g_),
-        c(c_), parent(nullptr), pathToParent(false), radius(CN_PTD_D) {}
+    Node(int x, int y, double F_=std::numeric_limits<double>::infinity(), double g_=std::numeric_limits<double>::infinity(), double c_= -1) :
+        i(x), j(y), F(F_), g(g_), c(c_), parent(nullptr), pathToParent(false), radius(CN_PTD_D) {}
 
     ~Node() {
         parent = nullptr;

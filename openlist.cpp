@@ -39,12 +39,12 @@ void OpenList::add(Node new_node) {
     bool pos_found = false;
 
     for(auto it = elements[new_node.i].begin(); it != elements[new_node.i].end(); ++it) {
-        if ((it->F >= new_node.F) && (!pos_found)) {
+        if (!(it->lesser(new_node, bt)) && (!pos_found)) {
             pos = it;
             pos_found = true;
         }
         if (*it == new_node) {
-            if (new_node.F >= it->F) return;
+            if (!new_node.lesser(*it, bt)) return;
             else {
                 if(pos == it) {
                     it->g = new_node.g;
@@ -65,16 +65,10 @@ void OpenList::add(Node new_node) {
 
 Node OpenList::getMin() {
     Node min;
-    min.F = std::numeric_limits<float>::infinity();
+    min.F = std::numeric_limits<double>::infinity();
     for(size_t i = 0; i < height; i++) {
-        if(!elements[i].empty() && elements[i].begin()->F <= min.F) {
-            if (elements[i].begin()->F == min.F) {
-                if (elements[i].begin()->g >= min.g) {
-                    min = *elements[i].begin();
-                }
-            } else {
-                min = *elements[i].begin();
-            }
+        if(!elements[i].empty() && elements[i].begin()->lesser(min, bt)) {
+            min = *elements[i].begin();
         }
     }
     elements[min.i].pop_front();
@@ -84,7 +78,7 @@ Node OpenList::getMin() {
 
 TiXmlElement * OpenList::writeToXml(TiXmlElement * element, TiXmlNode * child) const {
     Node min;
-    min.F = std::numeric_limits<float>::infinity();
+    min.F = std::numeric_limits<double>::infinity();
     int exc = 0;
     for(size_t i = 0; i < height; ++i) {
         if(!elements[i].empty() && elements[i].front().lesser(min, bt)) {
@@ -92,7 +86,7 @@ TiXmlElement * OpenList::writeToXml(TiXmlElement * element, TiXmlNode * child) c
             exc = i;
         }
     }
-    if(min.F != std::numeric_limits<float>::infinity()) {
+    if(min.F != std::numeric_limits<double>::infinity()) {
         element = new TiXmlElement(CNS_TAG_NODE);
         element -> SetAttribute(CNS_TAG_ATTR_X, min.j);
         element -> SetAttribute(CNS_TAG_ATTR_Y, min.i);
