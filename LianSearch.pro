@@ -3,6 +3,7 @@
 # Project created by QtCreator 2014-08-11T16:11:48
 #
 #-------------------------------------------------
+#refactoring process
 
 TARGET = LianSearch
 CONFIG   += console
@@ -13,29 +14,28 @@ win32 {
 QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++
 }
 SOURCES += main.cpp \
-    tinyxmlparser.cpp \
-    tinyxmlerror.cpp \
-    tinyxml.cpp \
-    tinystr.cpp \
-    cXmlLogger.cpp \
-    cMission.cpp \
-    cMap.cpp \
-    cLogger.cpp \
-    cList.cpp \
-    cConfig.cpp \
-    liansearch.cpp
+    liansearch.cpp \
+    openlist.cpp \
+    config.cpp \
+    map.cpp \
+    mission.cpp \
+    xmllogger.cpp \
+    tinyxml/tinystr.cpp \
+    tinyxml/tinyxml.cpp \
+    tinyxml/tinyxmlerror.cpp \
+    tinyxml/tinyxmlparser.cpp
 
 HEADERS += \
-    tinyxml.h \
-    tinystr.h \
-    sNode.h \
     searchresult.h \
     gl_const.h \
-    cXmlLogger.h \
-    cSearch.h \
-    cMission.h \
-    cMap.h \
-    cLogger.h \
-    cList.h \
-    cConfig.h \
-    liansearch.h
+    liansearch.h \
+    node.h \
+    openlist.h \
+    config.h \
+    map.h \
+    logger.h \
+    mission.h \
+    search.h \
+    xmllogger.h \
+    tinyxml/tinystr.h \
+    tinyxml/tinyxml.h

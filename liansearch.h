@@ -1,117 +1,109 @@
 #ifndef LIANSEARCH_H
 #define LIANSEARCH_H
 
-#include "sNode.h"
-#include "cList.h"
-#include "cMap.h"
-#include "cSearch.h"
-#include <vector>
+#include "gl_const.h"
+#include "map.h"
+#include "node.h"
+#include "openlist.h"
+#include "search.h"
+
+#include <chrono>
+#include <cmath>
+#include <list>
+#include <limits>
 #include <unordered_map>
-class LianSearch : public cSearch
-{
+#include <vector>
+
+class LianSearch : public Search {
 
 public:
 
-    // Конструктор с параметрами:
-    LianSearch(float angleLimit, int distance, float weight,
-               unsigned int steplimit, float circleRadiusFactor, float curvatureHeuristicWeight,
-               float decreaseDistanceFactor, int distanceMin,
-               float linecost, bool lesserCircle, int numOfParentsToIncreaseRadius);
+    // Constructor with parameters
+    LianSearch(float angleLimit_, int distance_, float weight_, int breakingties_,
+               unsigned int steplimit_, float curvatureHeuristicWeight_, bool postsmoother_,
+               float decreaseDistanceFactor_, int distanceMin_, double PivotRadius_, int numOfParentsToIncreaseRadius_);
 
     ~LianSearch();
-
-    // Собственно алгоритм поиска
-    SearchResult startSearch(cLogger *Log, const cMap &Map);
+    SearchResult startSearch(Logger *Log, const Map &map); // General searching algorithm
 
 private:
 
-    // Максимальный угол отклонения
-    float angleLimit;
+    float angleLimit; // Maximal value of deviation angle (turning limit)
 
-    // Минимальная дистанция шага
-    int distance;
+    int distance; // Minimal value of length of steps
 
     int numOfParentsToIncreaseRadius;
 
     std::vector<int> listOfDistances;
     int listOfDistancesSize;
 
-    // Вес эвристики
-    float weight;
+    float weight;  // Heuristics weight
 
-    // Другой эвристический коэффициент
-    // Если проверяется местонахождение целевой точки относительно окружности
-    // минимального радиуса, квадрат радиуса домножается на этот коэффициент
+    int BT;
+
+    bool postsmoother; // Smoothing the path after the algorithm
+
+    // Heurisic coefficient:
+    // During check for position of goal cell in the circle with minimal radius,
+    // squared radius is multiplied by this coefficient
     float circleRadiusFactor;
 
-    // Еще один эвристический коэффициент
-    // Если используется эвристика, характеризующая отклонение траектории от прямой
-    // на каждом шаге, то вычисляемая величина умножается на этот коэффициент
+    // Heurisic coefficient:
+    // If there is heuristic that checks deviation of trajectory from line on each
+    // step, this deviation is multiplyed by this coefficient
     float curvatureHeuristicWeight;
 
-    float linecost; // "стоимость" движения по вертикали или горизонтали
+    float pivotRadius; // Radius of safety circle around every turn point.
 
-    bool lesserCircle; // проверять ближайшие вершины на проходимость
+    unsigned int stepLimit; // Maximum number of iterations, allowed for the algorithm
 
-    // максимальное число шагов цикла поиска
-    unsigned int stepLimit;
+    unsigned int closeSize; // Number of elements in close (elements that were already examined)
 
-    // число вершин в списках open и close
-    unsigned int closeSize, openSize;
+    float decreaseDistanceFactor; // Value for decreasing the initial distance value
+    int distanceMin; // Minimal distance value
 
-    // во сколько раз можно уменьшать изначальную длину шага
-    float decreaseDistanceFactor;
-    int distanceMin;
+    std::vector< std::vector<Node> > circleNodes; // Virtual nodes that create circle around the cell
 
-    // Виртуальные узлы, составляющие окружность
-    std::vector< std::vector<Node> > circleNodes;
+    std::vector<Node> pivotCircle;  // Vector of nodes (shifts) for pivot security check
 
     std::vector<float> angles;
 
-    // Спиок Open + итоговый путь
-    cList *open, hppath, lppath;
+    std::list<Node> lppath, hppath; // Final path in two representations
+    OpenList open; // Open : list of nodes waiting for expanding
 
-    // список Close
-    std::unordered_multimap<int, Node> close;
+    std::unordered_multimap<int, Node> close; // Close: list of nodes that were already expanded
 
-    void addOpen(Node &newNode);
+    // Method that calculate Bresenham's Circle (center - (0, 0)) and writing list of created nodes to circleNodes
+    void calculateCircle(int radius); // Radius - radius of the circle in cells
 
-    // метод, вычисляющий окружность по Брезенхему и записывающий
-    // координаты узлов в список circleNodes (центр в точке [0, 0] )
-    // радиус - радиус окружности в клетках
-    void calculateCircle(int radius);
+    void calculatePivotCircle();
 
-    // метод вычисляет предпочтительный радиус исходя из парамтеров карты
-    int calculatePreferableRadius(const cMap &Map);
+    int calculatePreferableRadius(const Map &map); // Method calculates the most preferable radius depending on the parameters of the initial map
 
     void calculateDistances();
 
-    Node findMin(int size);
+    void calculateLineSegment(std::vector<Node> &line, const Node &start, const Node &goal); // Method builds Bresenham's Line
 
-    // метод строит отрезок с помощью алгоритма Брезенхема
-    void calculateLineSegment(std::vector<Node> &line, const Node &start, const Node &goal);
+    bool checkLineSegment(const Map &map, const Node &start, const Node &goal); // Method builds Bresenham's Line and check it for impassable parts
 
-    // метод строит отрезок с помощью алгоритма Брезенхема
-    // и проверяет его на наличие препятствий
-    bool checkLineSegment(const cMap &Map, const Node &start, const Node &goal);
+    // check that there are no obstacle in a safety radius from a turn point
+    bool checkPivotCircle(const Map &map, const Node &center);
 
-    // метод, вычисляющий "малую" окружность по брезенхему, для проверки свободного
-    // пространства в опорных точках
-    bool checkLesserCircle(const cMap &Map, const Node &center, const float radius);
+    double getCost(int a_i, int a_j, int b_i, int b_j) const;
 
-    double calculateDistanceFromCellToCell(int start_i, int start_j, int fin_i, int fin_j);
+    double calcAngle(const Node &dad, const Node &node, const Node &son) const;
+    bool checkAngle(const Node &dad, const Node &node, const Node &son) const;
 
-    // критерий остановки. Возвращает истину, если цикл поиска
-    // следует прекратить. Входящее значение - текущий номер шага алгоритма
-    bool stopCriterion();
+    bool stopCriterion(); // Check for the ending criteria. Return true if the algorithm should be stopped
 
     int tryToIncreaseRadius(Node curNode);
     bool tryToDecreaseRadius(Node &curNode, int width);
-    void findSuccessors(const Node curNode,std::vector<Node> &successors, const cMap &Map);
-    bool expand(const Node curNode, const cMap &Map);
+    void findSuccessors(const Node curNode,std::vector<Node> &successors, const Map &map);
+    bool expand(const Node curNode, const Map &map);
+    std::list<Node> smoothPath(const std::list<Node>& path, const Map& map);
     void makePrimaryPath(Node curNode);
     void makeSecondaryPath(Node curNode);
-    double makeAngles(Node curNode);
+    double makeAngles();
 };
 
 #endif // LIANSEARCH_H
