@@ -2,18 +2,16 @@
 
 OpenList::OpenList() { size = 0; }
 
-OpenList::OpenList(int size_, int BT) {
+OpenList::OpenList(int size_) {
     elements = new std::list<Node>[size_];
     size = 0;
     height = size_;
-    bt = BT;
 }
 
-void OpenList::resize(int size_, int BT) {
+void OpenList::resize(int size_) {
     elements = new std::list<Node>[size_];
     height = size_;
     size = 0;
-    bt = BT;
 }
 
 OpenList::~OpenList() {
@@ -87,7 +85,7 @@ TiXmlElement * OpenList::writeToXml(TiXmlElement * element, TiXmlNode * child) c
     min.F = std::numeric_limits<float>::infinity();
     int exc = 0;
     for(size_t i = 0; i < height; ++i) {
-        if(!elements[i].empty() && elements[i].front().lesser(min, bt)) {
+        if(!elements[i].empty() && elements[i].front().F < min.F) {
             min = elements[i].front();
             exc = i;
         }

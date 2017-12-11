@@ -49,11 +49,6 @@ struct Node {
             return !(*this == p);
     }
 
-    bool lesser(const Node another, int BT) const {
-        return F < another.F || (F == another.F && ((BT == CN_BT_GMAX && g > another.g) ||
-                                                    (BT == CN_BT_GMIN && g < another.g)));
-    }
-
     int convolution(int width) const {
             return i * width + j;
     }

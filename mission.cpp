@@ -19,7 +19,6 @@ void Mission::createSearch() {
     search = new LianSearch((float)config.getParamValue(CN_PT_AL),
                             (int)config.getParamValue(CN_PT_D),
                             (float)config.getParamValue(CN_PT_W),
-                            (int)config.getParamValue(CN_PT_BT),
                             (unsigned int)config.getParamValue(CN_PT_SL),
                             (float)config.getParamValue(CN_PT_CHW),
                             (bool)config.getParamValue(CN_PT_PS),

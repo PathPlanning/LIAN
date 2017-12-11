@@ -76,6 +76,7 @@ bool Map::getMap(const char* FileName) {
         element = node->ToElement();
         value = node->Value();
         std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+        CellSize = 1;
 
         if (!hasGrid && height > 0 && width > 0) {
             Grid = new int * [height];

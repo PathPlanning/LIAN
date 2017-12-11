@@ -19,9 +19,9 @@ class LianSearch : public Search {
 public:
 
     // Constructor with parameters
-    LianSearch(float angleLimit_, int distance_, float weight_, int breakingties_,
-               unsigned int steplimit_, float curvatureHeuristicWeight_, bool postsmoother_,
-               float decreaseDistanceFactor_, int distanceMin_, double PivotRadius_, int numOfParentsToIncreaseRadius_);
+    LianSearch(float angleLimit_, int distance_, float weight_, unsigned int steplimit_,
+               float curvatureHeuristicWeight_, bool postsmoother_, float decreaseDistanceFactor_,
+               int distanceMin_, double PivotRadius_, int numOfParentsToIncreaseRadius_);
 
     ~LianSearch();
     SearchResult startSearch(Logger *Log, const Map &map); // General searching algorithm
@@ -39,14 +39,7 @@ private:
 
     float weight;  // Heuristics weight
 
-    int BT;
-
     bool postsmoother; // Smoothing the path after the algorithm
-
-    // Heurisic coefficient:
-    // During check for position of goal cell in the circle with minimal radius,
-    // squared radius is multiplied by this coefficient
-    float circleRadiusFactor;
 
     // Heurisic coefficient:
     // If there is heuristic that checks deviation of trajectory from line on each

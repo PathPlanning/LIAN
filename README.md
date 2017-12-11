@@ -65,11 +65,11 @@ Input file should contain:
 
 * Mandatory tag `<algorithm>`. It describes the parameters of the algorithm.
 
-    * `<weight>` - defines the weight of heuristic function. Default value is "1".
+    * `<weight>` - defines the weight of heuristic function. Default value is "2".
     * `<anglelimit>` - mandatory tag. Defines the maximal turn angle in trajectory.
-    * `<distance>` - mandatory tag. Defines length of path section. If using DLIAN (by setting tags `<distanceMin>` and `<decreaseDistanceFactor>`) defines the maximal length of path section.
-    * `<distanceMin>` - optional tag for using in DLIAN. Defines minimal path section length for DLIAN algorithm.
-    * `<decreaseDistanceFactor>` - optional tag for using in DLIAN. Defines the factor, on which DLIAN tries to decrease path section length during search. It creates list of possible distances, started from *distance*, decreasing each time by *decreaseDistanceFactor* and finished by *distanceMin*.
+    * `<distance>` - mandatory tag. Defines length of path section. If using eLIAN (by setting tags `<distanceMin>` and `<decreaseDistanceFactor>`) defines the maximal length of path section.
+    * `<distanceMin>` - optional tag for using in eLIAN. Defines minimal path section length for eLIAN algorithm.
+    * `<decreaseDistanceFactor>` - optional tag for using in eLIAN. Defines the factor, on which eLIAN tries to decrease path section length during search. It creates list of possible distances, started from *distance*, decreasing each time by *decreaseDistanceFactor* and finished by *distanceMin*.
     * `<pivotCircleRadius>` - optional tag. If value > 0 algorithm checks the "safety zone" (circle with defined radius) around every turn point for obstacles. If there are obstacles in safety zone, there is a risk that agent during maneuver will collide with obstacle.
     * `<steplimit>` - optional tag. Set the maximal number of steps, that algorithm is allowed to make in order to prevent enormous amount of iterations, that can appear with complicated maps.
     * `<postsmoother>` - optional tag. Defines whether the path will be smoothened (join small fluctuations in one line (is possible)) after it was found or not. Possible values - "true", "false". Default value is "false".

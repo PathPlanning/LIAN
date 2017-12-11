@@ -9,14 +9,13 @@
 LianSearch::~LianSearch() {}
 
 
-LianSearch::LianSearch(float angleLimit_, int distance_, float weight_, int breakingties_,
+LianSearch::LianSearch(float angleLimit_, int distance_, float weight_,
                        unsigned int steplimit_, float curvatureHeuristicWeight_, bool postsmoother_,
                        float decreaseDistanceFactor_, int distanceMin_,
                        double PivotRadius_, int numOfParentsToIncreaseRadius_) {
     this->angleLimit = angleLimit_;
     this->distance = distance_;
     this->weight = weight_;
-    this->BT = breakingties_;
     this->stepLimit = steplimit_;
     this->curvatureHeuristicWeight = curvatureHeuristicWeight_;
     this->postsmoother = postsmoother_;
@@ -402,7 +401,7 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
     }
     std::cout << std::endl;
 
-    open.resize(map.getHeight(), BT);
+    open.resize(map.getHeight());
     Node curNode(map.start_i,map.start_j, 0.0, 0, 0.0);
     curNode.radius = distance;
     curNode.F = weight * getCost(curNode.i,curNode.j, map.goal_i,map.goal_j);

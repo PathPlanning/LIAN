@@ -11,11 +11,11 @@ class OpenList {
 
 public:
     OpenList();
-    OpenList(int size_, int BT);
+    OpenList(int size_);
 
     ~OpenList();
 
-    void resize(int size_, int BT);
+    void resize(int size_);
 
     size_t get_size() const;
     bool is_empty() const;
@@ -30,7 +30,6 @@ private:
     std::list<Node> *elements;
     size_t size;
     size_t height;
-    int bt;
 };
 
 #endif // OPENLIST_H

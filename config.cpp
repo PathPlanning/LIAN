@@ -127,7 +127,7 @@ bool Config::getConfig(const char* FileName) {
         }
         searchParams[CN_PT_W] = weight;
 
-        element = algorithm->FirstChildElement(CNS_TAG_BREAKINGTIE);
+       /* element = algorithm->FirstChildElement(CNS_TAG_BREAKINGTIE);
         if (!element) {
             std::cout << "Warning! No '" << CNS_TAG_BREAKINGTIE << "' element found inside '" << CNS_TAG_ALGORITHM
                       << "' section. Set to default value: " << CNS_TAG_ATTR_GMAX <<"." << std::endl;
@@ -144,7 +144,7 @@ bool Config::getConfig(const char* FileName) {
                 breakingties = CN_BT_GMAX;
             }
         }
-        searchParams[CN_PT_BT] = breakingties;
+        searchParams[CN_PT_BT] = breakingties;*/
 
 
         element = algorithm->FirstChildElement(CNS_TAG_STEPLIMIT);
@@ -181,14 +181,21 @@ bool Config::getConfig(const char* FileName) {
         element = algorithm->FirstChildElement(CNS_TAG_SMOOTHER);
         if (!element) {
             std::cout << "Warning! No '" << CNS_TAG_SMOOTHER << "' element found inside '" << CNS_TAG_ALGORITHM
-                      << "' section. Set to default value: 0." << std::endl;
+                      << "' section. Set to default value: false." << std::endl;
             postsmoother = 0;
         } else {
+            std::string ps;
             value = element->GetText();
             stream << value;
-            stream >> postsmoother;
+            stream >> ps;
             stream.clear();
             stream.str("");
+            if (ps == "true" || ps == "True" || ps == "1") postsmoother = 1;
+            else if (ps == "false" || ps == "False" || ps == "0") postsmoother = 0;
+            else {
+                std::cout << "Warning! Wrong '" << CNS_TAG_SMOOTHER << "Set to default value: false." << std::endl;
+                postsmoother = 0;
+            }
         }
         searchParams[CN_PT_PS] = postsmoother;
 
