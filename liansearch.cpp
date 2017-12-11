@@ -28,7 +28,7 @@ LianSearch::LianSearch(float angleLimit_, int distance_, float weight_, int brea
     srand(time(NULL));
 }
 
-inline void LianSearch::calculateCircle(int radius) { //here radius - radius of the circle in cells
+void LianSearch::calculateCircle(int radius) { //here radius - radius of the circle in cells
     circleNodes.clear();
     circleNodes.resize(listOfDistancesSize);
     for(int k = 0; k < listOfDistancesSize; ++k) {
@@ -376,11 +376,11 @@ bool LianSearch::stopCriterion() {
     return false;
 }
 
-inline double LianSearch::getCost(int a_i, int a_j, int b_i, int b_j) const {
+double LianSearch::getCost(int a_i, int a_j, int b_i, int b_j) const {
     return sqrt(abs(a_i - b_i) * abs(a_i - b_i) + abs(a_j - b_j) * abs(a_j - b_j));
 }
 
-inline double LianSearch::calcAngle(const Node &dad, const Node &node, const Node &son) const {
+double LianSearch::calcAngle(const Node &dad, const Node &node, const Node &son) const {
     double cos_angle = (node.j - dad.j) * (son.j - node.j) +
                        (node.i - dad.i) * (son.i - node.i);
     cos_angle /= getCost(son.i, son.j, node.i, node.j);
@@ -635,7 +635,7 @@ void LianSearch::makePrimaryPath(Node curNode) {
     hppath.push_front(curNode);
 }
 
-inline bool LianSearch::checkAngle(const Node &dad, const Node &node, const Node &son) const {
+bool LianSearch::checkAngle(const Node &dad, const Node &node, const Node &son) const {
     double angle = calcAngle(dad, node, son) * 180 /  CN_PI_CONSTANT;
     if (fabs(angle) <= angleLimit) {
         return true;

@@ -50,6 +50,8 @@ bool Map::getMap(const char* FileName) {
     bool hasGrid = false;
     std::stringstream stream;
     TiXmlDocument doc(FileName);
+    CellSize = 1;
+
     if(!doc.LoadFile()) {
         std::cout << "Error openning input XML file."<<std::endl;
         return false;
