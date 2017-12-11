@@ -375,7 +375,7 @@ bool LianSearch::stopCriterion() {
     return false;
 }
 
-inline double LianSearch::getCost(int a_i, int a_j, int b_i, int b_j) const {
+double LianSearch::getCost(int a_i, int a_j, int b_i, int b_j) const {
     return sqrt(abs(a_i - b_i) * abs(a_i - b_i) + abs(a_j - b_j) * abs(a_j - b_j));
 }
 
