@@ -74,7 +74,7 @@ Input file should contain:
     * `<decreaseDistanceFactor>` - optional tag for using in eLIAN. Defines the factor, on which eLIAN tries to decrease path section length during search. It creates list of possible distances, started from *distance*, decreasing each time by *decreaseDistanceFactor* and finished by *distanceMin*.
     * `<pivotCircleRadius>` - optional tag. If value > 0 algorithm checks the "safety zone" (circle with defined radius) around every turn point for obstacles. If there are obstacles in safety zone, there is a risk that agent during maneuver will collide with obstacle.
     * `<steplimit>` - optional tag. Set the maximal number of steps, that algorithm is allowed to make in order to prevent enormous amount of iterations, that can appear with complicated maps.
-    * `<postsmoother>` - optional tag. Defines whether the path will be smoothened (join small fluctuations in one line (is possible)) after it was found or not. Possible values - "true", "false". Default value is "false".
+    * `<postsmoother>` - optional tag. Defines whether the path will be smoothened (join small fluctuations in one line (if possible)) after it was found or not. Possible values - "true", "false". Default value is "false".
     * `<curvatureHeuristicWeight>` - optional tag. Defines the weight of curvature heuristic - heuristic that pays attention to the fluctuations of the path and chooses (if possible) the most straight one.
     * `<numOfParentsToIncreaseRadius>` - optional tag. Set the number of parent vertices that must have the same radius in order to start the increase of current radius. Default value is 2.
 
