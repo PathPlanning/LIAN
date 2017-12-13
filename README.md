@@ -1,7 +1,5 @@
 # LIAN
 
-[comment]: <> ( [![Build Status](https://travis-ci.org/PathPlanning/LIAN.svg?branch=master)](https://travis-ci.org/PathPlanning/LIAN))
-
 LIAN (from "limited angle") &mdash; heuristic search algorithm for generating smooth paths for single-shot grid-based 2D path finding.
 
 ## Description
@@ -74,7 +72,7 @@ Input file should contain:
     * `<anglelimit>` &mdash; mandatory tag. Defines the maximal turn angle in trajectory.
     * `<distance>` &mdash; mandatory tag. Defines length of path section. If using eLIAN (by setting tags `<distancemin>` and `<decreaseDistanceFactor>`) defines the maximal length of path section.
     * `<distancemin>` &mdash; optional tag for using in eLIAN. Defines minimal path section length for eLIAN algorithm.
-    * `<decreaseDistanceFactor>` &mdash; optional tag for using in eLIAN. Defines the factor, on which eLIAN tries to decrease path section length during search. It creates list of possible distances, started from *distance*, decreasing each time by *decreaseDistanceFactor* and finished by *distanceMin*.
+    * `<decreaseDistanceFactor>` &mdash; optional tag for using in eLIAN. Defines the factor, on which eLIAN tries to decrease path section length during search. It creates list of possible distances, started from *distance*, decreasing each time by *decreaseDistanceFactor* and finished by *distancemin*.
     * `<pivotCircleRadius>` &mdash; optional tag. If value > 0 algorithm checks the "safety zone" (circle with defined radius) around every turn point for obstacles. If there are obstacles in safety zone, there is a risk that agent during maneuver will collide with obstacle.
     * `<steplimit>` &mdash; optional tag. Set the maximal number of steps, that algorithm is allowed to make in order to prevent enormous amount of iterations, that can appear with complicated maps.
     * `<postsmoothing>` &mdash; optional tag. Defines whether the path will be smoothened (join small fluctuations in one line (if possible)) after it was found or not. Possible values &mdash; "true", "false". Default value is "false".
