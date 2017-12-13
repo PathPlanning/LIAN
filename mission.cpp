@@ -29,8 +29,8 @@ void Mission::createSearch() {
 }
 
 bool Mission::createLog() {
-    if(config.getParamValue(CN_PT_LOGLVL) == CN_LOGLVL_LOW || config.getParamValue(CN_PT_LOGLVL) == CN_LOGLVL_HIGH
-                                                             || config.getParamValue(CN_PT_LOGLVL) == CN_LOGLVL_MED) {
+    if(config.getParamValue(CN_PT_LOGLVL) == CN_LOGLVL_LOW || config.getParamValue(CN_PT_LOGLVL) == CN_LOGLVL_HIGH ||
+       config.getParamValue(CN_PT_LOGLVL) == CN_LOGLVL_MED || config.getParamValue(CN_PT_LOGLVL) == CN_LOGLVL_TINY) {
         logger = new cXmlLogger(config.getParamValue(CN_PT_LOGLVL));
     } else if(config.getParamValue(CN_PT_LOGLVL) == CN_LOGLVL_NO) {
         logger = new cXmlLogger(config.getParamValue(CN_PT_LOGLVL));

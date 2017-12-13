@@ -26,7 +26,6 @@ bool Config::getConfig(const char* FileName) {
     float angle;
     int distance;
     float weight;
-    int breakingties;
     unsigned int steplimit;
     float loglevel;
     float curvatureHeuriscitWeight;

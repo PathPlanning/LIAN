@@ -1,10 +1,15 @@
 #include "liansearch.h"
 
-#ifdef __linux__
-    #include <sys/time.h>
-#else
-    #include <windows.h>
-#endif
+
+/*
+ * // Use for more accurate time calculation
+ * #ifdef __linux__
+ *     #include <sys/time.h>
+ * #else
+ *     #include <windows.h>
+ * #endif
+ *
+*/
 
 LianSearch::~LianSearch() {}
 
@@ -410,18 +415,22 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
     calculateCircle((int) curNode.radius);
     calculatePivotCircle();
 
-#ifdef __linux__
-    timeval begin, end;
-    gettimeofday(&begin, NULL);
-#else
-    LARGE_INTEGER begin,end,freq;
-    QueryPerformanceCounter(&begin);
-    QueryPerformanceFrequency(&freq);
-#endif
+    std::chrono::time_point<std::chrono::system_clock> begin, end;
+    begin = std::chrono::system_clock::now();
+
+    /*
+     * #ifdef __linux__
+     *     timeval begin, end;
+     *     gettimeofday(&begin, NULL);
+     * #else
+     *     LARGE_INTEGER begin,end,freq;
+     *     QueryPerformanceCounter(&begin);
+     *     QueryPerformanceFrequency(&freq);
+     * #endif
+     */
 
     while(!stopCriterion()) { // main cycle of the search
         curNode = open.getMin();
-        //open.pop(curNode);
         close.insert({curNode.convolution(map.getWidth()),curNode});
         ++closeSize;
 
@@ -438,14 +447,6 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
         if(Log->loglevel >= CN_LOGLVL_LOW) Log->writeToLogOpenClose(open, close, map.getHeight());
     }
 
-#ifdef __linux__
-    gettimeofday(&end, NULL);
-    sresult.time = (end.tv_sec - begin.tv_sec) + static_cast<double>(end.tv_usec - begin.tv_usec) / 1000000;
-#else
-    QueryPerformanceCounter(&end);
-    sresult.time = static_cast<double long>(end.QuadPart-begin.QuadPart) / freq.QuadPart;
-#endif
-
     if(Log->loglevel==CN_LOGLVL_MED) Log->writeToLogOpenClose(open, close, map.getHeight());
 
     sresult.nodescreated = open.get_size() + closeSize;
@@ -453,7 +454,9 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
     if (pathFound) {
         sresult.pathlength = curNode.g;
         makePrimaryPath(curNode);
-        if (postsmoother) hppath = smoothPath(hppath, map);
+        if (postsmoother) {
+            hppath = smoothPath(hppath, map);
+        }
         makeSecondaryPath(curNode);
         float max_angle = makeAngles();
         sresult.pathfound = true;
@@ -462,9 +465,34 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
         sresult.angles = angles;
         sresult.max_angle = max_angle;
         sresult.sections = hppath.size()-1;
+
+        end = std::chrono::system_clock::now();
+        sresult.time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()) / 1000000000;
+         /*
+        #ifdef __linux__
+            gettimeofday(&end, NULL);
+            sresult.time = (end.tv_sec - begin.tv_sec) + static_cast<double>(end.tv_usec - begin.tv_usec) / 1000000;
+        #else
+            QueryPerformanceCounter(&end);
+            sresult.time = static_cast<double long>(end.QuadPart-begin.QuadPart) / freq.QuadPart;
+        #endif */
+
         return sresult;
     } else {
         sresult.pathfound = false;
+
+        end = std::chrono::system_clock::now();
+        sresult.time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()) / 1000000000;
+
+        /*
+       #ifdef __linux__
+           gettimeofday(&end, NULL);
+           sresult.time = (end.tv_sec - begin.tv_sec) + static_cast<double>(end.tv_usec - begin.tv_usec) / 1000000;
+       #else
+           QueryPerformanceCounter(&end);
+           sresult.time = static_cast<double long>(end.QuadPart-begin.QuadPart) / freq.QuadPart;
+       #endif */
+
         return sresult;
     }
 }
@@ -651,8 +679,7 @@ std::list<Node> LianSearch::smoothPath(const std::list<Node>& path, const Map& m
     Node start_section = path.front();
     Node end_section = path.front();
     bool first = true;
-    Node previous = *it;
-    ++it;
+    Node previous = *it++;
     while (end_section != path.back()) {
         for (it; it != path.end(); ++it) {
             auto next = ++it;
@@ -671,6 +698,7 @@ std::list<Node> LianSearch::smoothPath(const std::list<Node>& path, const Map& m
         start_section = end_section;
         it = ++curr_it;
     }
+    sresult.pathlength += (double)getCost(previous.i, previous.j, end_section.i, end_section.j);
     new_path.push_back(end_section);
     return new_path;
 }

@@ -40,6 +40,7 @@
 
 //loglevel
 #define CN_LOGLVL_NO	0
+#define CN_LOGLVL_TINY	0.5
 #define CN_LOGLVL_HIGH	1
 #define CN_LOGLVL_MED	1.5
 #define CN_LOGLVL_LOW	2
@@ -64,12 +65,12 @@
         #define CNS_TAG_ROW         "row"
     #define CNS_TAG_ANGLELIMIT      "anglelimit"
     #define CNS_TAG_DISTANCE        "distance"
-    #define CNS_TAG_WEIGHT          "weight"
+    #define CNS_TAG_WEIGHT          "hweight"
     #define CNS_TAG_STEPLIMIT       "steplimit"
     #define CNS_TAG_CURVHEURWEIGHT  "curvatureHeuristicWeight"
-    #define CNS_TAG_SMOOTHER        "postsmoother"
+    #define CNS_TAG_SMOOTHER        "postsmoothing"
     #define CNS_TAG_PIVOTCIRCLE     "pivotCircleRadius"
-    #define CNS_TAG_DISTANCEMIN     "distanceMin"
+    #define CNS_TAG_DISTANCEMIN     "distancemin"
     #define CNS_TAG_DECRDISTFACTOR  "decreaseDistanceFactor"
     #define CNS_TAG_NOFPTOINCRAD    "numOfParentsToIncreaseRadius"
     #define CNS_TAG_OPTIONS         "options"
@@ -100,7 +101,7 @@
  */
     #define CNS_TAG_ATTR_NUMOFSTEPS     "numberofsteps"
     #define CNS_TAG_ATTR_NODESCREATED   "nodescreated"
-    #define CNS_TAG_ATTR_LENGTH         "pathlength"
+    #define CNS_TAG_ATTR_LENGTH         "length"
     #define CNS_TAG_ATTR_LENGTHSC       "length_scaled"
     #define CNS_TAG_ATTR_SECTIONS       "sections"
     #define CNS_TAG_ATTR_TIME           "time"
