@@ -57,7 +57,7 @@ private:
 
     std::vector< std::vector<Node> > circleNodes; // Virtual nodes that create circle around the cell
 
-    std::vector<Node> pivotCircle;  // Vector of nodes (shifts) for pivot security check
+    std::vector<std::pair<int,int>> pivotCircle;  // Vector of nodes (shifts) for pivot security check
 
     std::vector<float> angles;
 

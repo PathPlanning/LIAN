@@ -24,7 +24,7 @@ void Mission::createSearch() {
                             (bool)config.getParamValue(CN_PT_PS),
                             (float)config.getParamValue(CN_PT_DDF),
                             (int)config.getParamValue(CN_PT_DM),
-                            (bool)config.getParamValue(CN_PT_PC),
+                            (double)config.getParamValue(CN_PT_PC),
                             (int)config.getParamValue(CN_PT_NOP));
 }
 

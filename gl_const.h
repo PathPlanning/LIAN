@@ -3,6 +3,7 @@
 
 #define CN_PI_CONSTANT 3.14159265359
 #define CN_SQRT2_CONSTANT 1.41421356237
+#define CN_EPSILON 1e-8
 
 #define CN_LOG          "_log"
 

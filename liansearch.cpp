@@ -81,29 +81,27 @@ void LianSearch::calculateCircle(int radius) { //here radius - radius of the cir
 }
 
 void LianSearch::calculatePivotCircle() {
-    int add_x, add_y, num = pivotRadius + 0.5;
-    Node node;
-    for (int x = -num; x <= +num; ++x) {
-        for (int y = -num; y <= +num; ++y) {
-            add_x = x != 0 ? 1 : 0;
-            add_y = y != 0 ? 1 : 0;
-            if ((pow(2 * abs(x) - add_x, 2) + pow(2 * abs(y) - add_y, 2)) < pow(2 * pivotRadius, 2)) {
-                pivotCircle.push_back(Node(x, y));
-            }
+    pivotCircle.clear();
+    int add_i, add_j, num(pivotRadius + 0.5 - CN_EPSILON);
+    for (int i = -num; i <= +num; i++) {
+        for (int j = -num; j <= +num; j++) {
+            add_i = i != 0 ? 1 : 0;
+            add_j = j != 0 ? 1 : 0;
+            if ((pow(2 * abs(i) - add_i, 2) + pow(2 * abs(j) - add_j, 2)) < pow(2 * pivotRadius, 2))
+                pivotCircle.push_back({i, j});
         }
     }
-    if (pivotCircle.empty()) {
-        node.i = node.j = 0;
-        pivotCircle.push_back(node);
-    }
+    if (pivotCircle.empty())
+        pivotCircle.push_back({0, 0});
 }
 
 bool LianSearch::checkPivotCircle(const Map &map, const Node &center) {
     int i, j;
-    for (Node node : pivotCircle) {
-        i = center.i + node.i;
-        j = center.j + node.j;
-        if (map.CellOnGrid(i, j) && map.CellIsObstacle(i,j)) return false;
+    for (int k = 0; k < pivotCircle.size(); k++) {
+        i = center.i + pivotCircle[k].first;
+        j = center.j + pivotCircle[k].second;
+        if (!map.CellOnGrid(i, j) || map.CellIsObstacle(i,j))
+            return false;
     }
     return true;
 }
