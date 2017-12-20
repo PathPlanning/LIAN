@@ -405,7 +405,7 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
     std::cout << std::endl;
 
     open.resize(map.getHeight());
-    Node curNode(map.start_i,map.start_j, 0.0, 0, 0.0);
+    Node curNode(map.start_i,map.start_j, 0.0, 0.0, 0.0);
     curNode.radius = distance;
     curNode.F = weight * getCost(curNode.i,curNode.j, map.goal_i,map.goal_j);
     bool pathFound = false;
@@ -466,7 +466,7 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
 
         end = std::chrono::system_clock::now();
         sresult.time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()) / 1000000000;
-         /*
+         /* // for more accurate time calculation
         #ifdef __linux__
             gettimeofday(&end, NULL);
             sresult.time = (end.tv_sec - begin.tv_sec) + static_cast<double>(end.tv_usec - begin.tv_usec) / 1000000;
@@ -482,7 +482,7 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
         end = std::chrono::system_clock::now();
         sresult.time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()) / 1000000000;
 
-        /*
+        /* for more accurate time calculation
        #ifdef __linux__
            gettimeofday(&end, NULL);
            sresult.time = (end.tv_sec - begin.tv_sec) + static_cast<double>(end.tv_usec - begin.tv_usec) / 1000000;
@@ -517,110 +517,187 @@ int LianSearch::tryToIncreaseRadius(Node curNode) {
     else return curNode.radius;
 }
 
+
 bool LianSearch::expand(const Node curNode, const Map &map) {
-    int k;
-    for(k = 0; k < listOfDistancesSize; ++k)
-        if(listOfDistances[k] == curNode.radius) break;
+    int current_distance;
+    for(current_distance = 0; current_distance < listOfDistancesSize; ++current_distance)
+        if(listOfDistances[current_distance] == curNode.radius)
+            break;
 
-    std::vector<Node> circle_nodes = circleNodes[k];
-    Node successor;
-    bool successors_are_fine = false, in_close;
-    float cos_angle, angle, curvature;
-    int position;
+    std::vector<Node> circle_nodes = circleNodes[current_distance];
+    bool successors_are_fine = false;
+    int node_straight_ahead;
 
-    if (curNode.parent != NULL) {
-        std::vector<Node> successors;
-        std::vector<int> succs;
-        for (position = 0; position < circle_nodes.size(); ++position)
-            if (curNode.parent->i == curNode.i + circle_nodes[position].i &&
-                curNode.parent->j == curNode.j + circle_nodes[position].j)
+    if (curNode.parent != NULL) { // case when there is parent for current node, and we should have some logical importance order in searching successors
+        for (node_straight_ahead = 0; node_straight_ahead < circle_nodes.size(); ++node_straight_ahead)
+            if (curNode.parent->i == curNode.i + circle_nodes[node_straight_ahead].i &&
+                curNode.parent->j == curNode.j + circle_nodes[node_straight_ahead].j)
                 break;
 
-        if (position < circle_nodes.size() / 2) position += circle_nodes.size() / 2;
-        else position -= circle_nodes.size() / 2;
-        int k1 = position + 1;
-        int k2 = position - 1;
-        succs.push_back(position);
-        for (int i = 0; i < circle_nodes.size(); ++i) {
-            if (k1 >= circle_nodes.size()) k1 = 0;
-            if (k2 < 0) k2 = circle_nodes.size() - 1;
-            succs.push_back(k1++);
-            succs.push_back(k2--);
-            if (succs.size() >= circle_nodes.size() / 2)
-                break;
-        }
-        for (int i=0; i < circle_nodes.size() / 2; i++) {
-            successor.i = curNode.i + circle_nodes[succs[i]].i;
-            successor.j = curNode.j + circle_nodes[succs[i]].j;
+        if (node_straight_ahead < circle_nodes.size() / 2) // we choose node, that lies straight ahead (angle in near zero)
+            node_straight_ahead += circle_nodes.size() / 2;
+        else
+            node_straight_ahead -= circle_nodes.size() / 2;
 
-            if (!map.CellOnGrid(successor.i, successor.j)) continue;
-            if (map.CellIsObstacle(successor.i, successor.j)) continue;
+         double angle = calcAngle(*curNode.parent, curNode, Node(curNode.i + circle_nodes[node_straight_ahead].i,
+                                                                 curNode.j + circle_nodes[node_straight_ahead].j));
 
-            angle = calcAngle(*curNode.parent, curNode, successor);
-            curvature = fabs(angle);
-            angle = angle * 180 / CN_PI_CONSTANT;
+         if (fabs(angle * 180 / CN_PI_CONSTANT) <= angleLimit) { // checking straight ahead node
+            int new_pos_i = curNode.i + circle_nodes[node_straight_ahead].i;
+            int new_pos_j = curNode.j + circle_nodes[node_straight_ahead].j;
 
-            if (fabs(angle) > angleLimit) break;
-            successors.push_back(Node(circle_nodes[succs[i]].i, circle_nodes[succs[i]].j));
-        }
-        circle_nodes=successors;
+            if (map.CellOnGrid(new_pos_i, new_pos_j) && map.CellIsTraversable(new_pos_i, new_pos_j)) {
+                Node newNode = Node(new_pos_i, new_pos_j,
+                               curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j),
+                               weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j),
+                               curNode.radius, &(close.find(curNode.convolution(map.getWidth()))->second),
+                               curNode.c, curvatureHeuristicWeight * distance);
 
-    }
-    for (unsigned int i = 0; i <= circle_nodes.size(); ++i) {
-        Node newNode;
-        if (i == circle_nodes.size()) { // for cycle iterations, where i equals circle_nodes size, check path to the goal cell
-            if (getCost(curNode.i, curNode.j, map.goal_i, map.goal_j) <= curNode.radius) {
-                successor.i = map.goal_i;
-                successor.j = map.goal_j;
-                if(curNode.parent != NULL) {
-                    angle = calcAngle(*curNode.parent, curNode, successor);
-                    curvature = fabs(angle);
-                    angle = angle * 180 / CN_PI_CONSTANT;
-                    if (fabs(angle) > angleLimit) continue;
+                if (checkLineSegment(map, *newNode.parent, newNode) && (!pivotRadius || (pivotRadius > 0
+                                                                    && (newNode.i != map.goal_i || newNode.j != map.goal_j)
+                                                                    && checkPivotCircle(map, newNode)))) {
+                    auto it = close.find(newNode.convolution(map.getWidth()));
+                    if (it != close.end()) {
+                        bool in_close = false;
+                        auto range = close.equal_range(it->first);
+                        for (auto it = range.first; it != range.second; ++it)
+                            if (it->second.parent && it->second.parent->i == curNode.i && it->second.parent->j == curNode.j)
+                                in_close = true;
+
+                        if (!in_close) {
+                            if (listOfDistancesSize > 1) newNode.radius = tryToIncreaseRadius(newNode);
+                            open.add(newNode);
+                            successors_are_fine = true;
+                        }
+                    } else {
+                        if(listOfDistancesSize > 1) newNode.radius = tryToIncreaseRadius(newNode);
+                        open.add(newNode);
+                        successors_are_fine = true;
+                    }
                 }
-            } else continue;
-        } else {
-            successor.i = curNode.i + circle_nodes[i].i;
-            successor.j = curNode.j + circle_nodes[i].j;
-        }
-        if (!map.CellOnGrid(successor.i, successor.j)) continue;
-        if (map.CellIsObstacle(successor.i, successor.j)) continue;
+             }
+        } // now we will expand neighbors that are closest to the node that lies straight ahead
 
-        newNode = successor;
-        newNode.parent = &(close.find(curNode.convolution(map.getWidth()))->second);
-        newNode.radius = newNode.parent->radius;
-        newNode.pathToParent = false;
-        newNode.g = newNode.parent->g + getCost(curNode.i, curNode.j, newNode.i, newNode.j);
-        newNode.c = newNode.parent->c + curvature;
-        newNode.F = newNode.g + weight * getCost(successor.i, successor.j, map.goal_i, map.goal_j)
-                              + curvatureHeuristicWeight * distance * newNode.c;
-        newNode.pathToParent = checkLineSegment(map, *newNode.parent, newNode);
+        std::vector<int> candidates = std::vector<int>{node_straight_ahead, node_straight_ahead};
 
+        bool limit = true;
 
-        if (pivotRadius > 0) {
-            if (newNode.i != map.goal_i || newNode.j != map.goal_j) {
-                newNode.pathToParent &= checkPivotCircle(map, newNode);
+        while (++candidates[0] != --candidates[1] && limit) { // untill the whole circle is explored or we exessed anglelimit somewhere
+            if (candidates[0] >= circle_nodes.size()) candidates[0] = 0;
+            if (candidates[1] < 0) candidates[1] = circle_nodes.size() - 1;
+
+            for (auto cand : candidates) {
+                double angle = calcAngle(*curNode.parent, curNode, Node(curNode.i + circle_nodes[cand].i,
+                                                                        curNode.j + circle_nodes[cand].j));
+
+                if (fabs(angle * 180 / CN_PI_CONSTANT) <= angleLimit) {
+                    int new_pos_i = curNode.i + circle_nodes[cand].i;
+                    int new_pos_j = curNode.j + circle_nodes[cand].j;
+
+                    if (!map.CellOnGrid(new_pos_i, new_pos_j)) continue;
+                    if (map.CellIsObstacle(new_pos_i, new_pos_j)) continue;
+
+                    Node newNode = Node(new_pos_i, new_pos_j,
+                                   curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j),
+                                   weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j),
+                                   curNode.radius, &(close.find(curNode.convolution(map.getWidth()))->second),
+                                   curNode.c + fabs(angle), curvatureHeuristicWeight * distance);
+
+                    if (checkLineSegment(map, *newNode.parent, newNode) && (!pivotRadius || (pivotRadius > 0
+                                                                        && (newNode.i != map.goal_i || newNode.j != map.goal_j)
+                                                                        && checkPivotCircle(map, newNode)))) {
+                        auto it = close.find(newNode.convolution(map.getWidth()));
+                        if (it != close.end()) {
+                            bool in_close = false;
+                            auto range = close.equal_range(it->first);
+                            for (auto it = range.first; it != range.second; ++it)
+                                if (it->second.parent && it->second.parent->i == curNode.i && it->second.parent->j == curNode.j)
+                                    in_close = true;
+
+                            if (!in_close) {
+                                if (listOfDistancesSize > 1) newNode.radius = tryToIncreaseRadius(newNode);
+                                open.add(newNode);
+                                successors_are_fine = true;
+                            }
+                        } else {
+                            if(listOfDistancesSize > 1) newNode.radius = tryToIncreaseRadius(newNode);
+                            open.add(newNode);
+                            successors_are_fine = true;
+                        }
+                    }
+                } else {
+                    limit = false;
+                }
             }
         }
+    } else { // when we do not have parent, we should explore all neighbors
+        for (auto node : circle_nodes) {
+            int new_pos_i = curNode.i + node.i;
+            int new_pos_j = curNode.j + node.j;
 
-        if(newNode.pathToParent) {
-            std::unordered_multimap<int, Node>::const_iterator it = close.find(newNode.convolution(map.getWidth()));
-            if(it != close.end()) {
-                in_close=false;
-                auto range = close.equal_range(it->first);
-                for(auto it = range.first; it != range.second; ++it)
-                    if(it->second.parent && it->second.parent->i == curNode.i && it->second.parent->j == curNode.j)
-                        in_close = true;
+            if (!map.CellOnGrid(new_pos_i, new_pos_j)) continue;
+            if (map.CellIsObstacle(new_pos_i, new_pos_j)) continue;
 
-                if(!in_close) {
+            Node newNode = Node(new_pos_i, new_pos_j,
+                           curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j),
+                           weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j),
+                           curNode.radius, &(close.find(curNode.convolution(map.getWidth()))->second),
+                           curNode.c, curvatureHeuristicWeight * distance);
+
+            if (checkLineSegment(map, *newNode.parent, newNode) && (!pivotRadius || (pivotRadius > 0
+                                                                && (newNode.i != map.goal_i || newNode.j != map.goal_j)
+                                                                && checkPivotCircle(map, newNode)))) {
+                auto it = close.find(newNode.convolution(map.getWidth()));
+                if (it != close.end()) {
+                    bool in_close = false;
+                    auto range = close.equal_range(it->first);
+                    for (auto it = range.first; it != range.second; ++it)
+                        if (it->second.parent && it->second.parent->i == curNode.i && it->second.parent->j == curNode.j)
+                            in_close = true;
+
+                    if (!in_close) {
+                        if (listOfDistancesSize > 1) newNode.radius = tryToIncreaseRadius(newNode);
+                        open.add(newNode);
+                        successors_are_fine = true;
+                    }
+                } else {
                     if(listOfDistancesSize > 1) newNode.radius = tryToIncreaseRadius(newNode);
                     open.add(newNode);
                     successors_are_fine = true;
                 }
-            } else {
-                if(listOfDistancesSize > 1) newNode.radius = tryToIncreaseRadius(newNode);
-                open.add(newNode);
-                successors_are_fine = true;
+            }
+        }
+    }
+
+    // when we are near goal point, we should try to reach it
+    if (getCost(curNode.i, curNode.j, map.goal_i, map.goal_j) <= curNode.radius) {
+        double angle = calcAngle(*curNode.parent, curNode, Node(map.goal_i, map.goal_j));
+
+        if (fabs(angle * 180 / CN_PI_CONSTANT) <= angleLimit) {
+            Node newNode = Node( map.goal_i,  map.goal_j,
+                           curNode.g + getCost(curNode.i, curNode.j,  map.goal_i,  map.goal_j),
+                           0.0, curNode.radius, &(close.find(curNode.convolution(map.getWidth()))->second),
+                           curNode.c, curvatureHeuristicWeight * distance);
+
+            if (checkLineSegment(map, *newNode.parent, newNode)) {
+                auto it = close.find(newNode.convolution(map.getWidth()));
+                if (it != close.end()) {
+                    bool in_close = false;
+                    auto range = close.equal_range(it->first);
+                    for (auto it = range.first; it != range.second; ++it)
+                        if (it->second.parent && it->second.parent->i == curNode.i && it->second.parent->j == curNode.j)
+                            in_close = true;
+
+                    if (!in_close) {
+                        if (listOfDistancesSize > 1) newNode.radius = tryToIncreaseRadius(newNode);
+                        open.add(newNode);
+                        successors_are_fine = true;
+                    }
+                } else {
+                    if(listOfDistancesSize > 1) newNode.radius = tryToIncreaseRadius(newNode);
+                    open.add(newNode);
+                    successors_are_fine = true;
+                }
             }
         }
     }

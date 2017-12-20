@@ -22,8 +22,11 @@ struct Node {
     Node() : i(-1), j(-1), F(std::numeric_limits<float>::infinity()), g(std::numeric_limits<float>::infinity()),
     c(-1), parent(nullptr), pathToParent(false), radius(CN_PTD_D) {}
 
-    Node(int x, int y, float F_=std::numeric_limits<float>::infinity(), float g_=std::numeric_limits<float>::infinity(), float c_=-1) :  i(x), j(y), F(F_), g(g_),
-        c(c_), parent(nullptr), pathToParent(false), radius(CN_PTD_D) {}
+    Node(int x, int y, float g_=std::numeric_limits<float>::infinity(), float h_=std::numeric_limits<float>::infinity(),
+         float radius_=CN_PTD_D, Node *parent_=nullptr, float c_=-1, float cweightdist_=0) :
+        i(x), j(y), g(g_), radius(radius_), c(c_), parent(parent_) {
+        F = g + h_ + cweightdist_ * c;
+    }
 
     ~Node() {
         parent = nullptr;
