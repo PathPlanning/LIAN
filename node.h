@@ -6,26 +6,31 @@
 #include <limits>
 #include <list>
 #include <iostream>
+#include <cmath>
 
 
 struct Node {
 
     Node*   parent;
 
-    bool    pathToParent;
     int     i, j;
     int     radius;
     float   F;
     float   g;
-    float   c; // curvature euristic component
+
+    double angle;
 
     Node() : i(-1), j(-1), F(std::numeric_limits<float>::infinity()), g(std::numeric_limits<float>::infinity()),
-    c(-1), parent(nullptr), pathToParent(false), radius(CN_PTD_D) {}
+             parent(nullptr), radius(CN_PTD_D), angle(0) {}
 
     Node(int x, int y, float g_=std::numeric_limits<float>::infinity(), float h_=std::numeric_limits<float>::infinity(),
-         float radius_=CN_PTD_D, Node *parent_=nullptr, float c_=-1, float cweightdist_=0) :
-        i(x), j(y), g(g_), radius(radius_), c(c_), parent(parent_) {
-        F = g + h_ + cweightdist_ * c;
+         float radius_=CN_PTD_D, Node *parent_=nullptr, float cweightdist_=0, double ang_=0) :
+        i(x), j(y), g(g_), radius(radius_), parent(parent_), angle(ang_) {
+        if (parent) {
+            F = g + h_ + cweightdist_ * fabs(ang_ - parent->angle);
+        } else {
+            F = g + h_;
+        }
     }
 
     ~Node() {
@@ -38,9 +43,8 @@ struct Node {
         F = other.F;
         g = other.g;
         parent = other.parent;
-        pathToParent = other.pathToParent;
+        angle = other.angle;
         radius = other.radius;
-        c = other.c;
         return *this;
     }
 

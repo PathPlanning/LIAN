@@ -47,7 +47,6 @@ void OpenList::add(Node new_node) {
                 if(pos == it) {
                     it->g = new_node.g;
                     it->F = new_node.F;
-                    it->c = new_node.c;
                     it->radius = new_node.radius;
                     return;
                 }

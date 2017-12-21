@@ -55,9 +55,11 @@ private:
     float decreaseDistanceFactor; // Value for decreasing the initial distance value
     int distanceMin; // Minimal distance value
 
-    std::vector< std::vector<Node> > circleNodes; // Virtual nodes that create circle around the cell
+    std::vector<std::vector<Node> > circleNodes; // Virtual nodes that create circle around the cell
 
-    std::vector<std::pair<int,int>> pivotCircle;  // Vector of nodes (shifts) for pivot security check
+    std::vector<std::vector<double> > circleAngles; // Angle values for virtual nodes that create circle around the cell
+
+    std::vector<std::pair<int,int> > pivotCircle;  // Vector of nodes (shifts) for pivot security check
 
     std::vector<float> angles;
 
@@ -92,6 +94,7 @@ private:
     int tryToIncreaseRadius(Node curNode);
     bool tryToDecreaseRadius(Node &curNode, int width);
     void findSuccessors(const Node curNode,std::vector<Node> &successors, const Map &map);
+    void update(const Node current_node, Node new_node, bool &successors, const Map &map);
     bool expand(const Node curNode, const Map &map);
     std::list<Node> smoothPath(const std::list<Node>& path, const Map& map);
     void makePrimaryPath(Node curNode);
