@@ -526,14 +526,20 @@ bool LianSearch::expand(const Node curNode, const Map &map) {
 
     std::vector<Node> circle_nodes = circleNodes[current_distance];
     bool successors_are_fine = false;
+    bool parent_found = false;
     int node_straight_ahead;
 
-    if (curNode.parent != NULL) { // case when there is parent for current node, and we should have some logical importance order in searching successors
-        for (node_straight_ahead = 0; node_straight_ahead < circle_nodes.size(); ++node_straight_ahead)
+    if (curNode.parent != NULL) { //find parent on circle
+        for (node_straight_ahead = 0; node_straight_ahead < circle_nodes.size(); ++node_straight_ahead) {
             if (curNode.parent->i == curNode.i + circle_nodes[node_straight_ahead].i &&
-                curNode.parent->j == curNode.j + circle_nodes[node_straight_ahead].j)
+                curNode.parent->j == curNode.j + circle_nodes[node_straight_ahead].j) {
+                parent_found = true;
                 break;
+            }
+        }
+    }
 
+    if (curNode.parent != NULL && parent_found) { // case when there is parent for current node, and we should have some logical importance order in searching successors
         if (node_straight_ahead < circle_nodes.size() / 2) // we choose node, that lies straight ahead (angle in near zero)
             node_straight_ahead += circle_nodes.size() / 2;
         else
