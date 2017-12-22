@@ -8,6 +8,16 @@
 #include <iostream>
 #include <cmath>
 
+struct circleNode
+{
+    int i, j;
+    double heading;
+    double cost;
+
+    circleNode(): i(-1), j(-1), heading(-1), cost(0) {}
+    circleNode(int i, int j, double cost): i(i), j(j), heading(-1), cost(cost) {}
+    circleNode(int i, int j, double heading, double cost): i(i), j(j), heading(heading), cost(cost) {}
+};
 
 struct Node {
 

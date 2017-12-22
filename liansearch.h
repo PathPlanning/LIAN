@@ -55,9 +55,7 @@ private:
     float decreaseDistanceFactor; // Value for decreasing the initial distance value
     int distanceMin; // Minimal distance value
 
-    std::vector<std::vector<Node> > circleNodes; // Virtual nodes that create circle around the cell
-
-    std::vector<std::vector<double> > circleAngles; // Angle values for virtual nodes that create circle around the cell
+    std::vector<std::vector<circleNode> > circleNodes; // Virtual nodes that create circle around the cell
 
     std::vector<std::pair<int,int> > pivotCircle;  // Vector of nodes (shifts) for pivot security check
 
