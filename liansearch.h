@@ -96,7 +96,7 @@ private:
     bool expand(const Node curNode, const Map &map);
     std::list<Node> smoothPath(const std::list<Node>& path, const Map& map);
     void makePrimaryPath(Node curNode);
-    void makeSecondaryPath(Node curNode);
+    void makeSecondaryPath();
     double makeAngles();
 };
 

@@ -464,7 +464,7 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
         if (postsmoother) {
             hppath = smoothPath(hppath, map);
         }
-        makeSecondaryPath(curNode);
+        makeSecondaryPath();
         float max_angle = makeAngles();
         sresult.pathfound = true;
         sresult.hppath = hppath;
@@ -686,7 +686,7 @@ std::list<Node> LianSearch::smoothPath(const std::list<Node>& path, const Map& m
     bool first = true;
     Node previous = *it++;
     while (end_section != path.back()) {
-        for (it; it != --path.end(); ++it) {
+        for (it; it != path.end(); ++it) {
             auto next = ++it;
             --it;
             if (!first && !checkAngle(previous, start_section, *it)) continue;
@@ -708,17 +708,18 @@ std::list<Node> LianSearch::smoothPath(const std::list<Node>& path, const Map& m
     return new_path;
 }
 
-
-void LianSearch::makeSecondaryPath(Node curNode) {
+void LianSearch::makeSecondaryPath() {
     std::vector<Node> lineSegment;
     auto it = hppath.begin();
     Node parent = *it++;
     while (it != hppath.end()) {
         calculateLineSegment(lineSegment, parent, *it);
+        std::reverse(std::begin(lineSegment), std::end(lineSegment));
         lppath.insert(lppath.begin(), ++lineSegment.begin(), lineSegment.end());
         parent = *it++;
     }
-    lppath.push_front(*hppath.begin());
+    lppath.push_front(hppath.back());
+    std::reverse(std::begin(lppath), std::end(lppath));
 }
 
 
