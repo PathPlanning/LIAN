@@ -67,10 +67,10 @@ Node OpenList::getMin() {
         if(!elements[i].empty() && elements[i].begin()->F <= min.F) {
             if (elements[i].begin()->F == min.F) {
                 if (elements[i].begin()->g >= min.g) {
-                    min = *elements[i].begin();
+                    min = elements[i].front();
                 }
             } else {
-                min = *elements[i].begin();
+                min = elements[i].front();
             }
         }
     }
@@ -85,7 +85,7 @@ TiXmlElement * OpenList::writeToXml(TiXmlElement * element, TiXmlNode * child) c
     int exc = 0;
     for(size_t i = 0; i < height; ++i) {
         if(!elements[i].empty() && elements[i].front().F < min.F) {
-            min = elements[i].front();
+            min = *elements[i].begin();
             exc = i;
         }
     }
@@ -100,9 +100,9 @@ TiXmlElement * OpenList::writeToXml(TiXmlElement * element, TiXmlNode * child) c
         child -> InsertEndChild(*element);
     }
     for(size_t i = 0; i < height; ++i) {
-        if(elements[i].empty()) {
+        if(!elements[i].empty()) {
             for (auto it = elements[i].begin(); it != elements[i].end(); ++it) {
-                if(it != elements[exc].begin()) {
+                if (it != elements[exc].begin()) {
                     element -> Clear();
                     element -> SetAttribute(CNS_TAG_ATTR_X, it->j);
                     element -> SetAttribute(CNS_TAG_ATTR_Y, it->i);

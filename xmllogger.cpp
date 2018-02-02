@@ -121,7 +121,7 @@ void cXmlLogger::writeToLogMap(const Map &map, const std::list<Node> &path) {
     delete [] curLine;
 }
 
-void cXmlLogger::writeToLogOpenClose(const OpenList &open, const std::unordered_multimap<int, Node>& close, const int size) {
+void cXmlLogger::writeToLogOpenClose(const OpenList &open, const std::unordered_multimap<int, Node>& close) {
 
     if (loglevel == CN_LOGLVL_NO || loglevel == CN_LOGLVL_HIGH || loglevel == CN_LOGLVL_TINY) return;
 

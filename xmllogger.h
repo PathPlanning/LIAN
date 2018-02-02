@@ -23,7 +23,7 @@ public:
     bool getLog(const char* FileName);
     void saveLog();
     void writeToLogMap(const Map &map,const std::list<Node> &path);
-    void writeToLogOpenClose(const OpenList &open, const std::unordered_multimap<int, Node> &close, const int size);
+    void writeToLogOpenClose(const OpenList &open, const std::unordered_multimap<int, Node> &close);
     void writeToLogPath(const std::list<Node> &path, const std::vector<float> &angles);
     void writeToLogHpLevel(const std::list<Node> &path);
     void writeToLogSummary(const std::list<Node> &path, int numberofsteps, int nodescreated, float length, float length_scaled,

@@ -451,10 +451,11 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
                 if(tryToDecreaseRadius(curNode,map.getWidth()))
                     if(expand(curNode, map))
                         break;
-        if(Log->loglevel >= CN_LOGLVL_LOW) Log->writeToLogOpenClose(open, close, map.getHeight());
+
+        if(Log->loglevel >= CN_LOGLVL_LOW) Log->writeToLogOpenClose(open, close);
     }
 
-    if(Log->loglevel==CN_LOGLVL_MED) Log->writeToLogOpenClose(open, close, map.getHeight());
+    if (Log->loglevel == CN_LOGLVL_MED) Log->writeToLogOpenClose(open, close);
 
     sresult.nodescreated = open.get_size() + closeSize;
     sresult.numberofsteps = closeSize;
@@ -554,7 +555,7 @@ bool LianSearch::expand(const Node curNode, const Map &map) {
     bool successors_are_fine = false;
     auto parent = &(close.find(curNode.convolution(map.getWidth()))->second);
     if (curNode.parent != nullptr) {
-        int node_straight_ahead = round(curNode.angle * circle_nodes.size() / 360);
+        int node_straight_ahead = floor(curNode.angle * circle_nodes.size() / 360);
         double angle = fabs(curNode.angle - circleNodes[current_distance][node_straight_ahead].heading);
         if ((angle <= 180 && angle <= angleLimit) || (angle > 180 && 360 - angle <= angleLimit)) {
             int new_pos_i = curNode.i + circle_nodes[node_straight_ahead].i;
@@ -738,5 +739,6 @@ double LianSearch::makeAngles() {
         sresult.accum_angle += angle;
         angles.push_back(angle);
     }
+    std::reverse(std::begin(angles), std::end(angles));
     return max_angle;
 }
