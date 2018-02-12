@@ -555,7 +555,7 @@ bool LianSearch::expand(const Node curNode, const Map &map) {
     bool successors_are_fine = false;
     auto parent = &(close.find(curNode.convolution(map.getWidth()))->second);
     if (curNode.parent != nullptr) {
-        int node_straight_ahead = floor(curNode.angle * circle_nodes.size() / 360);
+        int node_straight_ahead = (int)round(curNode.angle * circleNodes[current_distance].size() / 360) % circleNodes[current_distance].size();
         double angle = fabs(curNode.angle - circleNodes[current_distance][node_straight_ahead].heading);
         if ((angle <= 180 && angle <= angleLimit) || (angle > 180 && 360 - angle <= angleLimit)) {
             int new_pos_i = curNode.i + circle_nodes[node_straight_ahead].i;
