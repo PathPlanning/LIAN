@@ -7,7 +7,7 @@
         <cellsize>24</cellsize>
         <startx>2</startx>
         <starty>13</starty>
-        <finishx>47</finishx>
+        <finishx>48</finishx>
         <finishy>13</finishy>
         <grid>
             <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
@@ -53,7 +53,7 @@
         <numOfParentsToIncreaseRadius>2</numOfParentsToIncreaseRadius>
     </algorithm>
     <options>
-        <loglevel>1</loglevel>
+        <loglevel>2</loglevel>
         <logpath />
         <logfilename />
     </options>
