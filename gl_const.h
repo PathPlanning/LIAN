@@ -45,7 +45,7 @@
 #define CN_LOGLVL_HIGH	1
 #define CN_LOGLVL_MED	1.5
 #define CN_LOGLVL_LOW	2
-
+#define CN_LOGLVL_ITER	1.2
 
 /*
  * XML file tags ---------------------------------------------------------------
@@ -85,6 +85,7 @@
         #define CNS_TAG_HPLEVEL     "hplevel"
         #define CNS_TAG_ANGLES      "angles"
         #define CNS_TAG_ANGLE       "angle"
+        #define CNS_TAG_ITERS       "iterations"
         #define CNS_TAG_LOWLEVEL    "lowlevel"
             #define CNS_TAG_SECTION "section"
             #define CNS_TAG_STEP    "step"

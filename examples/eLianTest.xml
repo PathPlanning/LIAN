@@ -7,7 +7,7 @@
         <cellsize>24</cellsize>
         <startx>2</startx>
         <starty>13</starty>
-        <finishx>48</finishx>
+        <finishx>47</finishx>
         <finishy>13</finishy>
         <grid>
             <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
@@ -42,9 +42,9 @@
     </map>
     <algorithm>
         <hweight>2</hweight>
-        <anglelimit>45</anglelimit>
+        <anglelimit>25</anglelimit>
         <distance>15</distance>
-        <distancemin>3</distancemin>
+        <distancemin>2</distancemin>
         <decreaseDistanceFactor>2</decreaseDistanceFactor>
         <pivotCircleRadius>0</pivotCircleRadius>
         <steplimit>-1</steplimit>

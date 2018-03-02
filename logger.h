@@ -20,6 +20,7 @@ public:
     virtual ~Logger() {}
     virtual bool getLog(const char* FileName) = 0;
     virtual void saveLog() = 0;
+    virtual void writeToLogIter(int closeSize, const Node &curNode) = 0;
     virtual void writeToLogMap(const Map &map,const std::list<Node> &path) = 0;
     virtual void writeToLogOpenClose(const OpenList &open, const std::unordered_multimap<int, Node>& close) = 0;
     virtual void writeToLogPath(const std::list<Node> &path, const std::vector<float> &angles) = 0;

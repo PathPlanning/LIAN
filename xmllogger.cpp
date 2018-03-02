@@ -1,19 +1,19 @@
 #include"xmllogger.h"
 
-cXmlLogger::cXmlLogger(float loglvl) {
+XmlLogger::XmlLogger(float loglvl) {
     loglevel = loglvl;
     logFileName = "";
     doc = 0;
 }
 
-cXmlLogger::~cXmlLogger() {
+XmlLogger::~XmlLogger() {
     if (doc) {
         doc->Clear();
         delete doc;
     }
 }
 
-bool cXmlLogger::getLog(const char *FileName) {
+bool XmlLogger::getLog(const char *FileName) {
     std::string value;
     TiXmlDocument doc_xml(FileName);
 
@@ -71,10 +71,38 @@ bool cXmlLogger::getLog(const char *FileName) {
         log->LinkEndChild(lowlevel);
     }
 
+    if (loglevel - CN_LOGLVL_ITER < 0.001) {
+        TiXmlElement *iters = new TiXmlElement(CNS_TAG_ITERS);
+        log->LinkEndChild(iters);
+    }
+
     return true;
 }
 
-void cXmlLogger::writeToLogMap(const Map &map, const std::list<Node> &path) {
+void XmlLogger::writeToLogIter(int closeSize, const Node &curNode) {
+    int iterate = 0;
+    TiXmlElement *element = new TiXmlElement(CNS_TAG_STEP);
+    TiXmlNode *child = 0, *iters = doc->FirstChild(CNS_TAG_ROOT);
+    iters = iters->FirstChild(CNS_TAG_LOG)->FirstChild(CNS_TAG_ITERS);
+
+   // while (child = iters->IterateChildren(child))
+        //iterate++;
+
+    //element->SetAttribute(CNS_TAG_ATTR_NUM, iterate);
+    element->SetAttribute(CNS_TAG_STEP, closeSize);
+    element->SetAttribute(CNS_TAG_ATTR_X, curNode.j);
+    element->SetAttribute(CNS_TAG_ATTR_Y, curNode.i);
+    if (curNode.parent) {
+        element->SetAttribute(CNS_TAG_ATTR_PARX, curNode.parent->j);
+        element->SetAttribute(CNS_TAG_ATTR_PARY, curNode.parent->i);
+    }
+    element->SetDoubleAttribute(CNS_TAG_ATTR_F, curNode.F);
+    element->SetDoubleAttribute(CNS_TAG_ATTR_G, curNode.g);
+
+    iters->InsertEndChild(*element);
+}
+
+void XmlLogger::writeToLogMap(const Map &map, const std::list<Node> &path) {
     if (loglevel == CN_LOGLVL_NO || loglevel == CN_LOGLVL_TINY) return;
     std::stringstream stream;
     std::string text,value;
@@ -121,7 +149,7 @@ void cXmlLogger::writeToLogMap(const Map &map, const std::list<Node> &path) {
     delete [] curLine;
 }
 
-void cXmlLogger::writeToLogOpenClose(const OpenList &open, const std::unordered_multimap<int, Node>& close) {
+void XmlLogger::writeToLogOpenClose(const OpenList &open, const std::unordered_multimap<int, Node>& close) {
 
     if (loglevel == CN_LOGLVL_NO || loglevel == CN_LOGLVL_HIGH || loglevel == CN_LOGLVL_TINY) return;
 
@@ -161,7 +189,7 @@ void cXmlLogger::writeToLogOpenClose(const OpenList &open, const std::unordered_
     }
 }
 
-void cXmlLogger::writeToLogPath(const std::list<Node> &path, const std::vector<float> &angles)
+void XmlLogger::writeToLogPath(const std::list<Node> &path, const std::vector<float> &angles)
 {	
     if (loglevel == CN_LOGLVL_NO || loglevel == CN_LOGLVL_TINY) return;
     TiXmlElement *element = doc->FirstChildElement(CNS_TAG_ROOT);
@@ -198,12 +226,12 @@ void cXmlLogger::writeToLogPath(const std::list<Node> &path, const std::vector<f
     }
 }
 
-void cXmlLogger::saveLog() {
+void XmlLogger::saveLog() {
     //if (loglevel == CN_LOGLVL_NO) return;
     doc->SaveFile(logFileName.c_str());
 }
 
-void cXmlLogger::writeToLogHpLevel(const std::list<Node> &path) {
+void XmlLogger::writeToLogHpLevel(const std::list<Node> &path) {
     if (loglevel == CN_LOGLVL_NO || loglevel == CN_LOGLVL_TINY) return;
     int partnumber = 0;
     TiXmlElement *part;
@@ -227,7 +255,7 @@ void cXmlLogger::writeToLogHpLevel(const std::list<Node> &path) {
     }
 }
 
-void cXmlLogger::writeToLogSummary(const std::list<Node> &path, int numberofsteps, int nodescreated, float length, float length_scaled,
+void XmlLogger::writeToLogSummary(const std::list<Node> &path, int numberofsteps, int nodescreated, float length, float length_scaled,
                                    long double time, float max_angle, float accum_angle, int sections) {
     if (loglevel == CN_LOGLVL_NO) return;
     std::string timeValue;

@@ -24,7 +24,7 @@ struct Node {
     Node*   parent;
 
     int     i, j;
-    int     radius;
+    int   radius;
     float   F;
     float   g;
 
@@ -33,7 +33,7 @@ struct Node {
     Node() : i(-1), j(-1), F(std::numeric_limits<float>::infinity()), g(std::numeric_limits<float>::infinity()),
              parent(nullptr), radius(CN_PTD_D), angle(0) {}
 
-    Node(int x, int y, float g_=std::numeric_limits<float>::infinity(), float h_=std::numeric_limits<float>::infinity(),
+    Node(int x, int y, float g_=std::numeric_limits<float>::infinity(), double h_=std::numeric_limits<float>::infinity(),
          float radius_=CN_PTD_D, Node *parent_=nullptr, float cweightdist_=0, double ang_=0) :
         i(x), j(y), g(g_), radius(radius_), parent(parent_), angle(ang_) {
         if (parent) {
