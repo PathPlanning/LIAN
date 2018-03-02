@@ -562,7 +562,8 @@ bool LianSearch::expand(const Node curNode, const Map &map) {
             curvature = fabs(angle);
             angle = angle * 180 / CN_PI_CONSTANT;
 
-            if (fabs(angle) > angleLimit) break;
+            if (fabs(angle) > angleLimit) 
+              continue;
             successors.push_back(Node(circle_nodes[succs[i]].i, circle_nodes[succs[i]].j));
         }
         circle_nodes=successors;
