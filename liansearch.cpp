@@ -443,7 +443,7 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
         close.insert({curNode.convolution(map.getWidth()),curNode});
         ++closeSize;
 
-        if(Log->loglevel - CN_LOGLVL_ITER < 0.01) Log->writeToLogIter(closeSize, curNode);
+        if(Log->loglevel == CN_LOGLVL_ITER) Log->writeToLogIter(closeSize, curNode);
 
         if (curNode.i == map.goal_i && curNode.j == map.goal_j) { // if current point is goal point - end of the cycle
             pathFound = true;
