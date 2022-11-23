@@ -1,0 +1,20 @@
+[0.008s] Invoking command in '/home/avi/LIAN/lian/build/lian_nav2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/avi/nakai/packages/nakai-onboard/install/rosboard:/opt/ros/humble:/home/avi/nakai/packages/nakai-onboard/install/tf03:/home/avi/nakai/packages/nakai-onboard/install/ros2_jetson_stats:/home/avi/nakai/packages/nakai-onboard/install/nakai_robot:/home/avi/nakai/packages/nakai-onboard/install/bar30:/home/avi/nakai/packages/nakai-onboard/install/altimu10v5 /usr/bin/cmake --build /home/avi/LIAN/lian/build/lian_nav2 -- -j20 -l20
+[0.027s] Invoked command in '/home/avi/LIAN/lian/build/lian_nav2' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/avi/nakai/packages/nakai-onboard/install/rosboard:/opt/ros/humble:/home/avi/nakai/packages/nakai-onboard/install/tf03:/home/avi/nakai/packages/nakai-onboard/install/ros2_jetson_stats:/home/avi/nakai/packages/nakai-onboard/install/nakai_robot:/home/avi/nakai/packages/nakai-onboard/install/bar30:/home/avi/nakai/packages/nakai-onboard/install/altimu10v5 /usr/bin/cmake --build /home/avi/LIAN/lian/build/lian_nav2 -- -j20 -l20
+[0.044s] Invoking command in '/home/avi/LIAN/lian/build/lian_nav2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/avi/nakai/packages/nakai-onboard/install/rosboard:/opt/ros/humble:/home/avi/nakai/packages/nakai-onboard/install/tf03:/home/avi/nakai/packages/nakai-onboard/install/ros2_jetson_stats:/home/avi/nakai/packages/nakai-onboard/install/nakai_robot:/home/avi/nakai/packages/nakai-onboard/install/bar30:/home/avi/nakai/packages/nakai-onboard/install/altimu10v5 /usr/bin/cmake --install /home/avi/LIAN/lian/build/lian_nav2
+[0.048s] -- Install configuration: ""
+[0.048s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/ament_index/resource_index/package_run_dependencies/lian_nav2
+[0.048s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/ament_index/resource_index/parent_prefix_path/lian_nav2
+[0.048s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/environment/ament_prefix_path.sh
+[0.048s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/environment/ament_prefix_path.dsv
+[0.048s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/environment/path.sh
+[0.048s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/environment/path.dsv
+[0.049s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/local_setup.bash
+[0.049s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/local_setup.sh
+[0.049s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/local_setup.zsh
+[0.049s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/local_setup.dsv
+[0.049s] -- Installing: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/package.dsv
+[0.049s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/ament_index/resource_index/packages/lian_nav2
+[0.049s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/cmake/lian_nav2Config.cmake
+[0.049s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/cmake/lian_nav2Config-version.cmake
+[0.049s] -- Up-to-date: /home/avi/LIAN/lian/install/lian_nav2/share/lian_nav2/package.xml
+[0.050s] Invoked command in '/home/avi/LIAN/lian/build/lian_nav2' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/avi/nakai/packages/nakai-onboard/install/rosboard:/opt/ros/humble:/home/avi/nakai/packages/nakai-onboard/install/tf03:/home/avi/nakai/packages/nakai-onboard/install/ros2_jetson_stats:/home/avi/nakai/packages/nakai-onboard/install/nakai_robot:/home/avi/nakai/packages/nakai-onboard/install/bar30:/home/avi/nakai/packages/nakai-onboard/install/altimu10v5 /usr/bin/cmake --install /home/avi/LIAN/lian/build/lian_nav2
