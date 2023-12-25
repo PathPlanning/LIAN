@@ -3,10 +3,10 @@
 #include <iostream>
 
 int main(int argc, char* argv[]) {
-    if (argc != 2)
-        return 1;
-
-    Mission Mission(argv[1]);
+    // if (argc != 2) {
+    //     return 1;
+    // }
+    Mission Mission("../examples/eLianTestOld.xml");
     std::cout<<"Retreiving map from input XML file.\n";
     if (!Mission.getMap()) {
         std::cout<<"Program terminated.\n";
