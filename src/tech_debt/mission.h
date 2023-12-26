@@ -5,7 +5,7 @@
 #include "liansearch.h"
 #include "map.h"
 #include "search.h"
-#include "searchresult.h"
+#include "search_result.h"
 
 
 #include <string>

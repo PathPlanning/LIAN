@@ -17,10 +17,10 @@ public:
 
     void resize(int size_);
 
-    size_t get_size() const;
-    bool is_empty() const;
+    size_t size() const;
+    bool empty() const;
 
-    void add(Node new_node);
+    void add(const Node& new_node);
     Node getMin();
     void pop(Node min);
 
@@ -28,7 +28,7 @@ public:
 
 private:
     std::list<Node> *elements;
-    size_t size;
+    size_t size_;
     size_t height;
 };
 

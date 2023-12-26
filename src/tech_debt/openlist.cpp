@@ -1,39 +1,38 @@
 #include "openlist.h"
 
-OpenList::OpenList() { size = 0; }
+OpenList::OpenList() { size_ = 0; }
 
 OpenList::OpenList(int size_) {
     elements = new std::list<Node>[size_];
-    size = 0;
+    size_ = 0;
     height = size_;
 }
 
 void OpenList::resize(int size_) {
     elements = new std::list<Node>[size_];
     height = size_;
-    size = 0;
+    size_ = 0;
 }
 
 OpenList::~OpenList() {
     delete [] elements;
 }
 
-size_t OpenList::get_size() const {
-    return size;
+size_t OpenList::size() const {
+    return size_;
 }
 
-bool OpenList::is_empty() const {
-    if (size == 0) return true;
-    return false;
+bool OpenList::empty() const {
+    return size_ == 0;
 }
 
-void OpenList::add(Node new_node) {
+void OpenList::add(const Node& new_node) {
     if (elements[new_node.i].empty()) {
         elements[new_node.i].push_back(new_node);
-        ++size;
+        ++size_;
         return;
     }
-    std::list<Node>::iterator pos = elements[new_node.i].end();
+    auto pos = elements[new_node.i].end();
     bool pos_found = false;
 
     for(auto it = elements[new_node.i].begin(); it != elements[new_node.i].end(); ++it) {
@@ -51,13 +50,13 @@ void OpenList::add(Node new_node) {
                     return;
                 }
                 elements[new_node.i].erase(it);
-                --size;
+                --size_;
                 break;
             }
         }
     }
-    ++size;
-    elements[new_node.i].insert(pos,new_node);
+    ++size_;
+    elements[new_node.i].insert(pos, new_node);
 }
 
 Node OpenList::getMin() {
@@ -75,7 +74,7 @@ Node OpenList::getMin() {
         }
     }
     elements[min.i].pop_front();
-    --size;
+    --size_;
     return min;
 }
 

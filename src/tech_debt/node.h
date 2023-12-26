@@ -30,14 +30,14 @@ struct Node {
 
     double angle;
 
-    Node() : i(-1), j(-1), F(std::numeric_limits<float>::infinity()), g(std::numeric_limits<float>::infinity()),
-             parent(nullptr), radius(CN_PTD_D), angle(0) {}
+    Node() : parent(nullptr), i(-1), j(-1), radius(CN_PTD_D),
+             F(std::numeric_limits<float>::infinity()), g(std::numeric_limits<float>::infinity()), angle(0) {}
 
-    Node(int x, int y, float g_=std::numeric_limits<float>::infinity(), double h_=std::numeric_limits<float>::infinity(),
-         float radius_=CN_PTD_D, Node *parent_=nullptr, float cweightdist_=0, double ang_=0) :
-        i(x), j(y), g(g_), radius(radius_), parent(parent_), angle(ang_) {
+    Node(int x, int y, float g_=std::numeric_limits<float>::infinity(), float h_=std::numeric_limits<float>::infinity(),
+         int radius_=CN_PTD_D, Node *parent_=nullptr, float cweightdist_=0, double ang_=0) :
+        parent(parent_), i(x), j(y), radius(radius_), g(g_), angle(ang_) {
         if (parent) {
-            F = g + h_ + cweightdist_ * fabs(ang_ - parent->angle);
+            F = g + h_ + cweightdist_ * (float)fabs(ang_ - parent->angle);
         } else {
             F = g + h_;
         }
@@ -47,16 +47,7 @@ struct Node {
         parent = nullptr;
     }
 
-    inline Node& operator=(const Node& other) {
-        i = other.i;
-        j = other.j;
-        F = other.F;
-        g = other.g;
-        parent = other.parent;
-        angle = other.angle;
-        radius = other.radius;
-        return *this;
-    }
+    inline Node& operator=(const Node& other) = default;
 
     inline bool operator==(const Node& p) const {
             return i == p.i && j == p.j && parent->i == p.parent->i && parent->j == p.parent->j;

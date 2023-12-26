@@ -40,7 +40,9 @@ Map::Map(const char* FileName) {
 
     auto root = doc.FirstChildElement(CNS_TAG_ROOT);
     if (!root) {
-        throw std::runtime_error((std::stringstream() << "Error! No '" << CNS_TAG_ROOT << "' element found in XML file").str());
+        std::ostringstream err_oss;
+        err_oss << "Error! No '" << CNS_TAG_ROOT << "' element found in XML file";
+        throw std::runtime_error(err_oss.str());
     }
 
     TiXmlElement *map = getElement(root, CNS_TAG_MAP, CNS_TAG_ROOT);
@@ -74,12 +76,16 @@ Map::Map(const char* FileName) {
 
     for (int curY = 0; curY < height_; ++curY) {
         if (!element) {
-            throw std::runtime_error((std::stringstream() << "Not enough '" << CNS_TAG_ROW << "' in '" << CNS_TAG_GRID << "' given.").str());
+            std::ostringstream err_oss;
+            err_oss << "Not enough '" << CNS_TAG_ROW << "' in '" << CNS_TAG_GRID << "' given.";
+            throw std::runtime_error(err_oss.str());
         }
 
         grid_.push_back(serializeVector<int>(element));
         if (grid_.back().size() != width_) {
-            throw std::runtime_error((std::stringstream() << "Wrong amount of cells in '" << CNS_TAG_ROW << "' " << curY << " given.").str());
+            std::ostringstream err_oss;
+            err_oss << "Wrong amount of cells in '" << CNS_TAG_ROW << "' " << curY << " given.";
+            throw std::runtime_error(err_oss.str());
         }
         element = element->NextSiblingElement();
     }

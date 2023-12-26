@@ -4,7 +4,7 @@
 #include "gl_const.h"
 #include "logger.h"
 #include "map.h"
-#include "searchresult.h"
+#include "search_result.h"
 
 class Search {
 

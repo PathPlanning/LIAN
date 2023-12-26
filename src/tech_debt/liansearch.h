@@ -19,9 +19,9 @@ class LianSearch : public Search {
 public:
 
     // Constructor with parameters
-    LianSearch(float angleLimit_, int distance_, float weight_, unsigned int steplimit_,
-               float curvatureHeuristicWeight_, bool postsmoother_, float decreaseDistanceFactor_,
-               int distanceMin_, double PivotRadius_, int numOfParentsToIncreaseRadius_);
+    LianSearch(float angleLimit_, int distance_, float weight_, unsigned int stepLimit_,
+               float curvatureHeuristicWeight_, bool postSmoother_, float decreaseDistanceFactor_,
+               int distanceMin_, float pivotRadius_, int numOfParentsToIncreaseRadius_);
 
     ~LianSearch();
     SearchResult startSearch(Logger *Log, const Map &map); // General searching algorithm
@@ -35,7 +35,6 @@ private:
     int numOfParentsToIncreaseRadius;
 
     std::vector<int> listOfDistances;
-    int listOfDistancesSize;
 
     float weight;  // Heuristics weight
 
@@ -50,7 +49,6 @@ private:
 
     unsigned int stepLimit; // Maximum number of iterations, allowed for the algorithm
 
-    unsigned int closeSize; // Number of elements in close (elements that were already examined)
 
     float decreaseDistanceFactor; // Value for decreasing the initial distance value
     int distanceMin; // Minimal distance value
@@ -82,9 +80,9 @@ private:
     // check that there are no obstacle in a safety radius from a turn point
     bool checkPivotCircle(const Map &map, const Node &center);
 
-    double getCost(int a_i, int a_j, int b_i, int b_j) const;
+    static double getCost(int a_i, int a_j, int b_i, int b_j);
 
-    double calcAngle(const Node &dad, const Node &node, const Node &son) const;
+    static double calcAngle(const Node &dad, const Node &node, const Node &son);
     bool checkAngle(const Node &dad, const Node &node, const Node &son) const;
 
     bool stopCriterion(); // Check for the ending criteria. Return true if the algorithm should be stopped

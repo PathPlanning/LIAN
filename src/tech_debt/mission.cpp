@@ -38,7 +38,6 @@ namespace {
             return;
         }
 
-        TiXmlElement* point;
         int64_t index = 0;
         for (auto iter = path.cbegin(); iter != path.cend(); ++iter, ++index) {
             TiXmlElement point(CNS_TAG_NODE);
@@ -107,7 +106,6 @@ namespace {
             return;
         }
         int partnumber = 0;
-        TiXmlElement* part;
         auto it = path.cbegin();
 
         for (auto iter = ++path.cbegin(); iter != path.cend(); ++iter, ++it) {
@@ -124,7 +122,7 @@ namespace {
     }
 }
 
-Mission::Mission(const char* fName) : fileName(fName), config(fName), map(fName), search(nullptr), logger(nullptr) {}
+Mission::Mission(const char* fName) : config(fName), map(fName), search(nullptr), logger(nullptr), fileName(fName) {}
 
 Mission::~Mission() {
     delete search;
@@ -166,26 +164,26 @@ void Mission::startSearch() {
 
 void Mission::printSearchResultsToConsole() {
     std::cout << "Path ";
-    if (!sr.pathfound)
+    if (!sr.pathFound)
         std::cout << "NOT ";
     std::cout << "found!" << std::endl;
-    std::cout << "nodescreated=" << sr.nodescreated << std::endl;
-    std::cout << "numberofsteps=" << sr.numberofsteps << std::endl;
-    if (sr.pathfound) {
-        std::cout << "pathlength=" << sr.pathlength << std::endl;
-        std::cout << "length_scaled=" << sr.pathlength * map.getCellSize() << std::endl;
+    std::cout << "nodescreated=" << sr.nodesCreated << std::endl;
+    std::cout << "numberofsteps=" << sr.numberOfSteps << std::endl;
+    if (sr.pathFound) {
+        std::cout << "pathlength=" << sr.pathLength << std::endl;
+        std::cout << "length_scaled=" << sr.pathLength * map.getCellSize() << std::endl;
     }
     std::cout << "time=" << sr.time << std::endl;
 }
 
 void Mission::saveSearchResultsToLog() {
-    saveSummaryToLog(logger, sr.hppath, sr.numberofsteps, sr.nodescreated, sr.pathlength, sr.pathlength * map.getCellSize(),
-                              sr.time, sr.max_angle, sr.accum_angle, sr.sections);
+    saveSummaryToLog(logger, sr.hpPath, sr.numberOfSteps, sr.nodesCreated, sr.pathLength, sr.pathLength * map.getCellSize(),
+                     sr.time, sr.maxAngle, sr.accumAngle, sr.sections);
 
-    if (sr.pathfound) {
-        savePathToLog(logger, sr.lppath, sr.angles);
-        saveMapToLog(logger, map, sr.lppath);
-        saveToLogHpLevel(logger, sr.hppath);
+    if (sr.pathFound) {
+        savePathToLog(logger, sr.lpPath, sr.angles);
+        saveMapToLog(logger, map, sr.lpPath);
+        saveToLogHpLevel(logger, sr.hpPath);
     }
     logger->saveLog();
 }
