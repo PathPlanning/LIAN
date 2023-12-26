@@ -10,20 +10,29 @@
 #include <sstream>
 #include <string>
 
+struct SearchParams {
+    float angleLimit;
+    int distance;
+    float weight;
+    unsigned int steplimit;
+    float curvatureHeuristicWeight;
+    bool postsmoother;
+    float decreaseDistanceFactor;
+    int distanceMin;
+    double pivotRadius;
+    int numOfParentsToIncreaseRadius;
+    float logLevel;
+};
+
 class Config {
-
-private:
-    int N;
-    float *searchParams;
-
 public:
-    Config();
-    Config(int numParams, float *paramArray);
-    ~Config();
+    Config() {}
 
-    float getParamValue(int i) const;
+    const SearchParams& params() const;
 
     bool getConfig(const char* FileName);
+private:
+    SearchParams params_;
 };
 
 #endif
