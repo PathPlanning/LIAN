@@ -124,15 +124,11 @@ namespace {
     }
 }
 
-Mission::Mission(const char* fName) : fileName(fName), map(fName), search(nullptr), logger(nullptr) {}
+Mission::Mission(const char* fName) : fileName(fName), config(fName), map(fName), search(nullptr), logger(nullptr) {}
 
 Mission::~Mission() {
     delete search;
     delete logger;
-}
-
-bool Mission::getConfig() {
-    return config.getConfig(fileName);
 }
 
 void Mission::createSearch() {

@@ -1,48 +1,38 @@
 #include "xmlUtils.h"
 #include "map.h"
 
-Map::~Map()
-{	
-    if(Grid) {
-        for(int i = 0; i < height; i++) {
-            delete[] Grid[i];
-        }
-        delete[] Grid;
-    }
+std::vector<int>& Map::operator[](int i) {
+    return grid_[i];
 }
-
-int * Map::operator [] (int i) {
-    return Grid[i];
-}
-const int * Map::operator [] (int i) const {
-    return Grid[i];
+const std::vector<int>& Map::operator[](int i) const {
+    return grid_[i];
 }
 
 bool Map::CellIsTraversable(int curr_i, int curr_j) const {
-    return (Grid[curr_i][curr_j] != CN_OBSTL);
+    return (grid_[curr_i][curr_j] != CN_OBSTL);
 }
 
 bool Map::CellIsObstacle(int curr_i, int curr_j) const {
-    return (Grid[curr_i][curr_j] == CN_OBSTL);
+    return (grid_[curr_i][curr_j] == CN_OBSTL);
 }
 
 bool Map::CellOnGrid(int curr_i, int curr_j) const {
-    return (curr_i < height && curr_i >= 0 && curr_j < width && curr_j >= 0);
+    return (curr_i < height_ && curr_i >= 0 && curr_j < width_ && curr_j >= 0);
 }
 
 int Map::getHeight() const {
-    return height;
+    return height_;
 }
 
 int Map::getWidth() const {
-    return width;
+    return width_;
 }
 
 double Map::getCellSize() const {
-    return CellSize;
+    return cellSize_;
 }
 
-Map::Map(const char* FileName) : Grid(nullptr) {
+Map::Map(const char* FileName) {
     TiXmlDocument doc(FileName);
     if (!doc.LoadFile()) {
         throw std::runtime_error("Error openning input XML file");
@@ -56,13 +46,13 @@ Map::Map(const char* FileName) : Grid(nullptr) {
     TiXmlElement *map = getElement(root, CNS_TAG_MAP, CNS_TAG_ROOT);
 
     auto element = getElement(map, CNS_TAG_HEIGHT, CNS_TAG_MAP);
-    height = std::abs(serialize<int>(element));
+    height_ = std::abs(serialize<int>(element));
 
     element = getElement(map, CNS_TAG_WIDTH, CNS_TAG_MAP);
-    width = std::abs(serialize<int>(element));
+    width_ = std::abs(serialize<int>(element));
 
     element = getElement(map, CNS_TAG_CELLSIZE, CNS_TAG_MAP);
-    CellSize = std::abs(serialize<int>(element));
+    cellSize_ = std::abs(serialize<int>(element));
 
 
     element = getElement(map, CNS_TAG_SX, CNS_TAG_MAP);
@@ -78,47 +68,19 @@ Map::Map(const char* FileName) : Grid(nullptr) {
     goal_i = serialize<int>(element);
 
     element = getElement(map, CNS_TAG_GRID, CNS_TAG_MAP);
-    Grid = new int* [height];
-    for (int i = 0; i < height; i++) {
-        Grid[i] = new int[width];
-    }
+    grid_.reserve(height_);
 
     element = element->FirstChildElement(CNS_TAG_ROW);
 
-    int i = 0;
-    while (i < height) {
+    for (int curY = 0; curY < height_; ++curY) {
         if (!element) {
-            throw std::runtime_error((std::stringstream() << "Not enough '" << CNS_TAG_ROW << "' in '" << CNS_TAG_GRID << "' given").str());
+            throw std::runtime_error((std::stringstream() << "Not enough '" << CNS_TAG_ROW << "' in '" << CNS_TAG_GRID << "' given.").str());
         }
 
-        auto grid = element->GetText();
-        std::stringstream stream;
-        int k = 0;
-        std::string text = "";
-        int j = 0;
-
-        for (k = 0; k < (strlen(grid)); k++) {
-            if (grid[k] == ' ') {
-                stream << text;
-                stream >> Grid[i][j];
-                stream.clear();
-                stream.str("");
-                text = "";
-                j++;
-            }
-            else {
-                text += grid[k];
-            }
+        grid_.push_back(serializeVector<int>(element));
+        if (grid_.back().size() != width_) {
+            throw std::runtime_error((std::stringstream() << "Wrong amount of cells in '" << CNS_TAG_ROW << "' " << curY << " given.").str());
         }
-        stream << text;
-        stream >> Grid[i][j];
-        stream.clear();
-        stream.str("");
-
-        if (j < width - 1) {
-            throw std::runtime_error((std::stringstream() << "Not enough cells in '" << CNS_TAG_ROW << "' " << i << " given").str());
-        }
-        i++;
         element = element->NextSiblingElement();
     }
 }

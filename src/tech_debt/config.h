@@ -26,11 +26,9 @@ struct SearchParams {
 
 class Config {
 public:
-    Config() {}
+    Config(const char* FileName);
 
     const SearchParams& params() const;
-
-    bool getConfig(const char* FileName);
 private:
     SearchParams params_;
 };

@@ -59,7 +59,7 @@
     </options>
     <log>
         <mapfilename>../examples/eLianTestOld.xml</mapfilename>
-        <summary pathfound="true" numberofsteps="16" nodescreated="92" sections="6" length="54.698898" length_scaled="1312.773560" time="0.0091471" max_angle="63.434948" accum_angle="185.325729" />
+        <summary pathfound="true" numberofsteps="16" nodescreated="92" sections="6" length="54.698898" length_scaled="1312.773560" time="0.0091113" max_angle="63.434948" accum_angle="185.325729" />
         <path>
             <row number="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
             <row number="1">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>

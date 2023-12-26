@@ -14,7 +14,7 @@ const SearchParams& Config::params() const {
 //     return mapFileName_;
 // }
 
-bool Config::getConfig(const char* fileName) {
+Config::Config(const char* fileName) {
     TiXmlDocument doc(fileName);
     if (!doc.LoadFile()) {
         throw std::runtime_error("Error openning input XML file.");
@@ -69,6 +69,4 @@ bool Config::getConfig(const char* fileName) {
 
     element = getElement(options, CNS_TAG_LOGLVL, CNS_TAG_OPTIONS);
     params_.logLevel = serialize<float>(element);
-
-    return true;
 }
