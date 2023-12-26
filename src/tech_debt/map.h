@@ -19,9 +19,8 @@ private:
     double CellSize;
 
 public:
-    Map();
+    Map(const char* FileName);
     ~Map();
-    bool getMap(const char* FileName);
 
     bool CellIsTraversable (int curr_i, int curr_j) const;
     bool CellOnGrid (int curr_i, int curr_j) const;

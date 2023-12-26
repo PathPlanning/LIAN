@@ -8,10 +8,6 @@ int main(int argc, char* argv[]) {
     // }
     Mission Mission("../examples/eLianTestOld.xml");
     std::cout<<"Retreiving map from input XML file.\n";
-    if (!Mission.getMap()) {
-        std::cout<<"Program terminated.\n";
-        return 0;
-    }
 
     std::cout<<"Retreiving search algorithm configuration from input XML file.\n";
     if (!Mission.getConfig())

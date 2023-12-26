@@ -16,7 +16,6 @@ public:
     Mission(const char* fName);
     ~Mission();
 
-    bool getMap();
     bool getConfig();
     bool createLog();
     void createSearch();
@@ -25,8 +24,8 @@ public:
     void saveSearchResultsToLog();
 
 private:
-    Map         map;
     Config      config;
+    Map         map;
 
     Search      *search;
     Logger      *logger;

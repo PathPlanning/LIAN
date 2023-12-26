@@ -17,16 +17,7 @@ T serialize(TiXmlElement* element) {
 }
 
 template <>
-bool serialize<bool>(TiXmlElement* element) {
-    std::string buf(element->GetText());
-    if (buf == "true") {
-        return true;
-    }
-    if (buf == "false") {
-        return false;
-    }
-    throw std::runtime_error("Expected true or false. Got: " + buf);
-}
+bool serialize<bool>(TiXmlElement* element);
 
 template <typename T>
 T serializeOrElse(TiXmlElement* element, const T& orElse) {
@@ -59,16 +50,4 @@ std::vector<T> serializeVector(TiXmlElement* element) {
 
 TiXmlElement* getElement(
     TiXmlElement* section, const std::string& elementName,
-    std::optional<std::string> sectionName = std::nullopt) {
-    TiXmlElement* element = section->FirstChildElement(elementName.c_str());
-    if (!element) {
-        std::stringstream errorStream;
-        errorStream << "Error! No '" << elementName << "' element found";
-        if (sectionName) {
-            errorStream << " inside '" << (*sectionName) << "' section.";
-        }
-        throw std::runtime_error(errorStream.str());
-    }
-
-    return element;
-}
+    std::optional<std::string> sectionName = std::nullopt);

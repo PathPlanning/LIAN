@@ -69,4 +69,6 @@ bool Config::getConfig(const char* fileName) {
 
     element = getElement(options, CNS_TAG_LOGLVL, CNS_TAG_OPTIONS);
     params_.logLevel = serialize<float>(element);
+
+    return true;
 }
