@@ -2,15 +2,15 @@
 
 OpenList::OpenList() { size_ = 0; }
 
-OpenList::OpenList(int size_) {
-    elements = new std::list<Node>[size_];
+OpenList::OpenList(int size) {
+    elements = new std::list<Node>[size];
     size_ = 0;
-    height = size_;
+    height = size;
 }
 
-void OpenList::resize(int size_) {
-    elements = new std::list<Node>[size_];
-    height = size_;
+void OpenList::resize(int size) {
+    elements = new std::list<Node>[size];
+    height = size;
     size_ = 0;
 }
 
