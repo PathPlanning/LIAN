@@ -6,7 +6,6 @@
 #include "map.h"
 #include "search.h"
 #include "searchresult.h"
-#include "xmllogger.h"
 
 
 #include <string>

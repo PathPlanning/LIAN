@@ -5,7 +5,6 @@
 #include "logger.h"
 #include "map.h"
 #include "searchresult.h"
-#include "xmllogger.h"
 
 class Search {
 

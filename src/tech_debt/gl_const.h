@@ -40,12 +40,12 @@
 #define CN_OBSTL 1
 
 //loglevel
-#define CN_LOGLVL_NO	0
-#define CN_LOGLVL_TINY	0.5
-#define CN_LOGLVL_HIGH	1
-#define CN_LOGLVL_MED	1.5
-#define CN_LOGLVL_LOW	2
-#define CN_LOGLVL_ITER	1.2
+#define CN_LOGLVL_NO	0.f
+#define CN_LOGLVL_TINY	0.5f
+#define CN_LOGLVL_HIGH	1.f
+#define CN_LOGLVL_MED	1.5f
+#define CN_LOGLVL_LOW	2.f
+#define CN_LOGLVL_ITER	1.2f
 
 /*
  * XML file tags ---------------------------------------------------------------

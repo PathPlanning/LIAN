@@ -1,5 +1,76 @@
 #include "liansearch.h"
 
+namespace {
+    void saveIterationToLog(Logger* logger, int closeSize_, const Node& curNode) {
+        auto space = logger->logSpace<CN_LOGLVL_ITER>(CNS_TAG_ITERS);
+        if (!space) {
+            return;
+        }
+
+        TiXmlElement element(CNS_TAG_STEP);
+
+        element.SetAttribute(CNS_TAG_STEP, closeSize_);
+        element.SetAttribute(CNS_TAG_ATTR_X, curNode.j);
+        element.SetAttribute(CNS_TAG_ATTR_Y, curNode.i);
+        if (curNode.parent) {
+            element.SetAttribute(CNS_TAG_ATTR_PARX, curNode.parent->j);
+            element.SetAttribute(CNS_TAG_ATTR_PARY, curNode.parent->i);
+        }
+        element.SetDoubleAttribute(CNS_TAG_ATTR_F, curNode.F);
+        element.SetDoubleAttribute(CNS_TAG_ATTR_G, curNode.g);
+
+        space->InsertEndChild(element);
+    }
+
+    void saveToLogOpenAndClose(Logger* logger, const OpenList& open_,
+        const std::unordered_multimap<int, Node>& close_) {
+        auto space = logger->logSpace<CN_LOGLVL_LOW>(CNS_TAG_LOWLEVEL);
+        if (!space) {
+            return;
+        }
+
+        int iterate = 0;
+        TiXmlNode* child = 0, * curNode = space;
+
+        while (child = curNode->IterateChildren(child))
+            iterate++;
+
+        {
+            TiXmlElement element(CNS_TAG_STEP);
+            element.SetAttribute(CNS_TAG_ATTR_NUM, iterate);
+            curNode->InsertEndChild(element);
+            curNode = curNode->LastChild();
+        }
+
+        {
+
+            TiXmlElement element(CNS_TAG_OPEN);
+            curNode->InsertEndChild(element);
+            child = curNode->LastChild();
+        }
+
+        open_.writeToXml(child);
+
+        {
+            TiXmlElement element(CNS_TAG_CLOSE);
+            curNode->InsertEndChild(element);
+            child = curNode->LastChild();
+        }
+
+        for (auto it = close_.begin(); it != close_.end(); ++it) {
+            TiXmlElement element(CNS_TAG_NODE);
+            element.SetAttribute(CNS_TAG_ATTR_X, it->second.j);
+            element.SetAttribute(CNS_TAG_ATTR_Y, it->second.i);
+            element.SetDoubleAttribute(CNS_TAG_ATTR_F, it->second.F);
+            element.SetDoubleAttribute(CNS_TAG_ATTR_G, it->second.g);
+            if (it->second.g > 0) {
+                element.SetAttribute(CNS_TAG_ATTR_PARX, it->second.parent->j);
+                element.SetAttribute(CNS_TAG_ATTR_PARY, it->second.parent->i);
+            }
+            child->InsertEndChild(element);
+        }
+    }
+}
 
 /*
  * // Use for more accurate time calculation
@@ -276,7 +347,7 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
         close.insert({curNode.convolution(map.getWidth()),curNode});
         ++closeSize;
 
-        if(Log->loglevel == CN_LOGLVL_ITER) Log->writeToLogIter(closeSize, curNode);
+        saveIterationToLog(Log, closeSize, curNode);
 
         if (curNode.i == map.goal_i && curNode.j == map.goal_j) { // if current point is goal point - end of the cycle
             pathFound = true;
@@ -289,10 +360,10 @@ SearchResult LianSearch::startSearch(Logger *Log, const Map &map) {
                     if(expand(curNode, map))
                         break;
 
-        if(Log->loglevel >= CN_LOGLVL_LOW) Log->writeToLogOpenClose(open, close);
+        saveToLogOpenAndClose(Log, open, close);
     }
 
-    if (Log->loglevel == CN_LOGLVL_MED) Log->writeToLogOpenClose(open, close);
+    saveToLogOpenAndClose(Log, open, close);
 
     sresult.nodescreated = open.get_size() + closeSize;
     sresult.numberofsteps = closeSize;

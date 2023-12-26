@@ -24,7 +24,7 @@ public:
     Node getMin();
     void pop(Node min);
 
-    TiXmlElement *writeToXml(TiXmlElement * element, TiXmlNode *child) const;
+    void writeToXml(TiXmlNode *child) const;
 
 private:
     std::list<Node> *elements;

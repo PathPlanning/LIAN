@@ -79,7 +79,7 @@ Node OpenList::getMin() {
     return min;
 }
 
-TiXmlElement * OpenList::writeToXml(TiXmlElement * element, TiXmlNode * child) const {
+void OpenList::writeToXml(TiXmlNode * child) const {
     Node min;
     min.F = std::numeric_limits<float>::infinity();
     for(size_t i = 0; i < height; i++) {
@@ -94,32 +94,31 @@ TiXmlElement * OpenList::writeToXml(TiXmlElement * element, TiXmlNode * child) c
         }
     }
     if(min.F != std::numeric_limits<float>::infinity()) {
-        element = new TiXmlElement(CNS_TAG_NODE);
-        element -> SetAttribute(CNS_TAG_ATTR_X, min.j);
-        element -> SetAttribute(CNS_TAG_ATTR_Y, min.i);
-        element -> SetDoubleAttribute(CNS_TAG_ATTR_F, min.F);
-        element -> SetDoubleAttribute(CNS_TAG_ATTR_G, min.g);
-        element -> SetAttribute(CNS_TAG_ATTR_PARX, min.parent->j);
-        element -> SetAttribute(CNS_TAG_ATTR_PARY, min.parent->i);
-        child -> InsertEndChild(*element);
+        TiXmlElement element(CNS_TAG_NODE);
+        element.SetAttribute(CNS_TAG_ATTR_X, min.j);
+        element.SetAttribute(CNS_TAG_ATTR_Y, min.i);
+        element.SetDoubleAttribute(CNS_TAG_ATTR_F, min.F);
+        element.SetDoubleAttribute(CNS_TAG_ATTR_G, min.g);
+        element.SetAttribute(CNS_TAG_ATTR_PARX, min.parent->j);
+        element.SetAttribute(CNS_TAG_ATTR_PARY, min.parent->i);
+        child -> InsertEndChild(element);
     }
     for(size_t i = 0; i < height; ++i) {
         if(!elements[i].empty()) {
             for (auto it = elements[i].begin(); it != elements[i].end(); ++it) {
                 if (*it != min) {
-                    element -> Clear();
-                    element -> SetAttribute(CNS_TAG_ATTR_X, it->j);
-                    element -> SetAttribute(CNS_TAG_ATTR_Y, it->i);
-                    element -> SetDoubleAttribute(CNS_TAG_ATTR_F, it->F);
-                    element -> SetDoubleAttribute(CNS_TAG_ATTR_G, it->g);
+                    TiXmlElement element(CNS_TAG_NODE);
+                    element.SetAttribute(CNS_TAG_ATTR_X, it->j);
+                    element.SetAttribute(CNS_TAG_ATTR_Y, it->i);
+                    element.SetDoubleAttribute(CNS_TAG_ATTR_F, it->F);
+                    element.SetDoubleAttribute(CNS_TAG_ATTR_G, it->g);
                     if (it->g > 0){
-                        element -> SetAttribute(CNS_TAG_ATTR_PARX, it->parent->j);
-                        element -> SetAttribute(CNS_TAG_ATTR_PARY, it->parent->i);
+                        element.SetAttribute(CNS_TAG_ATTR_PARX, it->parent->j);
+                        element.SetAttribute(CNS_TAG_ATTR_PARY, it->parent->i);
                     }
-                    child->InsertEndChild(*element);
+                    child->InsertEndChild(element);
                 }
             }
         }
     }
-    return element;
 }
