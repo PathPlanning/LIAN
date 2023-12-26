@@ -22,7 +22,9 @@ Config::Config(const char* fileName) {
 
     auto root = doc.FirstChildElement(CNS_TAG_ROOT);
     if (!root) {
-        throw std::runtime_error((std::stringstream() << "No '" << CNS_TAG_ROOT << "' element found in XML file.").str());
+        std::ostringstream err_oss;
+        err_oss << "No '" << CNS_TAG_ROOT << "' element found in XML file.";
+        throw std::runtime_error(err_oss.str());
     }
 
     auto algorithm = getElement(root, CNS_TAG_ALGORITHM, CNS_TAG_ROOT);
