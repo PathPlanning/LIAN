@@ -114,10 +114,10 @@ void LianSearch::calculateCircle(int radius) { //here radius - radius of the cir
         int y = radius;
         int delta = 2 - 2 * radius;
         while (y >= 0) {
-            if (x > radius) x = radius;
-            else if (x < -radius) x = -radius;
-            if (y > radius) y = radius;
-            else if (y < -radius) y = -radius;
+            x = std::min(x, radius);
+            x = std::max(x, -radius);
+            y = std::min(y, radius);
+            y = std::max(y, -radius);
             double dist = getCost(0, 0, x, y);
             circle_nodes.emplace_back(x, y, dist);
             circle_nodes.emplace_back(x, -y, dist);
@@ -138,23 +138,29 @@ void LianSearch::calculateCircle(int radius) { //here radius - radius of the cir
             delta += 2 * (++x - y--);
         }
 
-        for (int i = 0; i < circle_nodes.size(); i += 4)
+        for (int i = 0; i < circle_nodes.size(); i += 4) {
             circleNodes[k].push_back(circle_nodes[i]);
-        for (int i = circle_nodes.size() - 7; i > 0; i -= 4)
+        }
+        for (int i = circle_nodes.size() - 7; i > 0; i -= 4) {
             circleNodes[k].push_back(circle_nodes[i]);
-        for (int i = 7; i < circle_nodes.size(); i += 4)
+        }
+        for (int i = 7; i < circle_nodes.size(); i += 4) {
             circleNodes[k].push_back(circle_nodes[i]);
-        for (int i = circle_nodes.size() - 6; i > 0; i -= 4)
+        }
+        for (int i = circle_nodes.size() - 6; i > 0; i -= 4) {
             circleNodes[k].push_back(circle_nodes[i]);
+        }
         circleNodes[k].pop_back();
         for (size_t i = 0; i < circleNodes[k].size(); ++i) {
             double angle = acos((circleNodes[k][0].i * circleNodes[k][i].i + circleNodes[k][0].j * circleNodes[k][i].j)
                 / (sqrt(pow(circleNodes[k][0].i, 2) + pow(circleNodes[k][0].j, 2))
                     * sqrt(pow(circleNodes[k][i].i, 2) + pow(circleNodes[k][i].j, 2))));
-            if (i < circleNodes[k].size() / 2)
+            if (i < circleNodes[k].size() / 2) {
                 circleNodes[k][i].heading = angle * 180 / CN_PI_CONSTANT;
-            else
+            }
+            else {
                 circleNodes[k][i].heading = 360 - angle * 180 / CN_PI_CONSTANT;
+            }
             //std::cout << circleNodes[k][i].heading  << std::endl;
         }
     }
@@ -169,12 +175,14 @@ void LianSearch::calculatePivotCircle() {
         for (int j = -num; j <= +num; j++) {
             add_i = i != 0 ? 1 : 0;
             add_j = j != 0 ? 1 : 0;
-            if ((pow(2 * abs(i) - add_i, 2) + pow(2 * abs(j) - add_j, 2)) < pow(2 * pivotRadius, 2))
+            if ((pow(2 * abs(i) - add_i, 2) + pow(2 * abs(j) - add_j, 2)) < pow(2 * pivotRadius, 2)) {
                 pivotCircle.push_back({ i, j });
+            }
         }
     }
-    if (pivotCircle.empty())
+    if (pivotCircle.empty()) {
         pivotCircle.push_back({ 0, 0 });
+    }
 }
 
 bool LianSearch::checkPivotCircle(const Map& map, const Node& center) {
@@ -182,8 +190,9 @@ bool LianSearch::checkPivotCircle(const Map& map, const Node& center) {
     for (int k = 0; k < pivotCircle.size(); k++) {
         i = center.i + pivotCircle[k].first;
         j = center.j + pivotCircle[k].second;
-        if (!map.CellOnGrid(i, j) || map.CellIsObstacle(i, j))
+        if (!map.CellOnGrid(i, j) || map.CellIsObstacle(i, j)) {
             return false;
+        }
     }
     return true;
 }
@@ -309,8 +318,8 @@ double LianSearch::calcAngle(const Node& dad, const Node& node, const Node& son)
     cos_angle /= getCost(son.i, son.j, node.i, node.j);
     cos_angle /= getCost(node.i, node.j, dad.i, dad.j);
 
-    if (cos_angle < -1) cos_angle = -1;
-    if (cos_angle > 1) cos_angle = 1;
+    cos_angle = std::min(cos_angle, (double)1);
+    cos_angle = std::max(cos_angle, (double)-1);
 
     return acos(cos_angle);
 }
@@ -449,9 +458,14 @@ void LianSearch::update(const Node current_node, Node new_node, bool& successors
     auto it = close.find(new_node.convolution(map.getWidth()));
     if (it != close.end()) {
         auto range = close.equal_range(it->first);
-        for (auto it = range.first; it != range.second; ++it)
-            if (it->second.parent == nullptr || (it->second.parent->i == current_node.i && it->second.parent->j == current_node.j))
+        for (auto it = range.first; it != range.second; ++it) {
+            if (it->second.parent == nullptr) {
                 return;
+            }
+            if (it->second.parent->i == current_node.i && it->second.parent->j == current_node.j) {
+                return;
+            }
+        }
     }
 
     if (listOfDistances.size() > 1) new_node.radius = tryToIncreaseRadius(&new_node);
@@ -460,10 +474,12 @@ void LianSearch::update(const Node current_node, Node new_node, bool& successors
 }
 
 bool LianSearch::expand(const Node curNode, const Map& map) {
-    int current_distance;
-    for (current_distance = 0; current_distance < listOfDistances.size(); ++current_distance)
-        if (listOfDistances[current_distance] == curNode.radius)
+    std::size_t current_distance;
+    for (current_distance = 0; current_distance < listOfDistances.size(); ++current_distance) {
+        if (listOfDistances[current_distance] == curNode.radius) {
             break;
+        }
+    }
 
     std::vector<circleNode> circle_nodes = circleNodes[current_distance];
 
@@ -492,8 +508,12 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
         bool limit1 = true;
         bool limit2 = true;
         while (++candidates[0] != --candidates[1] && (limit1 || limit2)) { // untill the whole circle is explored or we exessed anglelimit somewhere
-            if (candidates[0] >= circle_nodes.size()) candidates[0] = 0;
-            if (candidates[1] < 0) candidates[1] = circle_nodes.size() - 1;
+            if (candidates[0] >= circle_nodes.size()) {
+                candidates[0] = 0;
+            }
+            if (candidates[1] < 0) {
+                candidates[1] = circle_nodes.size() - 1;
+            }
 
             for (auto cand : candidates) {
                 double angle = fabs(curNode.angle - circleNodes[current_distance][cand].heading);
@@ -501,8 +521,9 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
                     int new_pos_i = curNode.i + circle_nodes[cand].i;
                     int new_pos_j = curNode.j + circle_nodes[cand].j;
 
-                    if (!map.CellOnGrid(new_pos_i, new_pos_j)) continue;
-                    if (map.CellIsObstacle(new_pos_i, new_pos_j)) continue;
+                    if (!map.CellOnGrid(new_pos_i, new_pos_j) || map.CellIsObstacle(new_pos_i, new_pos_j)) {
+                        continue;
+                    }
 
                     Node newNode = Node(new_pos_i, new_pos_j);
                     newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
@@ -514,9 +535,11 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
 
                     update(curNode, newNode, successors_are_fine, map);
                 }
+                else if (cand == candidates[0]) {
+                    limit1 = false;
+                }
                 else {
-                    if (cand == candidates[0]) limit1 = false;
-                    else limit2 = false;
+                    limit2 = false;
                 }
             }
         }
@@ -528,8 +551,9 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
             new_pos_j = curNode.j + node.j;
             angle_position++;
 
-            if (!map.CellOnGrid(new_pos_i, new_pos_j)) continue;
-            if (map.CellIsObstacle(new_pos_i, new_pos_j)) continue;
+            if (!map.CellOnGrid(new_pos_i, new_pos_j) || map.CellIsObstacle(new_pos_i, new_pos_j)) {
+                continue;
+            }
 
             Node newNode = Node(new_pos_i, new_pos_j);
             newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
@@ -560,8 +584,11 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
 
 bool LianSearch::tryToDecreaseRadius(Node& curNode, int width) {
     std::size_t i;
-    for (i = listOfDistances.size(); i >= 1; --i)
-        if (curNode.radius == listOfDistances[i - 1]) break;
+    for (i = listOfDistances.size(); i >= 1; --i) {
+        if (curNode.radius == listOfDistances[i - 1]) {
+            break;
+        }
+    }
     if (i < listOfDistances.size()) {
         curNode.radius = listOfDistances[i];
         auto it = close.find(curNode.convolution(width));
@@ -614,7 +641,9 @@ std::list<Node> LianSearch::smoothPath(const std::list<Node>& path, const Map& m
         for (it; it != path.end(); ++it) {
             auto next = ++it;
             --it;
-            if (!first && !checkAngle(previous, start_section, *it)) continue;
+            if (!first && !checkAngle(previous, start_section, *it)) {
+                continue;
+            }
             if (((next != path.end() && checkAngle(start_section, *it, *next))
                 || next == path.end()) && checkLineSegment(map, start_section, *it)) {
                 end_section = *it;
