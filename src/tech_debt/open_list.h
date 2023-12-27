@@ -1,5 +1,5 @@
-#ifndef OPENLIST_H
-#define OPENLIST_H
+#ifndef OPEN_LIST_H
+#define OPEN_LIST_H
 
 #include "node.h"
 #include "tinyxml/tinyxml.h"
@@ -22,14 +22,14 @@ public:
 
     void add(const Node& new_node);
     Node getMin();
-    void pop(Node min);
+//    void pop(Node min);
 
     void writeToXml(TiXmlNode *child) const;
 
 private:
-    std::list<Node> *elements;
+    std::vector<std::list<Node>> rows_;
     size_t size_;
-    size_t height;
+//    size_t height;
 };
 
-#endif // OPENLIST_H
+#endif // OPEN_LIST_H
