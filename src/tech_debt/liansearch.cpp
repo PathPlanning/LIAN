@@ -379,7 +379,7 @@ SearchResult LianSearch::startSearch(Logger* Log, const Map& map) {
     sresult.numberOfSteps = close.size();
     if (pathFound) {
         sresult.pathLength = curNode.g;
-        makePrimaryPath(curNode);
+        makePrimaryPath(&curNode);
         if (postsmoother) {
             hppath = smoothPath(hppath, map);
         }
@@ -588,40 +588,29 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
 
 
 bool LianSearch::tryToDecreaseRadius(Node& curNode, int width) {
-    std::size_t i;
-    for (i = listOfDistances.size(); i >= 1; --i) {
-        if (curNode.radius == listOfDistances[i - 1]) {
+    auto radiusIter = std::lower_bound(listOfDistances.rbegin(), listOfDistances.rend(), curNode.radius);
+    if (radiusIter == listOfDistances.rbegin()) {
+        return false;
+    }
+
+    curNode.radius = *(radiusIter - 1);
+    auto it = close.find(curNode.convolution(width));
+    auto range = close.equal_range(it->first);
+    for (auto it = range.first; it != range.second; ++it) {
+        if (it->second.parent && it->second.parent->i == curNode.parent->i
+            && it->second.parent->j == curNode.parent->j) {
+            it->second.radius = curNode.radius;
             break;
         }
     }
-    if (i < listOfDistances.size()) {
-        curNode.radius = listOfDistances[i];
-        auto it = close.find(curNode.convolution(width));
-        auto range = close.equal_range(it->first);
-        for (auto it = range.first; it != range.second; ++it) {
-            if (it->second.parent && it->second.parent->i == curNode.parent->i
-                && it->second.parent->j == curNode.parent->j) {
-                it->second.radius = listOfDistances[i];
-                break;
-            }
-        }
-        return true;
-    }
-    return false;
+    return true;
 }
 
-
-void LianSearch::makePrimaryPath(Node curNode) {
-    hppath.push_front(curNode);
-    curNode = *curNode.parent;
-    do {
-        hppath.push_front(curNode);
-        //std::cout << '(' << curNode.i << ", " << curNode.j << ") ";
-        curNode = *curNode.parent;
-
-    } while (curNode.parent != nullptr);
-    hppath.push_front(curNode);
-    //std::cout << '(' << curNode.i << ", " << curNode.j << ")\n";
+void LianSearch::makePrimaryPath(Node* curNode) {
+    while (curNode) {
+        hppath.push_front(*curNode);
+        curNode = curNode->parent;
+    }
 }
 
 bool LianSearch::checkAngle(const Node& dad, const Node& node, const Node& son) const {
