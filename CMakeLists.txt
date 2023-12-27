@@ -25,7 +25,6 @@ add_executable(LianSearch
 		src/tech_debt/map.h
 		src/tech_debt/logger.h
 		src/tech_debt/mission.h
-		src/tech_debt/search.h
 		src/tech_debt/xmlUtils.h)
 target_link_libraries(LianSearch PUBLIC tinyxml)
 target_include_directories(LianSearch PUBLIC contrib)
