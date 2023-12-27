@@ -42,7 +42,7 @@
     </map>
     <algorithm>
         <hweight>2</hweight>
-        <anglelimit>25</anglelimit>
+        <anglelimit>70</anglelimit>
         <distance>15</distance>
         <distancemin>2</distancemin>
         <decreaseDistanceFactor>2</decreaseDistanceFactor>
@@ -58,8 +58,8 @@
         <logfilename />
     </options>
     <log>
-        <mapfilename>/home/admin/Pathplanning/LIAN/LIAN/examples/eLianTest.xml</mapfilename>
-        <summary pathfound="true" numberofsteps="15" nodescreated="62" sections="6" length="49.429760" length_scaled="49.429760" time="0.00421986" max_angle="68.838737" accum_angle="143.343887" />
+        <mapfilename>C:\Users\Nikrolaks\Desktop\LIAN\build\\\..\\examples\\eLianTest.xml</mapfilename>
+        <summary pathfound="true" numberofsteps="16" nodescreated="92" sections="6" length="54.698898" length_scaled="1312.773560" time="0.0003164" max_angle="63.434948" accum_angle="185.325729" />
         <path>
             <row number="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
             <row number="1">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
@@ -74,14 +74,14 @@
             <row number="10">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 </row>
             <row number="11">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 </row>
             <row number="12">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 </row>
-            <row number="13">0 0 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 * 0 0 </row>
-            <row number="14">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * 0 0 0 1 1 1 1 1 1 0 0 0 0 * 0 0 </row>
-            <row number="15">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * 0 0 1 1 1 1 1 1 0 0 0 0 * 0 0 </row>
-            <row number="16">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 * * 1 1 1 1 1 1 0 0 0 0 * 0 0 </row>
-            <row number="17">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 * 0 0 0 0 0 0 0 0 * 0 0 0 </row>
-            <row number="18">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 * * * * * * * * 0 0 0 0 </row>
-            <row number="19">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
-            <row number="20">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
+            <row number="13">0 0 * * * * * * * * * * * * * * * * * * * * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 * * 0 </row>
+            <row number="14">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * * * * 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 * </row>
+            <row number="15">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * * * * 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 * </row>
+            <row number="16">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 * * * * 0 1 1 1 1 1 1 0 0 0 0 0 0 * </row>
+            <row number="17">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 * * * 0 0 0 0 0 0 0 0 0 0 * </row>
+            <row number="18">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 * * * * 0 0 0 0 0 0 * </row>
+            <row number="19">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 * * * 0 0 * 0 </row>
+            <row number="20">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 * * 0 0 </row>
             <row number="21">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
             <row number="22">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
             <row number="23">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
@@ -91,11 +91,11 @@
             <row number="27">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
         </path>
         <angles>
-            <angle number="0" value="3.814075" />
-            <angle number="1" value="29.875992" />
-            <angle number="2" value="0.000000" />
-            <angle number="3" value="40.815083" />
-            <angle number="4" value="68.838737" />
+            <angle number="0" value="11.309933" />
+            <angle number="1" value="4.635463" />
+            <angle number="2" value="49.635464" />
+            <angle number="3" value="56.309933" />
+            <angle number="4" value="63.434948" />
         </angles>
         <lplevel>
             <node number="0" x="2" y="13" />
@@ -118,522 +118,48 @@
             <node number="17" x="19" y="13" />
             <node number="18" x="20" y="13" />
             <node number="19" x="21" y="13" />
-            <node number="20" x="22" y="13" />
-            <node number="21" x="23" y="13" />
-            <node number="22" x="24" y="13" />
-            <node number="23" x="25" y="13" />
-            <node number="24" x="26" y="13" />
-            <node number="25" x="27" y="13" />
-            <node number="26" x="28" y="13" />
-            <node number="27" x="29" y="13" />
-            <node number="28" x="30" y="13" />
-            <node number="29" x="31" y="13" />
-            <node number="30" x="32" y="14" />
-            <node number="31" x="33" y="14" />
-            <node number="32" x="34" y="15" />
+            <node number="20" x="22" y="14" />
+            <node number="21" x="23" y="14" />
+            <node number="22" x="24" y="14" />
+            <node number="23" x="25" y="14" />
+            <node number="24" x="26" y="14" />
+            <node number="25" x="27" y="15" />
+            <node number="26" x="28" y="15" />
+            <node number="27" x="29" y="15" />
+            <node number="28" x="30" y="15" />
+            <node number="29" x="31" y="15" />
+            <node number="30" x="32" y="16" />
+            <node number="31" x="33" y="16" />
+            <node number="32" x="34" y="16" />
             <node number="33" x="35" y="16" />
-            <node number="34" x="36" y="16" />
+            <node number="34" x="36" y="17" />
             <node number="35" x="37" y="17" />
-            <node number="36" x="38" y="18" />
+            <node number="36" x="38" y="17" />
             <node number="37" x="39" y="18" />
             <node number="38" x="40" y="18" />
             <node number="39" x="41" y="18" />
             <node number="40" x="42" y="18" />
-            <node number="41" x="43" y="18" />
-            <node number="42" x="44" y="18" />
-            <node number="43" x="45" y="18" />
-            <node number="44" x="46" y="17" />
-            <node number="45" x="47" y="16" />
-            <node number="46" x="47" y="15" />
-            <node number="47" x="47" y="14" />
-            <node number="48" x="47" y="13" />
+            <node number="41" x="43" y="19" />
+            <node number="42" x="44" y="19" />
+            <node number="43" x="45" y="19" />
+            <node number="44" x="46" y="20" />
+            <node number="45" x="47" y="20" />
+            <node number="46" x="48" y="19" />
+            <node number="47" x="49" y="18" />
+            <node number="48" x="49" y="17" />
+            <node number="49" x="49" y="16" />
+            <node number="50" x="49" y="15" />
+            <node number="51" x="49" y="14" />
+            <node number="52" x="48" y="13" />
+            <node number="53" x="47" y="13" />
         </lplevel>
         <hplevel>
             <section number="0" start.x="2" start.y="13" finish.x="17" finish.y="13" length="15.000000" />
-            <section number="1" start.x="17" start.y="13" finish.x="32" finish.y="14" length="15.033297" />
-            <section number="2" start.x="32" start.y="14" finish.x="35" finish.y="16" length="3.605551" />
-            <section number="3" start.x="35" start.y="16" finish.x="38" finish.y="18" length="3.605553" />
-            <section number="4" start.x="38" start.y="18" finish.x="46" finish.y="17" length="8.062256" />
-            <section number="5" start.x="46" start.y="17" finish.x="47" finish.y="13" length="4.123104" />
+            <section number="1" start.x="17" start.y="13" finish.x="32" finish.y="16" length="15.297058" />
+            <section number="2" start.x="32" start.y="16" finish.x="46" finish.y="20" length="14.560219" />
+            <section number="3" start.x="46" start.y="20" finish.x="49" finish.y="18" length="3.605553" />
+            <section number="4" start.x="49" start.y="18" finish.x="49" finish.y="14" length="4.000000" />
+            <section number="5" start.x="49" start.y="14" finish.x="47" finish.y="13" length="2.236069" />
         </hplevel>
-        <lowlevel>
-            <step number="0">
-                <open>
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                </open>
-                <close>
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                </close>
-            </step>
-            <step number="1">
-                <open>
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                </open>
-                <close>
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                </close>
-            </step>
-            <step number="2">
-                <open>
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                </open>
-                <close>
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                </close>
-            </step>
-            <step number="3">
-                <open>
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                </open>
-                <close>
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                </close>
-            </step>
-            <step number="4">
-                <open>
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                </open>
-                <close>
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                </close>
-            </step>
-            <step number="5">
-                <open>
-                    <node x="36" y="14" F="58.213825" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="12" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="36" y="10" F="58.926613" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="35" y="10" F="61.097809" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="34" y="11" F="62.665066" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="34" y="12" F="62.199913" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="32" y="12" F="64.189697" g="34.123104" parent_x="36" parent_y="12" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="34" y="13" F="62.359173" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="35" y="14" F="60.442360" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                </open>
-                <close>
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                </close>
-            </step>
-            <step number="6">
-                <open>
-                    <node x="36" y="10" F="58.926613" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="12" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="35" y="10" F="61.097809" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="34" y="11" F="62.665066" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="34" y="12" F="62.199913" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="32" y="12" F="64.189697" g="34.123104" parent_x="36" parent_y="12" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="34" y="13" F="62.359173" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="35" y="14" F="60.442360" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="36" y="16" F="60.926613" g="38.123104" parent_x="36" parent_y="14" />
-                </open>
-                <close>
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="36" y="14" F="58.213825" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                </close>
-            </step>
-            <step number="7">
-                <open>
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="10" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="12" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="35" y="10" F="61.097809" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="34" y="11" F="62.665066" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="34" y="12" F="62.199913" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="32" y="12" F="64.189697" g="34.123104" parent_x="36" parent_y="12" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="34" y="13" F="62.359173" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="35" y="14" F="60.442360" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="36" y="16" F="60.926613" g="38.123104" parent_x="36" parent_y="14" />
-                </open>
-                <close>
-                    <node x="36" y="10" F="58.926613" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="36" y="14" F="58.213825" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                </close>
-            </step>
-            <step number="8">
-                <open>
-                    <node x="36" y="14" F="56.124016" g="34.033295" parent_x="32" parent_y="14" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="10" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="12" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="35" y="10" F="61.097809" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="34" y="11" F="62.665066" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="34" y="12" F="62.199913" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="32" y="12" F="64.189697" g="34.123104" parent_x="36" parent_y="12" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="34" y="13" F="62.359173" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="35" y="14" F="60.442360" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="36" y="15" F="56.517082" g="34.156403" parent_x="32" parent_y="14" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="35" y="16" F="58.377480" g="33.638847" parent_x="32" parent_y="14" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="36" y="16" F="60.926613" g="38.123104" parent_x="36" parent_y="14" />
-                </open>
-                <close>
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="36" y="10" F="58.926613" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="36" y="14" F="58.213825" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                </close>
-            </step>
-            <step number="9">
-                <open>
-                    <node x="36" y="15" F="56.517082" g="34.156403" parent_x="32" parent_y="14" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="10" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="12" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="35" y="10" F="61.097809" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="34" y="11" F="62.665066" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="34" y="12" F="62.199913" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="32" y="12" F="64.189697" g="34.123104" parent_x="36" parent_y="12" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="34" y="13" F="62.359173" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="35" y="14" F="60.442360" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="35" y="16" F="58.377480" g="33.638847" parent_x="32" parent_y="14" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="36" y="16" F="60.926613" g="38.123104" parent_x="36" parent_y="14" />
-                </open>
-                <close>
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="36" y="10" F="58.926613" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="36" y="14" F="56.124016" g="34.033295" parent_x="32" parent_y="14" />
-                    <node x="36" y="14" F="58.213825" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                </close>
-            </step>
-            <step number="10">
-                <open>
-                    <node x="35" y="16" F="58.377480" g="33.638847" parent_x="32" parent_y="14" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="10" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="12" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="35" y="10" F="61.097809" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="34" y="11" F="62.665066" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="34" y="12" F="62.199913" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="32" y="12" F="64.189697" g="34.123104" parent_x="36" parent_y="12" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="34" y="13" F="62.359173" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="35" y="14" F="60.442360" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="36" y="16" F="60.926613" g="38.123104" parent_x="36" parent_y="14" />
-                </open>
-                <close>
-                    <node x="36" y="15" F="56.517082" g="34.156403" parent_x="32" parent_y="14" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="36" y="14" F="56.124016" g="34.033295" parent_x="32" parent_y="14" />
-                    <node x="36" y="14" F="58.213825" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="36" y="10" F="58.926613" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                </close>
-            </step>
-            <step number="11">
-                <open>
-                    <node x="38" y="18" F="57.835663" g="37.244400" parent_x="35" parent_y="16" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="10" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="12" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="35" y="10" F="61.097809" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="34" y="11" F="62.665066" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="34" y="12" F="62.199913" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="32" y="12" F="64.189697" g="34.123104" parent_x="36" parent_y="12" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="34" y="13" F="62.359173" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="35" y="14" F="60.442360" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="36" y="16" F="60.926613" g="38.123104" parent_x="36" parent_y="14" />
-                    <node x="38" y="19" F="59.514797" g="37.881489" parent_x="35" parent_y="16" />
-                </open>
-                <close>
-                    <node x="36" y="15" F="56.517082" g="34.156403" parent_x="32" parent_y="14" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="36" y="14" F="56.124016" g="34.033295" parent_x="32" parent_y="14" />
-                    <node x="36" y="14" F="58.213825" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="35" y="16" F="58.377480" g="33.638847" parent_x="32" parent_y="14" />
-                    <node x="36" y="10" F="58.926613" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                </close>
-            </step>
-            <step number="12">
-                <open>
-                    <node x="46" y="17" F="53.552868" g="45.306656" parent_x="38" parent_y="18" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="10" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="12" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="35" y="10" F="61.097809" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="34" y="11" F="62.665066" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="34" y="12" F="62.199913" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="32" y="12" F="64.189697" g="34.123104" parent_x="36" parent_y="12" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="34" y="13" F="62.359173" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="35" y="14" F="60.442360" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="36" y="16" F="60.926613" g="38.123104" parent_x="36" parent_y="14" />
-                    <node x="46" y="18" F="55.442440" g="45.244400" parent_x="38" parent_y="18" />
-                    <node x="46" y="19" F="57.472183" g="45.306656" parent_x="38" parent_y="18" />
-                    <node x="38" y="19" F="59.514797" g="37.881489" parent_x="35" parent_y="16" />
-                    <node x="46" y="20" F="59.632748" g="45.490612" parent_x="38" parent_y="18" />
-                    <node x="45" y="21" F="61.352592" g="44.860172" parent_x="38" parent_y="18" />
-                    <node x="45" y="22" F="63.745743" g="45.306656" parent_x="38" parent_y="18" />
-                    <node x="45" y="23" F="66.242805" g="45.846725" parent_x="38" parent_y="18" />
-                </open>
-                <close>
-                    <node x="38" y="18" F="57.835663" g="37.244400" parent_x="35" parent_y="16" />
-                    <node x="36" y="15" F="56.517082" g="34.156403" parent_x="32" parent_y="14" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="36" y="14" F="56.124016" g="34.033295" parent_x="32" parent_y="14" />
-                    <node x="36" y="14" F="58.213825" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="35" y="16" F="58.377480" g="33.638847" parent_x="32" parent_y="14" />
-                    <node x="36" y="10" F="58.926613" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                </close>
-            </step>
-            <step number="13">
-                <open>
-                    <node x="47" y="13" F="49.429760" g="49.429760" parent_x="46" parent_y="17" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="10" />
-                    <node x="36" y="8" F="62.289196" g="38.123104" parent_x="36" parent_y="12" />
-                    <node x="31" y="9" F="62.545067" g="29.560221" parent_x="17" parent_y="13" />
-                    <node x="32" y="10" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="35" y="10" F="61.097809" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="10" F="75.596313" g="15.297058" parent_x="2" parent_y="13" />
-                    <node x="32" y="11" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="34" y="11" F="62.665066" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="11" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="12" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                    <node x="34" y="12" F="62.199913" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="32" y="12" F="64.189697" g="34.123104" parent_x="36" parent_y="12" />
-                    <node x="17" y="12" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="46" y="13" F="51.306656" g="49.306656" parent_x="46" parent_y="17" />
-                    <node x="48" y="13" F="51.778793" g="49.778793" parent_x="46" parent_y="17" />
-                    <node x="45" y="13" F="53.429760" g="49.429760" parent_x="46" parent_y="17" />
-                    <node x="44" y="13" F="55.778793" g="49.778793" parent_x="46" parent_y="17" />
-                    <node x="34" y="13" F="62.359173" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="49" y="14" F="54.021435" g="49.549297" parent_x="46" parent_y="17" />
-                    <node x="43" y="14" F="57.795509" g="49.549297" parent_x="46" parent_y="17" />
-                    <node x="35" y="14" F="60.442360" g="36.359173" parent_x="36" parent_y="12" />
-                    <node x="17" y="14" F="75.066620" g="15.033297" parent_x="2" parent_y="13" />
-                    <node x="49" y="15" F="54.569061" g="48.912209" parent_x="46" parent_y="17" />
-                    <node x="43" y="15" F="57.856480" g="48.912209" parent_x="46" parent_y="17" />
-                    <node x="32" y="15" F="60.398239" g="30.132746" parent_x="17" parent_y="13" />
-                    <node x="17" y="15" F="75.265930" g="15.132746" parent_x="2" parent_y="13" />
-                    <node x="32" y="16" F="60.891174" g="30.297058" parent_x="17" parent_y="13" />
-                    <node x="36" y="16" F="60.926613" g="38.123104" parent_x="36" parent_y="14" />
-                    <node x="42" y="17" F="62.112904" g="49.306656" parent_x="46" parent_y="17" />
-                    <node x="38" y="17" F="65.004372" g="45.306656" parent_x="46" parent_y="17" />
-                    <node x="46" y="18" F="55.442440" g="45.244400" parent_x="38" parent_y="18" />
-                    <node x="42" y="18" F="63.571896" g="49.429760" parent_x="46" parent_y="17" />
-                    <node x="46" y="19" F="57.472183" g="45.306656" parent_x="38" parent_y="18" />
-                    <node x="38" y="19" F="59.514797" g="37.881489" parent_x="35" parent_y="16" />
-                    <node x="49" y="19" F="61.561317" g="48.912209" parent_x="46" parent_y="17" />
-                    <node x="43" y="19" F="63.334412" g="48.912209" parent_x="46" parent_y="17" />
-                    <node x="46" y="20" F="59.632748" g="45.490612" parent_x="38" parent_y="18" />
-                    <node x="49" y="20" F="64.109520" g="49.549297" parent_x="46" parent_y="17" />
-                    <node x="43" y="20" F="65.673813" g="49.549297" parent_x="46" parent_y="17" />
-                    <node x="45" y="21" F="61.352592" g="44.860172" parent_x="38" parent_y="18" />
-                    <node x="47" y="21" F="65.429764" g="49.429760" parent_x="46" parent_y="17" />
-                    <node x="46" y="21" F="65.431168" g="49.306656" parent_x="46" parent_y="17" />
-                    <node x="48" y="21" F="65.903305" g="49.778793" parent_x="46" parent_y="17" />
-                    <node x="45" y="21" F="65.922180" g="49.429760" parent_x="46" parent_y="17" />
-                    <node x="44" y="21" F="66.866798" g="49.778793" parent_x="46" parent_y="17" />
-                    <node x="45" y="22" F="63.745743" g="45.306656" parent_x="38" parent_y="18" />
-                    <node x="45" y="23" F="66.242805" g="45.846725" parent_x="38" parent_y="18" />
-                </open>
-                <close>
-                    <node x="46" y="17" F="53.552868" g="45.306656" parent_x="38" parent_y="18" />
-                    <node x="38" y="18" F="57.835663" g="37.244400" parent_x="35" parent_y="16" />
-                    <node x="36" y="15" F="56.517082" g="34.156403" parent_x="32" parent_y="14" />
-                    <node x="2" y="13" F="90.000000" g="0.000000" />
-                    <node x="17" y="13" F="75.000000" g="15.000000" parent_x="2" parent_y="13" />
-                    <node x="36" y="14" F="56.124016" g="34.033295" parent_x="32" parent_y="14" />
-                    <node x="36" y="14" F="58.213825" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="14" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="32" y="13" F="60.000000" g="30.000000" parent_x="17" parent_y="13" />
-                    <node x="36" y="12" F="56.213825" g="34.123104" parent_x="32" parent_y="13" />
-                    <node x="35" y="16" F="58.377480" g="33.638847" parent_x="32" parent_y="14" />
-                    <node x="36" y="10" F="58.926613" g="36.123104" parent_x="36" parent_y="12" />
-                    <node x="36" y="13" F="56.000000" g="34.000000" parent_x="32" parent_y="13" />
-                    <node x="32" y="14" F="60.099892" g="30.033297" parent_x="17" parent_y="13" />
-                </close>
-            </step>
-        </lowlevel>
     </log>
 </root>

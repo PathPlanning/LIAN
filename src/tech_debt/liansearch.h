@@ -19,7 +19,7 @@ class LianSearch : public Search {
 public:
 
     // Constructor with parameters
-    LianSearch(float angleLimit_, int distance_, float weight_, unsigned int stepLimit_,
+    LianSearch(float angleLimit, int distance_, float weight_, unsigned int stepLimit_,
                float curvatureHeuristicWeight_, bool postSmoother_, float decreaseDistanceFactor_,
                int distanceMin_, float pivotRadius_, int numOfParentsToIncreaseRadius_);
 
@@ -28,30 +28,30 @@ public:
 
 private:
 
-    float angleLimit; // Maximal value of deviation angle (turning limit)
+    float angleLimit_; // Maximal value of deviation angle (turning limit)
 
-    int distance; // Minimal value of length of steps
+    int distance_; // Minimal value of length of steps
 
-    int numOfParentsToIncreaseRadius;
+    int numOfParentsToIncreaseRadius_;
 
     const std::vector<int> listOfDistances;
 
-    float weight;  // Heuristics weight
+    float weight_;  // Heuristics weight
 
-    bool postsmoother; // Smoothing the path after the algorithm
+    bool postsmoother_; // Smoothing the path after the algorithm
 
     // Heurisic coefficient:
     // If there is heuristic that checks deviation of trajectory from line on each
     // step, this deviation is multiplyed by this coefficient
-    float curvatureHeuristicWeight;
+    float curvatureHeuristicWeight_;
 
-    float pivotRadius; // Radius of safety circle around every turn point.
+    float pivotRadius_; // Radius of safety circle around every turn point.
 
-    unsigned int stepLimit; // Maximum number of iterations, allowed for the algorithm
+    unsigned int stepLimit_; // Maximum number of iterations, allowed for the algorithm
 
 
-    float decreaseDistanceFactor; // Value for decreasing the initial distance value
-    int distanceMin; // Minimal distance value
+    float decreaseDistanceFactor_; // Value for decreasing the initial distance value
+    int distanceMin_; // Minimal distance value
 
     std::vector<std::vector<circleNode> > circleNodes; // Virtual nodes that create circle around the cell
 

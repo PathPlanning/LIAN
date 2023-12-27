@@ -70,5 +70,5 @@ Config::Config(const char* fileName) {
     TiXmlElement* options = getElement(root, CNS_TAG_OPTIONS);
 
     element = getElement(options, CNS_TAG_LOGLVL, CNS_TAG_OPTIONS);
-    params_.logLevel = serialize<float>(element);
+    params_.logLevel = serialize<int>(element);
 }

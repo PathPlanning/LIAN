@@ -42,7 +42,7 @@
     </map>
     <algorithm>
         <hweight>2</hweight>
-        <anglelimit>25</anglelimit>
+        <anglelimit>70</anglelimit>
         <distance>15</distance>
         <distancemin>2</distancemin>
         <decreaseDistanceFactor>2</decreaseDistanceFactor>

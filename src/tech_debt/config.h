@@ -21,7 +21,7 @@ struct SearchParams {
     int distanceMin;
     double pivotRadius;
     int numOfParentsToIncreaseRadius;
-    float logLevel;
+    int logLevel;
 };
 
 class Config {

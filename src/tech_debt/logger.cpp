@@ -2,7 +2,7 @@
 
 #include "logger.h"
 
-Logger::Logger(float loglvl) : logLevel_(loglvl) {
+Logger::Logger(int loglvl) : logLevel_(loglvl) {
 }
 
 Logger::~Logger() {
@@ -71,7 +71,7 @@ bool Logger::getLog(const std::string& fileName) {
         log->LinkEndChild(lowlevel);
     }
 
-    if (logLevel_ - CN_LOGLVL_ITER < 0.001) {
+    if (logLevel_ >= CN_LOGLVL_ITER) {
         TiXmlElement* iters = new TiXmlElement(CNS_TAG_ITERS);
         log->LinkEndChild(iters);
     }

@@ -101,21 +101,21 @@ namespace {
 LianSearch::~LianSearch() = default;
 
 
-LianSearch::LianSearch(float angleLimit_, int distance_, float weight_,
-    unsigned int stepLimit_, float curvatureHeuristicWeight_, bool postSmoother_,
-    float decreaseDistanceFactor_, int distanceMin_,
-    float pivotRadius_, int numOfParentsToIncreaseRadius_) :
-    angleLimit(angleLimit_),
-    distance(distance_),
-    numOfParentsToIncreaseRadius(numOfParentsToIncreaseRadius_),
-    weight(weight_),
-    postsmoother(postSmoother_),
-    curvatureHeuristicWeight(curvatureHeuristicWeight_),
-    pivotRadius(pivotRadius_),
-    stepLimit(stepLimit_),
-    decreaseDistanceFactor(decreaseDistanceFactor_),
-    distanceMin(distanceMin_),
-    listOfDistances(std::move(buildListOfDistances(distance_, decreaseDistanceFactor_, distanceMin_)))
+LianSearch::LianSearch(float angleLimit, int distance, float weight,
+    unsigned int stepLimit, float curvatureHeuristicWeight, bool postSmoother,
+    float decreaseDistanceFactor, int distanceMin,
+    float pivotRadius, int numOfParentsToIncreaseRadius) :
+    angleLimit_(angleLimit),
+    distance_(distance),
+    numOfParentsToIncreaseRadius_(numOfParentsToIncreaseRadius),
+    weight_(weight),
+    postsmoother_(postSmoother),
+    curvatureHeuristicWeight_(curvatureHeuristicWeight),
+    pivotRadius_(pivotRadius),
+    stepLimit_(stepLimit),
+    decreaseDistanceFactor_(decreaseDistanceFactor),
+    distanceMin_(distanceMin),
+    listOfDistances(std::move(buildListOfDistances(distance, decreaseDistanceFactor, distanceMin)))
 {
     srand(time(nullptr));
 }
@@ -187,12 +187,12 @@ void LianSearch::calculatePivotCircle() {
     pivotCircle.clear();
     int add_i;
     int add_j;
-    int num = floor(pivotRadius + 0.5 - CN_EPSILON);
+    int num = floor(pivotRadius_ + 0.5 - CN_EPSILON);
     for (int i = -num; i <= +num; i++) {
         for (int j = -num; j <= +num; j++) {
             add_i = i != 0 ? 1 : 0;
             add_j = j != 0 ? 1 : 0;
-            if ((pow(2 * abs(i) - add_i, 2) + pow(2 * abs(j) - add_j, 2)) < pow(2 * pivotRadius, 2)) {
+            if ((pow(2 * abs(i) - add_i, 2) + pow(2 * abs(j) - add_j, 2)) < pow(2 * pivotRadius_, 2)) {
                 pivotCircle.push_back({ i, j });
             }
         }
@@ -300,7 +300,7 @@ bool LianSearch::stopCriterion() {
         return true;
     }
 
-    if (close.size() > stepLimit && stepLimit > 0) {
+    if (close.size() > stepLimit_ && stepLimit_ > 0) {
         std::cout << "Algorithm esceeded step limit!" << std::endl;
         return true;
     }
@@ -327,8 +327,8 @@ double LianSearch::calcAngle(const Node& dad, const Node& node, const Node& son)
 SearchResult LianSearch::startSearch(Logger* Log, const Map& map) {
     open.resize(map.getHeight());
     Node curNode(map.start_i, map.start_j, 0.0, 0.0, 0.0);
-    curNode.radius = distance;
-    curNode.F = weight * getCost(curNode.i, curNode.j, map.goal_i, map.goal_j);
+    curNode.radius = distance_;
+    curNode.F = weight_ * getCost(curNode.i, curNode.j, map.goal_i, map.goal_j);
     bool pathFound = false;
     open.add(curNode);
     calculateCircle((int)curNode.radius);
@@ -375,7 +375,7 @@ SearchResult LianSearch::startSearch(Logger* Log, const Map& map) {
     if (pathFound) {
         sresult.pathLength = curNode.g;
         makePrimaryPath(&curNode);
-        if (postsmoother) {
+        if (postsmoother_) {
             hppath = smoothPath(hppath, map);
         }
         makeSecondaryPath();
@@ -422,14 +422,14 @@ SearchResult LianSearch::startSearch(Logger* Log, const Map& map) {
 int LianSearch::tryToIncreaseRadius(Node* curNode) {
     bool change = false;
     std::size_t i, k = 0;
-    while (k < numOfParentsToIncreaseRadius) {
+    while (k < numOfParentsToIncreaseRadius_) {
         if (!(curNode->parent != nullptr && curNode->radius == curNode->parent->radius)) {
             break;
         }
         ++k;
         curNode = curNode->parent;
     }
-    if (k == numOfParentsToIncreaseRadius) {
+    if (k == numOfParentsToIncreaseRadius_) {
         for (i = listOfDistances.size(); i >= 1; --i) {
             if (curNode->radius == listOfDistances[i - 1]) {
                 break;
@@ -447,7 +447,7 @@ void LianSearch::update(const Node current_node, Node new_node, bool& successors
     if (!checkLineSegment(map, *new_node.parent, new_node)) {
         return;
     }
-    if (pivotRadius > 0 && (new_node.i != map.goal_i || new_node.j != map.goal_j)) {
+    if (pivotRadius_ > 0 && (new_node.i != map.goal_i || new_node.j != map.goal_j)) {
         if (!checkPivotCircle(map, new_node)) {
             return;
         }
@@ -488,15 +488,15 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
     if (curNode.parent != nullptr) {
         int node_straight_ahead = (int)round(curNode.angle * circleNodes[current_distance].size() / 360) % circleNodes[current_distance].size();
         double angle = fabs(curNode.angle - circleNodes[current_distance][node_straight_ahead].heading);
-        if ((angle <= 180 && angle <= angleLimit) || (angle > 180 && 360 - angle <= angleLimit)) {
+        if ((angle <= 180 && angle <= angleLimit_) || (angle > 180 && 360 - angle <= angleLimit_)) {
             int new_pos_i = curNode.i + circle_nodes[node_straight_ahead].i;
             int new_pos_j = curNode.j + circle_nodes[node_straight_ahead].j;
             if (map.CellOnGrid(new_pos_i, new_pos_j) && map.CellIsTraversable(new_pos_i, new_pos_j)) {
                 Node newNode = Node(new_pos_i, new_pos_j);
                 newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
                 newNode.angle = circleNodes[current_distance][node_straight_ahead].heading;
-                newNode.F = newNode.g + weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j) +
-                    curvatureHeuristicWeight * distance * fabs(curNode.angle - newNode.angle);
+                newNode.F = newNode.g + weight_ * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j) +
+                    curvatureHeuristicWeight_ * distance_ * fabs(curNode.angle - newNode.angle);
                 newNode.radius = curNode.radius;
                 newNode.parent = parent;
 
@@ -517,7 +517,7 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
 
             for (auto cand : candidates) {
                 double angle = fabs(curNode.angle - circleNodes[current_distance][cand].heading);
-                if ((angle <= 180 && angle <= angleLimit) || (angle > 180 && 360 - angle <= angleLimit)) {
+                if ((angle <= 180 && angle <= angleLimit_) || (angle > 180 && 360 - angle <= angleLimit_)) {
                     int new_pos_i = curNode.i + circle_nodes[cand].i;
                     int new_pos_j = curNode.j + circle_nodes[cand].j;
 
@@ -528,8 +528,8 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
                     Node newNode = Node(new_pos_i, new_pos_j);
                     newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
                     newNode.angle = circleNodes[current_distance][cand].heading;
-                    newNode.F = newNode.g + weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j) +
-                        curvatureHeuristicWeight * distance * fabs(curNode.angle - newNode.angle);
+                    newNode.F = newNode.g + weight_ * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j) +
+                        curvatureHeuristicWeight_ * distance_ * fabs(curNode.angle - newNode.angle);
                     newNode.radius = curNode.radius;
                     newNode.parent = parent;
 
@@ -557,7 +557,7 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
 
             Node newNode = Node(new_pos_i, new_pos_j);
             newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
-            newNode.F = newNode.g + weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j);
+            newNode.F = newNode.g + weight_ * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j);
             newNode.radius = curNode.radius;
             newNode.angle = circleNodes[current_distance][angle_position].heading;
             newNode.parent = parent;
@@ -570,10 +570,10 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
     if (getCost(curNode.i, curNode.j, map.goal_i, map.goal_j) <= curNode.radius) {
         double angle = calcAngle(*curNode.parent, curNode, Node(map.goal_i, map.goal_j));
 
-        if (fabs(angle * 180 / CN_PI_CONSTANT) <= angleLimit) {
+        if (fabs(angle * 180 / CN_PI_CONSTANT) <= angleLimit_) {
             Node newNode = Node(map.goal_i, map.goal_j,
                 curNode.g + getCost(curNode.i, curNode.j, map.goal_i, map.goal_j), 0.0,
-                curNode.radius, parent, curvatureHeuristicWeight * distance, 0.0);
+                curNode.radius, parent, curvatureHeuristicWeight_ * distance_, 0.0);
 
             update(curNode, newNode, successors_are_fine, map);
         }
@@ -610,7 +610,7 @@ void LianSearch::makePrimaryPath(Node* curNode) {
 
 bool LianSearch::checkAngle(const Node& dad, const Node& node, const Node& son) const {
     double angle = calcAngle(dad, node, son) * 180 / CN_PI_CONSTANT;
-    if (fabs(angle) <= angleLimit) {
+    if (fabs(angle) <= angleLimit_) {
         return true;
     }
     return false;
