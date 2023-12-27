@@ -17,8 +17,6 @@ struct SearchResult {
     double time{};
     float maxAngle{};
     int sections{};
-
-    SearchResult() = default;
 };
 
 #endif // SEARCH_RESULT_H

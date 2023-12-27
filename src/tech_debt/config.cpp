@@ -47,7 +47,7 @@ Config::Config(const char* fileName) {
     params_.weight = serializeOrElse<float>(element, CN_PTD_W);
 
     element = algorithm->FirstChildElement(CNS_TAG_STEPLIMIT);
-    params_.steplimit = serializeOrElse<unsigned int>(element, 0);
+    params_.stepLimit = serializeOrElse<unsigned int>(element, 0);
 
     element = algorithm->FirstChildElement(CNS_TAG_CURVHEURWEIGHT);
     params_.curvatureHeuristicWeight = serializeOrElse<float>(element, 0.0);

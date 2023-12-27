@@ -3,10 +3,9 @@
 
 #include "config.h"
 #include "liansearch.h"
+#include "logger.h"
 #include "map.h"
-#include "search.h"
 #include "search_result.h"
-
 
 #include <string>
 
@@ -17,7 +16,6 @@ public:
     ~Mission();
 
     bool createLog();
-    void createSearch();
     void startSearch();
     void printSearchResultsToConsole();
     void saveSearchResultsToLog();
@@ -26,7 +24,7 @@ private:
     Config      config;
     Map         map;
 
-    Search      *search;
+    LianSearch  search;
     Logger      *logger;
 
     const char* fileName;

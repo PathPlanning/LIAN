@@ -14,7 +14,7 @@ struct SearchParams {
     float angleLimit;
     int distance;
     float weight;
-    unsigned int steplimit;
+    unsigned int stepLimit;
     float curvatureHeuristicWeight;
     bool postsmoother;
     float decreaseDistanceFactor;

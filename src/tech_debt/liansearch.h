@@ -5,7 +5,9 @@
 #include "map.h"
 #include "node.h"
 #include "open_list.h"
-#include "search.h"
+#include "search_result.h"
+#include "config.h"
+#include "logger.h"
 
 #include <chrono>
 #include <cmath>
@@ -14,55 +16,31 @@
 #include <unordered_map>
 #include <vector>
 
-class LianSearch : public Search {
-
+class LianSearch {
 public:
+    LianSearch(SearchParams settings);
 
-    // Constructor with parameters
-    LianSearch(float angleLimit, int distance_, float weight_, unsigned int stepLimit_,
-               float curvatureHeuristicWeight_, bool postSmoother_, float decreaseDistanceFactor_,
-               int distanceMin_, float pivotRadius_, int numOfParentsToIncreaseRadius_);
-
-    ~LianSearch();
-    SearchResult startSearch(Logger *Log, const Map &map); // General searching algorithm
+    SearchResult startSearch(Logger *Log, const Map &map);
 
 private:
+    SearchParams settings_;
 
-    float angleLimit_; // Maximal value of deviation angle (turning limit)
+    SearchResult sresult_;
 
-    int distance_; // Minimal value of length of steps
+    const std::vector<int> listOfDistances_;
 
-    int numOfParentsToIncreaseRadius_;
+    std::vector<int> buildDistances();
 
-    const std::vector<int> listOfDistances;
+    std::vector<std::vector<circleNode> > circleNodes_; // Virtual nodes that create circle around the cell
 
-    float weight_;  // Heuristics weight
+    std::vector<std::pair<int,int> > pivotCircle_;  // Vector of nodes (shifts) for pivot security check
 
-    bool postsmoother_; // Smoothing the path after the algorithm
+    std::vector<float> angles_;
 
-    // Heurisic coefficient:
-    // If there is heuristic that checks deviation of trajectory from line on each
-    // step, this deviation is multiplyed by this coefficient
-    float curvatureHeuristicWeight_;
+    std::list<Node> lppath_, hppath_; // Final path in two representations
+    OpenList open_; // Open : list of nodes waiting for expanding
 
-    float pivotRadius_; // Radius of safety circle around every turn point.
-
-    unsigned int stepLimit_; // Maximum number of iterations, allowed for the algorithm
-
-
-    float decreaseDistanceFactor_; // Value for decreasing the initial distance value
-    int distanceMin_; // Minimal distance value
-
-    std::vector<std::vector<circleNode> > circleNodes; // Virtual nodes that create circle around the cell
-
-    std::vector<std::pair<int,int> > pivotCircle;  // Vector of nodes (shifts) for pivot security check
-
-    std::vector<float> angles;
-
-    std::list<Node> lppath, hppath; // Final path in two representations
-    OpenList open; // Open : list of nodes waiting for expanding
-
-    std::unordered_multimap<int, Node> close; // Close: list of nodes that were already expanded
+    std::unordered_multimap<int, Node> close_; // Close: list of nodes that were already expanded
 
     // Method that calculate Bresenham's Circle (center - (0, 0)) and writing list of created nodes to circleNodes
     void calculateCircle(int radius); // Radius - radius of the circle in cells
@@ -75,8 +53,6 @@ private:
 
     // check that there are no obstacle in a safety radius from a turn point
     bool checkPivotCircle(const Map &map, const Node &center);
-
-    static double getCost(int a_i, int a_j, int b_i, int b_j);
 
     static double calcAngle(const Node &dad, const Node &node, const Node &son);
     bool checkAngle(const Node &dad, const Node &node, const Node &son) const;

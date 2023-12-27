@@ -121,24 +121,10 @@ namespace {
     }
 }
 
-Mission::Mission(const char* fName) : config(fName), map(fName), search(nullptr), logger(nullptr), fileName(fName) {}
+Mission::Mission(const char* fName) : config(fName), map(fName), search(config.params()), logger(nullptr), fileName(fName) {}
 
 Mission::~Mission() {
-    delete search;
     delete logger;
-}
-
-void Mission::createSearch() {
-    search = new LianSearch(config.params().angleLimit,
-                            config.params().distance,
-                            config.params().weight,
-                            config.params().steplimit,
-                            config.params().curvatureHeuristicWeight,
-                            config.params().postsmoother,
-                            config.params().decreaseDistanceFactor,
-                            config.params().distanceMin,
-                            config.params().pivotRadius,
-                            config.params().numOfParentsToIncreaseRadius);
 }
 
 bool Mission::createLog() {
@@ -158,7 +144,7 @@ bool Mission::createLog() {
 }
 
 void Mission::startSearch() {
-    sr = search->startSearch(logger, map);
+    sr = search.startSearch(logger, map);
 }
 
 void Mission::printSearchResultsToConsole() {
