@@ -9,7 +9,7 @@ add_subdirectory(contrib)
 add_executable(LianSearch
 		src/tech_debt/main.cpp
 		src/tech_debt/liansearch.cpp
-		src/tech_debt/openlist.cpp
+        src/tech_debt/open_list.cpp
 		src/tech_debt/config.cpp
 		src/tech_debt/map.cpp
 		src/tech_debt/mission.cpp
@@ -20,7 +20,7 @@ add_executable(LianSearch
 		src/tech_debt/gl_const.h
 		src/tech_debt/liansearch.h
 		src/tech_debt/node.h
-		src/tech_debt/openlist.h
+        src/tech_debt/open_list.h
 		src/tech_debt/config.h
 		src/tech_debt/map.h
 		src/tech_debt/logger.h

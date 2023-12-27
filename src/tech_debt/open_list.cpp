@@ -1,4 +1,4 @@
-#include "openlist.h"
+#include "open_list.h"
 
 OpenList::OpenList() { size_ = 0; }
 
