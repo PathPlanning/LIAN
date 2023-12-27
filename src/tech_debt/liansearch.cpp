@@ -214,8 +214,8 @@ void LianSearch::calculateDistances() {
 template <class ActionF>
 bool lineSegmentTraverse(const Node& start, const Node& goal, ActionF action) {
     int64_t x1 = start.i;
-    int64_t x2 = goal.i;
     int64_t y1 = start.j;
+    int64_t x2 = goal.i;
     int64_t y2 = goal.j;
 
     int64_t dx = abs(x2 - x1), dy = abs(y2 - y1);
@@ -238,36 +238,32 @@ bool lineSegmentTraverse(const Node& start, const Node& goal, ActionF action) {
         rotate = 3;
     }
 
-    bool alongX = dx >= dy;
-    bool reversed = rotate == 0 || (rotate == 1 && !alongX) || (rotate == 3 && alongX);
+    int64_t i = 0, j = 0;
 
-    int64_t stepInc = alongX ? dy : dx;
-    int64_t stepDec = alongX ? dx : dy;
-    int64_t startT = alongX ? x1 : y1;
-    int64_t finishT = alongX ? x2 : y2;
+    bool iFromX = dx >= dy;
+
+    int64_t stepInc = iFromX ? dy : dx;
+    int64_t stepDec = iFromX ? dx : dy;
+    int64_t startI = iFromX ? x1 : y1;
+    int64_t finishI = iFromX ? x2 : y2;
 
     bool rotateFirstBit = rotate & 1;
-    int64_t c = !rotateFirstBit ? (x1 ^ y1 ^ startT) : (x2 ^ y2 ^ finishT);
-    int dc = !rotateFirstBit ? 1 : -1;
+    j = !rotateFirstBit ? (x1 ^ y1 ^ startI) : (x2 ^ y2 ^ finishI);
+    int dj = !rotateFirstBit ? 1 : -1;
 
-    for (int t = startT; t <= finishT; ++t) {
-        int64_t tempt = t, tempc = c;
-
-        if (!alongX) {
-            std::swap(tempt, tempc);
-        }
-
-        if (!action(tempt, tempc)) {
+    for (i = startI; i <= finishI; ++i) {
+        if (iFromX ? !action(i, j) : !action(j, i)) {
             break;
         }
 
         stepVal += stepInc;
         if (stepVal >= stepDec) {
-            c += dc;
+            j += dj;
             stepVal -= stepDec;
         }
     }
 
+    bool reversed = rotate == 0 || (rotate == 1 && !iFromX) || (rotate == 3 && iFromX);
     return reversed;
 }
 
@@ -284,13 +280,13 @@ void LianSearch::calculateLineSegment(std::vector<Node>& line, const Node& start
 }
 
 bool LianSearch::checkLineSegment(const Map& map, const Node& start, const Node& goal) {
-    bool hasObstacleOnTrace = false;
+    bool hasObstacleOnLineSegment = false;
     lineSegmentTraverse(start, goal,
-        [&map, &hasObstacleOnTrace](int64_t t, int64_t c) {
-            hasObstacleOnTrace |= map.CellIsObstacle(t, c);
-            return !hasObstacleOnTrace;
+        [&map, &hasObstacleOnLineSegment](int64_t t, int64_t c) {
+            hasObstacleOnLineSegment |= map.CellIsObstacle(t, c);
+            return !hasObstacleOnLineSegment;
         });
-    return !hasObstacleOnTrace;
+    return !hasObstacleOnLineSegment;
 }
 
 
@@ -439,10 +435,11 @@ int LianSearch::tryToIncreaseRadius(Node* curNode) {
         curNode = curNode->parent;
     }
     if (k == numOfParentsToIncreaseRadius) {
-        for (i = listOfDistances.size(); i >= 1; --i)
+        for (i = listOfDistances.size(); i >= 1; --i) {
             if (curNode->radius == listOfDistances[i - 1]) {
                 break;
             }
+        }
         change = i > 1;
     }
     if (change) {
@@ -452,8 +449,14 @@ int LianSearch::tryToIncreaseRadius(Node* curNode) {
 }
 
 void LianSearch::update(const Node current_node, Node new_node, bool& successors, const Map& map) {
-    if (!checkLineSegment(map, *new_node.parent, new_node)) return;
-    if (pivotRadius > 0 && (new_node.i != map.goal_i || new_node.j != map.goal_j) && !checkPivotCircle(map, new_node)) return;
+    if (!checkLineSegment(map, *new_node.parent, new_node)) {
+        return;
+    }
+    if (pivotRadius > 0 && (new_node.i != map.goal_i || new_node.j != map.goal_j)) {
+        if (!checkPivotCircle(map, new_node)) {
+            return;
+        }
+    }
 
     auto it = close.find(new_node.convolution(map.getWidth()));
     if (it != close.end()) {
@@ -468,7 +471,9 @@ void LianSearch::update(const Node current_node, Node new_node, bool& successors
         }
     }
 
-    if (listOfDistances.size() > 1) new_node.radius = tryToIncreaseRadius(&new_node);
+    if (listOfDistances.size() > 1) {
+        new_node.radius = tryToIncreaseRadius(&new_node);
+    }
     open.add(new_node);
     successors = true;
 }
