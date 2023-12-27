@@ -21,4 +21,4 @@ struct SearchResult {
     SearchResult() = default;
 };
 
-#endif // SEARCHRESULT_H
+#endif // SEARCH_RESULT_H

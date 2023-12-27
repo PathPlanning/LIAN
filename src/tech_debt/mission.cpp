@@ -51,7 +51,6 @@ namespace {
 
         space = logger->logSpace<CN_LOGLVL_HIGH>(CNS_TAG_ANGLES);
 
-        std::vector<float>::const_iterator iter2 = angles.end();
         for (auto iter = angles.crbegin(); iter != angles.crend(); ++iter) {
             TiXmlElement point(CNS_TAG_ANGLE);
             point.SetAttribute(CNS_TAG_ATTR_NUM, (iter - angles.crbegin()));
