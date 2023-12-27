@@ -243,7 +243,7 @@ bool lineSegmentTraverse(const Node& start, const Node& goal, ActionF action) {
 
     for (int t = startT; t <= finishT; ++t) {
         int64_t tempt = t, tempc = c;
-        
+
         if (!alongX) {
             std::swap(tempt, tempc);
         }
@@ -419,26 +419,27 @@ SearchResult LianSearch::startSearch(Logger* Log, const Map& map) {
     }
 }
 
-int LianSearch::tryToIncreaseRadius(Node curNode) {
+int LianSearch::tryToIncreaseRadius(Node* curNode) {
     bool change = false;
-    int i, k = 0;
+    std::size_t i, k = 0;
     while (k < numOfParentsToIncreaseRadius) {
-        if (curNode.parent != nullptr) {
-            if (curNode.radius == curNode.parent->radius) {
-                ++k;
-                curNode = *curNode.parent;
-                continue;
-            }
+        if (!(curNode->parent != nullptr && curNode->radius == curNode->parent->radius)) {
+            break;
         }
-        break;
+        ++k;
+        curNode = curNode->parent;
     }
     if (k == numOfParentsToIncreaseRadius) {
-        for (i = listOfDistances.size() - 1; i >= 0; --i)
-            if (curNode.radius == listOfDistances[i]) break;
-        if (i > 0) change = true;
+        for (i = listOfDistances.size(); i >= 1; --i)
+            if (curNode->radius == listOfDistances[i - 1]) {
+                break;
+            }
+        change = i > 1;
     }
-    if (change) return listOfDistances[i - 1];
-    else return curNode.radius;
+    if (change) {
+        return listOfDistances[i - 2];
+    }
+    return curNode->radius;
 }
 
 void LianSearch::update(const Node current_node, Node new_node, bool& successors, const Map& map) {
@@ -453,7 +454,7 @@ void LianSearch::update(const Node current_node, Node new_node, bool& successors
                 return;
     }
 
-    if (listOfDistances.size() > 1) new_node.radius = tryToIncreaseRadius(new_node);
+    if (listOfDistances.size() > 1) new_node.radius = tryToIncreaseRadius(&new_node);
     open.add(new_node);
     successors = true;
 }
@@ -522,7 +523,7 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
     }
     else { // when we do not have parent, we should explore all neighbors
         int angle_position(-1), new_pos_i, new_pos_j;
-        for (auto node : circle_nodes) {
+        for (auto& node : circle_nodes) {
             new_pos_i = curNode.i + node.i;
             new_pos_j = curNode.j + node.j;
             angle_position++;
@@ -558,17 +559,17 @@ bool LianSearch::expand(const Node curNode, const Map& map) {
 
 
 bool LianSearch::tryToDecreaseRadius(Node& curNode, int width) {
-    int i;
-    for (i = listOfDistances.size() - 1; i >= 0; --i)
-        if (curNode.radius == listOfDistances[i]) break;
-    if (i < listOfDistances.size() - 1) {
-        curNode.radius = listOfDistances[i + 1];
+    std::size_t i;
+    for (i = listOfDistances.size(); i >= 1; --i)
+        if (curNode.radius == listOfDistances[i - 1]) break;
+    if (i < listOfDistances.size()) {
+        curNode.radius = listOfDistances[i];
         auto it = close.find(curNode.convolution(width));
         auto range = close.equal_range(it->first);
         for (auto it = range.first; it != range.second; ++it) {
             if (it->second.parent && it->second.parent->i == curNode.parent->i
                 && it->second.parent->j == curNode.parent->j) {
-                it->second.radius = listOfDistances[i + 1];
+                it->second.radius = listOfDistances[i];
                 break;
             }
         }

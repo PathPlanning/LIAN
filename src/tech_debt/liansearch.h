@@ -87,7 +87,7 @@ private:
 
     bool stopCriterion(); // Check for the ending criteria. Return true if the algorithm should be stopped
 
-    int tryToIncreaseRadius(Node curNode);
+    int tryToIncreaseRadius(Node* curNode);
     bool tryToDecreaseRadius(Node &curNode, int width);
     void findSuccessors(const Node curNode,std::vector<Node> &successors, const Map &map);
     void update(const Node current_node, Node new_node, bool &successors, const Map &map);
