@@ -34,7 +34,7 @@ private:
 
     int numOfParentsToIncreaseRadius;
 
-    std::vector<int> listOfDistances;
+    const std::vector<int> listOfDistances;
 
     float weight;  // Heuristics weight
 
@@ -69,10 +69,6 @@ private:
 
     void calculatePivotCircle();
 
-    int calculatePreferableRadius(const Map &map); // Method calculates the most preferable radius depending on the parameters of the initial map
-
-    void calculateDistances();
-
     void calculateLineSegment(std::vector<Node> &line, const Node &start, const Node &goal); // Method builds Bresenham's Line
 
     bool checkLineSegment(const Map &map, const Node &start, const Node &goal); // Method builds Bresenham's Line and check it for impassable parts
@@ -89,7 +85,6 @@ private:
 
     int tryToIncreaseRadius(Node* curNode);
     bool tryToDecreaseRadius(Node &curNode, int width);
-    void findSuccessors(const Node curNode,std::vector<Node> &successors, const Map &map);
     void update(const Node current_node, Node new_node, bool &successors, const Map &map);
     bool expand(const Node curNode, const Map &map);
     std::list<Node> smoothPath(const std::list<Node>& path, const Map& map);

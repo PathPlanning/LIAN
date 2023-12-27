@@ -16,7 +16,6 @@ public:
     Mission(const char* fName);
     ~Mission();
 
-    bool getConfig();
     bool createLog();
     void createSearch();
     void startSearch();

@@ -32,8 +32,9 @@ namespace {
         int iterate = 0;
         TiXmlNode* child = nullptr, * curNode = space;
 
-        while ((child = curNode->IterateChildren(child)))
+        while (child = curNode->IterateChildren(child)) {
             iterate++;
+        }
 
         {
             TiXmlElement element(CNS_TAG_STEP);
@@ -70,6 +71,21 @@ namespace {
             child->InsertEndChild(element);
         }
     }
+
+    std::vector<int> buildListOfDistances(int distance, float decreaseDistanceFactor, int distanceMin) {
+        std::vector<int> listOfDistances;
+        int curDistance = distance;
+        if (decreaseDistanceFactor > 1) {
+            while (curDistance >= distanceMin) {
+                listOfDistances.push_back(curDistance);
+                curDistance = ceil(curDistance / decreaseDistanceFactor);
+            }
+        }
+        else {
+            listOfDistances.push_back(curDistance);
+        }
+        return listOfDistances;
+    }
 }
 
 /*
@@ -98,7 +114,8 @@ LianSearch::LianSearch(float angleLimit_, int distance_, float weight_,
     pivotRadius(pivotRadius_),
     stepLimit(stepLimit_),
     decreaseDistanceFactor(decreaseDistanceFactor_),
-    distanceMin(distanceMin_)
+    distanceMin(distanceMin_),
+    listOfDistances(std::move(buildListOfDistances(distance_, decreaseDistanceFactor_, distanceMin_)))
 {
     srand(time(nullptr));
 }
@@ -195,19 +212,6 @@ bool LianSearch::checkPivotCircle(const Map& map, const Node& center) {
         }
     }
     return true;
-}
-
-void LianSearch::calculateDistances() {
-    int curDistance = distance;
-    if (decreaseDistanceFactor > 1) {
-        while (curDistance >= distanceMin) {
-            listOfDistances.push_back(curDistance);
-            curDistance = ceil(curDistance / decreaseDistanceFactor);
-        }
-    }
-    else {
-        listOfDistances.push_back(curDistance);
-    }
 }
 
 
@@ -321,15 +325,6 @@ double LianSearch::calcAngle(const Node& dad, const Node& node, const Node& son)
 }
 
 SearchResult LianSearch::startSearch(Logger* Log, const Map& map) {
-
-    calculateDistances();
-
-    std::cout << "List of distances :";
-    for (auto dist : listOfDistances) {
-        std::cout << " " << dist;
-    }
-    std::cout << std::endl;
-
     open.resize(map.getHeight());
     Node curNode(map.start_i, map.start_j, 0.0, 0.0, 0.0);
     curNode.radius = distance;
