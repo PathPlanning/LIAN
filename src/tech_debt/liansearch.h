@@ -4,7 +4,7 @@
 #include "gl_const.h"
 #include "map.h"
 #include "node.h"
-#include "openlist.h"
+#include "open_list.h"
 #include "search.h"
 
 #include <chrono>
