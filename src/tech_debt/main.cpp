@@ -8,7 +8,6 @@ int main(int argc, char* argv[]) {
      }
     Mission Mission(argv[1]);
 
-    Mission.createLog();
     Mission.startSearch();
 
     Mission.printSearchResultsToConsole();

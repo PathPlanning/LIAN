@@ -1,7 +1,7 @@
 #include "mission.h"
 
 namespace {
-    void saveSummaryToLog(Logger* logger, const std::list<Node>& path, int numberofsteps, int nodescreated, float length, float length_scaled,
+    void saveSummaryToLog(std::shared_ptr<Logger> logger, const std::list<Node>& path, int numberofsteps, int nodescreated, float length, float length_scaled,
         long double time, float max_angle, float accum_angle, int sections) {
         auto space = logger->logSpace<CN_LOGLVL_TINY>(CNS_TAG_SUM);
         if (!space) {
@@ -32,7 +32,7 @@ namespace {
         space->SetDoubleAttribute(CNS_TAG_ATTR_ACCUMANGLE, accum_angle);
     }
 
-    void savePathToLog(Logger* logger, const std::list<Node>& path, const std::vector<float>& angles) {
+    void savePathToLog(std::shared_ptr<Logger> logger, const std::list<Node>& path, const std::vector<float>& angles) {
         auto space = logger->logSpace<CN_LOGLVL_HIGH>(CNS_TAG_LPLEVEL);
         if (!space) {
             return;
@@ -59,7 +59,7 @@ namespace {
         }
     }
 
-    void saveMapToLog(Logger* logger, const Map& map, const std::list<Node>& path) {
+    void saveMapToLog(std::shared_ptr<Logger> logger, const Map& map, const std::list<Node>& path) {
         auto space = logger->logSpace<CN_LOGLVL_HIGH>(CNS_TAG_PATH);
         if (!space) {
             return;
@@ -99,7 +99,7 @@ namespace {
         }
     }
 
-    void saveToLogHpLevel(Logger* logger, const std::list<Node>& path) {
+    void saveToLogHpLevel(std::shared_ptr<Logger> logger, const std::list<Node>& path) {
         auto space = logger->logSpace<CN_LOGLVL_HIGH>(CNS_TAG_HPLEVEL);
         if (!space) {
             return;
@@ -121,27 +121,12 @@ namespace {
     }
 }
 
-Mission::Mission(const char* fName) : config(fName), map(fName), search(config.params()), logger(nullptr), fileName(fName) {}
-
-Mission::~Mission() {
-    delete logger;
-}
-
-bool Mission::createLog() {
-    if(config.params().logLevel == CN_LOGLVL_LOW || config.params().logLevel == CN_LOGLVL_HIGH ||
-        config.params().logLevel == CN_LOGLVL_MED || config.params().logLevel == CN_LOGLVL_TINY ||
-        config.params().logLevel - CN_LOGLVL_ITER < 0.001) {
-        logger = new Logger(config.params().logLevel);
-    }
-    else if (config.params().logLevel == CN_LOGLVL_NO) {
-        logger = new Logger(config.params().logLevel);
-        return true;
-    } else {
-        std::cout << "'loglevel' is not correctly specified in input XML-file.\n";
-        return false;
-    }
-    return logger->getLog(fileName);
-}
+Mission::Mission(const char* fName) 
+    : config(fName)
+    , map(fName)
+    , search(config.params())
+    , logger(std::make_shared<Logger>(config.params().logLevel, std::string(fName)))
+    , fileName(fName) {}
 
 void Mission::startSearch() {
     sr = search.startSearch(logger, map);
@@ -170,6 +155,5 @@ void Mission::saveSearchResultsToLog() {
         saveMapToLog(logger, map, sr.lpPath);
         saveToLogHpLevel(logger, sr.hpPath);
     }
-    logger->saveLog();
 }
 

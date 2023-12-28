@@ -2,26 +2,8 @@
 
 #include "logger.h"
 
-Logger::Logger(int loglvl) : logLevel_(loglvl) {
-}
-
-Logger::~Logger() {
-    if (doc_) {
-        doc_->Clear();
-        delete doc_;
-    }
-}
-
-bool Logger::getLog(const std::string& fileName) {
-    std::string value;
-    TiXmlDocument doc_xml(fileName.c_str());
-
-    if (!doc_xml.LoadFile()) {
-        throw std::runtime_error("Error opening XML-file in getLog");
-        return false;
-    }
-
-    value = fileName;
+Logger::Logger(int loglvl, const std::string& configFileName) : logLevel_(loglvl) {
+    std::string value = configFileName;
     size_t dotPos = value.find_last_of(".");
 
     if (dotPos != std::string::npos) {
@@ -30,55 +12,34 @@ bool Logger::getLog(const std::string& fileName) {
     else {
         value += CN_LOG;
     }
-
     logFileName_ = value;
-    doc_xml.SaveFile(logFileName_.c_str());
 
-    doc_ = new TiXmlDocument(logFileName_.c_str());
-    doc_->LoadFile();
 
-    TiXmlElement* msg;
-    TiXmlElement* root;
+    doc_.InsertEndChild(TiXmlDeclaration("1.0", "UTF-8", ""));
 
-    root = doc_->FirstChildElement(CNS_TAG_ROOT);
-    TiXmlElement* log = new TiXmlElement(CNS_TAG_LOG);
-    root->LinkEndChild(log);
+    auto element = doc_.InsertEndChild(TiXmlElement(CNS_TAG_LOG));
 
-    msg = new TiXmlElement(CNS_TAG_MAPFN);
-    msg->LinkEndChild(new TiXmlText(fileName.c_str()));
-    log->LinkEndChild(msg);
-
-    msg = new TiXmlElement(CNS_TAG_SUM);
-    log->LinkEndChild(msg);
+    element->InsertEndChild(TiXmlElement(CNS_TAG_SUM));
 
     if (logLevel_ > CN_LOGLVL_TINY) {
+        element->InsertEndChild(TiXmlElement(CNS_TAG_PATH));
 
-        TiXmlElement* path = new TiXmlElement(CNS_TAG_PATH);
-        log->LinkEndChild(path);
+        element->InsertEndChild(TiXmlElement(CNS_TAG_ANGLES));
 
-        TiXmlElement* angles = new TiXmlElement(CNS_TAG_ANGLES);
-        log->LinkEndChild(angles);
+        element->InsertEndChild(TiXmlElement(CNS_TAG_LPLEVEL));
 
-        TiXmlElement* lplevel = new TiXmlElement(CNS_TAG_LPLEVEL);
-        log->LinkEndChild(lplevel);
-
-        TiXmlElement* hplevel = new TiXmlElement(CNS_TAG_HPLEVEL);
-        log->LinkEndChild(hplevel);
+        element->InsertEndChild(TiXmlElement(CNS_TAG_HPLEVEL));
     }
 
     if (logLevel_ >= CN_LOGLVL_MED) {
-        TiXmlElement* lowlevel = new TiXmlElement(CNS_TAG_LOWLEVEL);
-        log->LinkEndChild(lowlevel);
+        element->InsertEndChild(TiXmlElement(CNS_TAG_LOWLEVEL));
     }
 
     if (logLevel_ >= CN_LOGLVL_ITER) {
-        TiXmlElement* iters = new TiXmlElement(CNS_TAG_ITERS);
-        log->LinkEndChild(iters);
+        element->InsertEndChild(TiXmlElement(CNS_TAG_ITERS));
     }
-
-    return true;
 }
 
-void Logger::saveLog() {
-    doc_->SaveFile(logFileName_.c_str());
+Logger::~Logger() {
+    doc_.SaveFile(logFileName_.c_str());
 }

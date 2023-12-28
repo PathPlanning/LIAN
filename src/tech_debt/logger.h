@@ -7,21 +7,22 @@
 
 class Logger {
 public:
-    Logger(int loglvl);
+    Logger(int loglvl, const std::string& configFileName);
+    Logger(const Logger& oth) = delete;
+    Logger(Logger&& oth) = delete;
+    Logger& operator=(const Logger& oth) = delete;
+    Logger& operator=(Logger&& oth) = delete;
     ~Logger();
-
-    bool getLog(const std::string& FileName);
-    void saveLog();
 
     template<int loglvl>
     TiXmlElement* logSpace(const std::string& tagName) {
         if (logLevel_ < loglvl) {
             return nullptr;
         }
-        return doc_->FirstChild(CNS_TAG_ROOT)->FirstChild(CNS_TAG_LOG)->FirstChildElement(tagName.c_str());
+        return doc_.FirstChild(CNS_TAG_LOG)->FirstChildElement(tagName.c_str());
     }
 private:
     int logLevel_;
     std::string logFileName_;
-    TiXmlDocument* doc_ = nullptr;
+    TiXmlDocument doc_;
 };

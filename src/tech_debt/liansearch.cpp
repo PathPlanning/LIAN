@@ -5,7 +5,7 @@ namespace {
         return sqrt(abs(a_i - b_i) * abs(a_i - b_i) + abs(a_j - b_j) * abs(a_j - b_j));
     }
 
-    void saveIterationToLog(Logger* logger, int closeSize_, const Node& curNode) {
+    void saveIterationToLog(std::shared_ptr<Logger> logger, int closeSize_, const Node& curNode) {
         auto space = logger->logSpace<CN_LOGLVL_ITER>(CNS_TAG_ITERS);
         if (!space) {
             return;
@@ -26,7 +26,7 @@ namespace {
         space->InsertEndChild(element);
     }
 
-    void saveToLogOpenAndClose(Logger* logger, const OpenList& open_,
+    void saveToLogOpenAndClose(std::shared_ptr<Logger> logger, const OpenList& open_,
         const std::unordered_multimap<int, Node>& close_) {
         auto space = logger->logSpace<CN_LOGLVL_LOW>(CNS_TAG_LOWLEVEL);
         if (!space) {
@@ -309,7 +309,7 @@ double LianSearch::calcAngle(const Node& dad, const Node& node, const Node& son)
     return acos(cos_angle);
 }
 
-SearchResult LianSearch::startSearch(Logger* Log, const Map& map) {
+SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& map) {
     open_.resize(map.getHeight());
     Node curNode(map.start_i, map.start_j, 0.0, 0.0, 0.0);
     curNode.radius = settings_.distance;
@@ -337,7 +337,7 @@ SearchResult LianSearch::startSearch(Logger* Log, const Map& map) {
         curNode = open_.getMin();
         close_.insert({ curNode.convolution(map.getWidth()),curNode });
 
-        saveIterationToLog(Log, close_.size(), curNode);
+        saveIterationToLog(logger, close_.size(), curNode);
 
         if (curNode.i == map.goal_i && curNode.j == map.goal_j) { // if current point is goal point - end of the cycle
             pathFound = true;
@@ -350,10 +350,10 @@ SearchResult LianSearch::startSearch(Logger* Log, const Map& map) {
                     if (expand(curNode, map))
                         break;
 
-        saveToLogOpenAndClose(Log, open_, close_);
+        saveToLogOpenAndClose(logger, open_, close_);
     }
 
-    saveToLogOpenAndClose(Log, open_, close_);
+    saveToLogOpenAndClose(logger, open_, close_);
 
     sresult_.nodesCreated = open_.size() + close_.size();
     sresult_.numberOfSteps = close_.size();

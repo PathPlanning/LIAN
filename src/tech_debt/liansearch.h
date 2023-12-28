@@ -15,12 +15,13 @@
 #include <limits>
 #include <unordered_map>
 #include <vector>
+#include <memory>
 
 class LianSearch {
 public:
     LianSearch(SearchParams settings);
 
-    SearchResult startSearch(Logger *Log, const Map &map);
+    SearchResult startSearch(std::shared_ptr<Logger> logger, const Map &map);
 
 private:
     SearchParams settings_;

@@ -8,24 +8,23 @@
 #include "search_result.h"
 
 #include <string>
+#include <memory>
 
 class Mission {
 
 public:
     Mission(const char* fName);
-    ~Mission();
 
-    bool createLog();
     void startSearch();
     void printSearchResultsToConsole();
     void saveSearchResultsToLog();
 
 private:
-    Config      config;
-    Map         map;
+    Config config;
+    Map map;
 
-    LianSearch  search;
-    Logger      *logger;
+    LianSearch search;
+    std::shared_ptr<Logger> logger;
 
     const char* fileName;
 
