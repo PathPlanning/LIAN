@@ -49,16 +49,28 @@ struct Node {
 
     inline Node& operator=(const Node& other) = default;
 
-    inline bool operator==(const Node& p) const {
-            return i == p.i && j == p.j && parent->i == p.parent->i && parent->j == p.parent->j;
+    inline bool operator==(const Node& other) const {
+        // todo: change this to simple comparison and move this to equal() method
+        return i == other.i && j == other.j
+               && ((!parent && !other.parent)
+               || (parent && other.parent
+                   && parent->i == other.parent->i && parent->j == other.parent->j));
     }
 
-    inline bool operator!=(const Node& p) const {
-            return !(*this == p);
+    inline bool operator!=(const Node& other) const {
+            return !(*this == other);
     }
 
-    int convolution(int width) const {
-            return i * width + j;
+    inline bool operator<(const Node& other) const {
+        return F > other.F || (F == other.F && g < other.g);
+    }
+};
+
+template<>
+struct std::hash<Node> {
+    std::size_t operator()(const Node& node) const
+    {
+        return (size_t)node.i << 32 | (size_t)node.j;
     }
 };
 
