@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <log>
-    <summary pathfound="true" numberofsteps="17" nodescreated="96" sections="6" length="54.698898" length_scaled="1312.773560" time="7.9571e-05" max_angle="63.434948" accum_angle="185.325729" />
+    <summary pathfound="true" numberofsteps="16" nodescreated="92" sections="6" length="54.698898" length_scaled="1312.773560" time="7e-05" max_angle="63.434948" accum_angle="185.325729" />
     <path>
         <row number="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
         <row number="1">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
