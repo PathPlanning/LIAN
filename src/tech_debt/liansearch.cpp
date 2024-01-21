@@ -446,28 +446,41 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
     
     bool successors_are_fine = false;
     auto curNodeFromClose = &(search_tree_.close_.find(curNode)->second);
+    auto tryUpdateMap = [&](auto& node, bool updateAngle = false, bool usesCurvatureHeuristicWeight = true) {
+        double angle = fabs(curNode.angle - node.heading);
+        if (!(angle <= 180 && angle <= settings_.angleLimit) && !(angle > 180 && 360 - angle <= settings_.angleLimit)) {
+            return false; // this is angle problem
+        }
+
+        int new_pos_i = curNode.i + node.i;
+        int new_pos_j = curNode.j + node.j;
+
+        if (!map.CellOnGrid(new_pos_i, new_pos_j) || map.CellIsObstacle(new_pos_i, new_pos_j)) {
+            return true; // this is okey
+        }
+        Node newNode = Node(new_pos_i, new_pos_j);
+        newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
+        newNode.angle = updateAngle ? node.heading : 0.0;
+        newNode.F = newNode.g + settings_.weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j) +
+            (usesCurvatureHeuristicWeight ?
+                settings_.curvatureHeuristicWeight * (float)settings_.distance * fabs(curNode.angle - newNode.angle) : 0.0);
+        newNode.radius = curNode.radius;
+        newNode.angle = node.heading;
+        newNode.parent = curNodeFromClose;
+
+        update(curNode, newNode, successors_are_fine, map);
+        return true; // this is okey
+        };
+
     if (curNode.parent != nullptr) {
         int node_straight_ahead = (int)round(curNode.angle * circle_nodes.size() / 360) % circle_nodes.size();
-        double angle = fabs(curNode.angle - circle_nodes[node_straight_ahead].heading);
-        if ((angle <= 180 && angle <= settings_.angleLimit) || (angle > 180 && 360 - angle <= settings_.angleLimit)) {
-            int new_pos_i = curNode.i + circle_nodes[node_straight_ahead].i;
-            int new_pos_j = curNode.j + circle_nodes[node_straight_ahead].j;
-            if (map.CellOnGrid(new_pos_i, new_pos_j) && map.CellIsTraversable(new_pos_i, new_pos_j)) {
-                Node newNode = Node(new_pos_i, new_pos_j);
-                newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
-                newNode.angle = circle_nodes[node_straight_ahead].heading;
-                newNode.F = newNode.g + settings_.weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j) +
-                    settings_.curvatureHeuristicWeight * (float)settings_.distance * fabs(curNode.angle - newNode.angle);
-                newNode.radius = curNode.radius;
-                newNode.parent = curNodeFromClose;
-
-                update(curNode, newNode, successors_are_fine, map);
-            }
-        } // now we will expand neighbors that are closest to the node that lies straight ahead
+        tryUpdateMap(circle_nodes[node_straight_ahead], true); // now we will expand neighbors that are closest to the node that lies straight ahead
 
         std::vector<int> candidates = std::vector<int>{ node_straight_ahead, node_straight_ahead };
         bool limit1 = true;
         bool limit2 = true;
+        
+
         while (++candidates[0] != --candidates[1] && (limit1 || limit2)) { // untill the whole circle is explored or we exessed anglelimit somewhere
             if (candidates[0] >= circle_nodes.size()) {
                 candidates[0] = 0;
@@ -476,25 +489,9 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
                 candidates[1] = circle_nodes.size() - 1;
             }
 
-            for (auto cand : candidates) {
-                double angle = fabs(curNode.angle - circle_nodes[cand].heading);
-                if ((angle <= 180 && angle <= settings_.angleLimit) || (angle > 180 && 360 - angle <= settings_.angleLimit)) {
-                    int new_pos_i = curNode.i + circle_nodes[cand].i;
-                    int new_pos_j = curNode.j + circle_nodes[cand].j;
-
-                    if (!map.CellOnGrid(new_pos_i, new_pos_j) || map.CellIsObstacle(new_pos_i, new_pos_j)) {
-                        continue;
-                    }
-
-                    Node newNode = Node(new_pos_i, new_pos_j);
-                    newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
-                    newNode.F = newNode.g + settings_.weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j) +
-                        settings_.curvatureHeuristicWeight * (float)settings_.distance * fabs(curNode.angle - newNode.angle);
-                    newNode.radius = curNode.radius;
-                    newNode.angle = circle_nodes[cand].heading;
-                    newNode.parent = curNodeFromClose;
-
-                    update(curNode, newNode, successors_are_fine, map);
+            for (auto &cand : candidates) {
+                if (tryUpdateMap(circle_nodes[cand])) {
+                    continue;
                 }
                 else if (cand == candidates[0]) {
                     limit1 = false;
@@ -529,7 +526,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
 
     // when we are near goal point, we should try to reach it
     if (getCost(curNode.i, curNode.j, map.goal_i, map.goal_j) <= curNode.radius) {
-        double angle = calcAngle(*curNode.parent, curNode, Node(map.goal_i, map.goal_j));
+        double angle = curNode.parent != nullptr ? calcAngle(*curNode.parent, curNode, Node(map.goal_i, map.goal_j)) : 0.0;
 
         if (fabs(angle * 180 / CN_PI_CONSTANT) <= settings_.angleLimit) {
             Node newNode = Node(map.goal_i, map.goal_j,
@@ -574,7 +571,7 @@ bool LianSearch::tryToDecreaseRadius(Node& curNode) {
 
     curNode.radius = *(radiusIter - 1);
     auto range = search_tree_.close_.equal_range(curNode);
-    for (auto it = range.first; it != range.second; ++it) {
+    for (auto& it = range.first; it != range.second; ++it) {
         Node &nodeFromClose = it->second;
         if (nodeFromClose.parent && nodeFromClose.parent->i == curNode.parent->i
             && nodeFromClose.parent->j == curNode.parent->j) {
@@ -612,7 +609,7 @@ std::list<Node> LianSearch::smoothPath(const std::list<Node>& path, const Map& m
     Node previous = *it++;
     while (end_section != path.back()) {
         for (it; it != path.end(); ++it) {
-            auto next = ++it;
+            auto& next = ++it;
             --it;
             if (!first && !checkAngle(previous, start_section, *it)) {
                 continue;
