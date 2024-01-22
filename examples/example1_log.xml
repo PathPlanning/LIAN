@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <!-- Example of LIAN run with angle limit 45 degrees, pivot circle security check radius 3 and without dynamically changing section length-->
+    <map>
+        <width>25</width>
+        <height>25</height>
+        <cellsize>24</cellsize>
+        <startx>7</startx>
+        <starty>15</starty>
+        <finishx>20</finishx>
+        <finishy>10</finishy>
+        <grid>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 1 1 1 1 1 1 1 0 0</row>
+            <row>0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 1 1 1 1 1 1 1 0 0</row>
+            <row>0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 1 1 1 1 1 1 1 0 0</row>
+            <row>0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 1 1 1 1 1 1 1 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+            <row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</row>
+        </grid>
+    </map>
+    <algorithm>
+        <hweight>2</hweight>
+        <anglelimit>45</anglelimit>
+        <distance>5</distance>
+        <distancemin>3</distancemin>
+        <decreaseDistanceFactor>1</decreaseDistanceFactor>
+        <pivotCircleRadius>0</pivotCircleRadius>
+        <steplimit>-1</steplimit>
+        <postsmoothing>false</postsmoothing>
+        <curvatureHeuristicWeight>0</curvatureHeuristicWeight>
+        <numOfParentsToIncreaseRadius>2</numOfParentsToIncreaseRadius>
+    </algorithm>
+    <options>
+        <loglevel>3</loglevel>
+        <logpath />
+        <logfilename />
+    </options>
+</root>
 <log>
-    <summary pathfound="true" numberofsteps="4" nodescreated="42" sections="3" length="15.099019" length_scaled="362.376465" time="0.0002359" max_angle="41.820171" accum_angle="53.130104" />
+    <summary pathfound="true" numberofsteps="4" nodescreated="21" sections="3" length="15.099019" length_scaled="362.376465" time="0.0001767" max_angle="41.820171" accum_angle="53.130104" />
     <path>
         <row number="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
         <row number="1">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
