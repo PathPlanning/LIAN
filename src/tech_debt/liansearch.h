@@ -55,7 +55,7 @@ private:
     int tryToIncreaseRadius(Node* curNode);
     bool tryToDecreaseRadius(Node &curNode);
 
-    void update(const Node& current_node, Node &new_node, bool &successors, const Map &map);
+    void updateOpen(const Node& current_node, Node &new_node, bool &successors, const Map &map);
     bool expand(const Node& curNode, const Map &map);
     std::list<Node> smoothPath(const std::list<Node>& path, const Map& map);
     void makePrimaryPath(Node* curNode);

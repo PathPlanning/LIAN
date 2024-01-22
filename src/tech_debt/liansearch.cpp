@@ -357,7 +357,7 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
     }
 }
 
-void LianSearch::update(const Node& current_node, Node &new_node, bool& successors, const Map& map) {
+void LianSearch::updateOpen(const Node& current_node, Node &new_node, bool& successors, const Map& map) {
     if (!checkLineSegment(map, *new_node.parent, new_node)) {
         return;
     }
@@ -394,7 +394,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
     
     bool successors_are_fine = false;
     Node *curNodeFromClose = search_tree_.findClose(curNode);
-    auto tryUpdateMap = [&](auto& node, bool updateAngle = false, bool usesCurvatureHeuristicWeight = true) {
+    auto tryUpdateOpen = [&](auto& node, bool updateAngle = false, bool usesCurvatureHeuristicWeight = true) {
         double angle = fabs(curNode.angle - node.heading);
         if (!(angle <= 180 && angle <= settings_.angleLimit) && !(angle > 180 && 360 - angle <= settings_.angleLimit)) {
             return false; // this is angle problem
@@ -404,7 +404,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
         int new_pos_j = curNode.j + node.j;
 
         if (!map.CellOnGrid(new_pos_i, new_pos_j) || map.CellIsObstacle(new_pos_i, new_pos_j)) {
-            return true; // this is okay
+            return true; // this is okey
         }
         Node newNode = Node(new_pos_i, new_pos_j);
         newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
@@ -416,13 +416,13 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
         newNode.angle = node.heading;
         newNode.parent = curNodeFromClose;
 
-        update(curNode, newNode, successors_are_fine, map);
+        updateOpen(curNode, newNode, successors_are_fine, map);
         return true; // this is okey
         };
 
     if (curNode.parent != nullptr) {
         int node_straight_ahead = (int)round(curNode.angle * circle_nodes.size() / 360) % circle_nodes.size();
-        tryUpdateMap(circle_nodes[node_straight_ahead], true); // now we will expand neighbors that are closest to the node that lies straight ahead
+        tryUpdateOpen(circle_nodes[node_straight_ahead], true); // now we will expand neighbors that are closest to the node that lies straight ahead
 
         std::vector<int> candidates = std::vector<int>{ node_straight_ahead, node_straight_ahead };
         bool limit1 = true;
@@ -437,7 +437,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
             }
 
             for (auto &cand : candidates) {
-                if (tryUpdateMap(circle_nodes[cand])) {
+                if (tryUpdateOpen(circle_nodes[cand])) {
                     continue;
                 }
                 else if (cand == candidates[0]) {
@@ -450,24 +450,8 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
         }
     }
     else { // when we do not have parent, we should explore all neighbors
-        int angle_position(-1), new_pos_i, new_pos_j;
         for (auto& node : circle_nodes) {
-            new_pos_i = curNode.i + node.i;
-            new_pos_j = curNode.j + node.j;
-            angle_position++;
-
-            if (!map.CellOnGrid(new_pos_i, new_pos_j) || map.CellIsObstacle(new_pos_i, new_pos_j)) {
-                continue;
-            }
-
-            Node newNode = Node(new_pos_i, new_pos_j);
-            newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
-            newNode.F = newNode.g + settings_.weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j);
-            newNode.radius = curNode.radius;
-            newNode.angle = circle_nodes[angle_position].heading;
-            newNode.parent = curNodeFromClose;
-
-            update(curNode, newNode, successors_are_fine, map);
+            tryUpdateOpen(node);
         }
     }
 
@@ -480,7 +464,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
                 curNode.g + getCost(curNode.i, curNode.j, map.goal_i, map.goal_j), 0.0,
                                 curNode.radius, curNodeFromClose, settings_.curvatureHeuristicWeight * settings_.distance, 0.0);
 
-            update(curNode, newNode, successors_are_fine, map);
+            updateOpen(curNode, newNode, successors_are_fine, map);
         }
     }
     return successors_are_fine;
@@ -580,7 +564,6 @@ std::list<Node> LianSearch::smoothPath(const std::list<Node>& path, const Map& m
 }
 
 void LianSearch::makeSecondaryPath() {
-    ;
     auto it = hppath_.begin();
     Node parent = *it++;
     while (it != hppath_.end()) {
