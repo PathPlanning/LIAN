@@ -2,7 +2,11 @@
 
 #include "logger.h"
 
-Logger::Logger(int loglvl, const std::string& configFileName) : logLevel_(loglvl) {
+Logger::Logger(int loglvl, const std::string& configFileName) : doc_(configFileName.c_str()), logLevel_(loglvl) {
+    if (!doc_.LoadFile()) {
+        throw std::runtime_error("Error opening XML-file in getLog");
+    }
+
     std::string value = configFileName;
     size_t dotPos = value.find_last_of(".");
 
@@ -14,8 +18,6 @@ Logger::Logger(int loglvl, const std::string& configFileName) : logLevel_(loglvl
     }
     logFileName_ = value;
 
-
-    doc_.InsertEndChild(TiXmlDeclaration("1.0", "UTF-8", ""));
 
     auto element = doc_.InsertEndChild(TiXmlElement(CNS_TAG_LOG));
 
