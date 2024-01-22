@@ -27,15 +27,6 @@ void saveIterationToLog(std::shared_ptr<Logger> &logger, int closeSize_, const N
     space->InsertEndChild(element);
 }
 
-/*
- * // Use for more accurate time calculation
- * #ifdef __linux__
- *     #include <sys/time.h>
- * #else
- *     #include <windows.h>
- * #endif
- *
-*/
 
 std::vector<int> LianSearch::buildDistances() const {
     std::vector<int> result;
@@ -272,17 +263,6 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
     std::chrono::time_point<std::chrono::system_clock> begin, end;
     begin = std::chrono::system_clock::now();
 
-    /*
-     * #ifdef __linux__
-     *     timeval begin, end;
-     *     gettimeofday(&begin, NULL);
-     * #else
-     *     LARGE_INTEGER begin,end,freq;
-     *     QueryPerformanceCounter(&begin);
-     *     QueryPerformanceFrequency(&freq);
-     * #endif
-     */
-
     while (!stopCriterion()) { // main cycle of the search
         std::optional<Node> min = search_tree_.getOpen();
         if (!min)
@@ -327,14 +307,6 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
 
         end = std::chrono::system_clock::now();
         sresult_.time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()) / 1000000000;
-        /* // for more accurate time calculation
-       #ifdef __linux__
-           gettimeofday(&end, NULL);
-           sresult.time = (end.tv_sec - begin.tv_sec) + static_cast<double>(end.tv_usec - begin.tv_usec) / 1000000;
-       #else
-           QueryPerformanceCounter(&end);
-           sresult.time = static_cast<double long>(end.QuadPart-begin.QuadPart) / freq.QuadPart;
-       #endif */
 
         return sresult_;
     }
@@ -343,15 +315,6 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
 
         end = std::chrono::system_clock::now();
         sresult_.time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()) / 1000000000;
-
-        /* for more accurate time calculation
-       #ifdef __linux__
-           gettimeofday(&end, NULL);
-           sresult.time = (end.tv_sec - begin.tv_sec) + static_cast<double>(end.tv_usec - begin.tv_usec) / 1000000;
-       #else
-           QueryPerformanceCounter(&end);
-           sresult.time = static_cast<double long>(end.QuadPart-begin.QuadPart) / freq.QuadPart;
-       #endif */
 
         return sresult_;
     }
@@ -404,7 +367,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
         int new_pos_j = curNode.j + node.j;
 
         if (!map.CellOnGrid(new_pos_i, new_pos_j) || map.CellIsObstacle(new_pos_i, new_pos_j)) {
-            return true; // this is okey
+            return true; // this is okay
         }
         Node newNode = Node(new_pos_i, new_pos_j);
         newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
@@ -417,7 +380,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
         newNode.parent = curNodeFromClose;
 
         updateOpen(curNode, newNode, successors_are_fine, map);
-        return true; // this is okey
+        return true; // this is okay
         };
 
     if (curNode.parent != nullptr) {
