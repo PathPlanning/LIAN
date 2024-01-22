@@ -25,14 +25,13 @@ public:
 private:
     SearchParams settings_;
     SearchResult sresult_;
-    const std::vector<int> listOfDistances_;
+    const std::vector<int> distanceLookup_; // Possible step sizes, from largest to smallest
     std::vector<std::vector<circleNode> > circleNodes_; // Virtual nodes that create circle around the cell
     std::vector<std::pair<int,int> > pivotCircle_;  // Vector of nodes (shifts) for pivot security check
     std::vector<float> angles_;
     std::list<Node> lppath_, hppath_; // Final path in two representations
-    SearchTree search_tree_; // Open: list of nodes waiting for expanding
-                             // as well as
-                             // Close: list of nodes that were already expanded
+    SearchTree search_tree_; // consists of `open` (list of nodes waiting for expanding) \
+                             // and `close` (list of nodes that were already expanded)
 
      // Called on construction
     std::vector<int> buildDistances() const;

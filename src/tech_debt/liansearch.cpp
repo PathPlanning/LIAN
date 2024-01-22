@@ -54,16 +54,16 @@ std::vector<int> LianSearch::buildDistances() const {
 
 LianSearch::LianSearch(SearchParams settings)
     : settings_(settings)
-    , listOfDistances_(buildDistances())
+    , distanceLookup_(buildDistances())
 {
     srand(time(nullptr));
 }
 
 void LianSearch::calculateCircle(int radius) { //here radius - radius of the circle in cells
     circleNodes_.clear();
-    circleNodes_.resize(listOfDistances_.size());
-    for (int k = 0; k < listOfDistances_.size(); ++k) {
-        radius = listOfDistances_[k];
+    circleNodes_.resize(distanceLookup_.size());
+    for (int k = 0; k < distanceLookup_.size(); ++k) {
+        radius = distanceLookup_[k];
         circleNodes_[k].clear();
         std::vector<circleNode> circle_nodes(0);
         int x = 0;
@@ -297,8 +297,8 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
             break;
         }
 
-        if (!expand(curNode, map) && listOfDistances_.size() > 1)
-            while (curNode.radius > listOfDistances_[listOfDistances_.size() - 1])
+        if (!expand(curNode, map) && distanceLookup_.size() > 1)
+            while (curNode.radius > distanceLookup_[distanceLookup_.size() - 1])
                 if (tryToDecreaseRadius(curNode))
                     if (expand(curNode, map))
                         break;
@@ -375,7 +375,7 @@ void LianSearch::update(const Node& current_node, Node &new_node, bool& successo
         }
     }
 
-    if (listOfDistances_.size() > 1) {
+    if (distanceLookup_.size() > 1) {
         new_node.radius = tryToIncreaseRadius(&new_node);
     }
     search_tree_.addOpen(new_node);
@@ -384,8 +384,8 @@ void LianSearch::update(const Node& current_node, Node &new_node, bool& successo
 
 bool LianSearch::expand(const Node& curNode, const Map& map) {
     std::size_t current_distance;
-    for (current_distance = 0; current_distance < listOfDistances_.size(); ++current_distance) {
-        if (listOfDistances_[current_distance] == curNode.radius) {
+    for (current_distance = 0; current_distance < distanceLookup_.size(); ++current_distance) {
+        if (distanceLookup_[current_distance] == curNode.radius) {
             break;
         }
     }
@@ -487,8 +487,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
 }
 
 int LianSearch::tryToIncreaseRadius(Node* curNode) {
-    bool change = false;
-    std::size_t i, k = 0;
+    std::size_t k = 0;
     while (k < settings_.numOfParentsToIncreaseRadius) {
         if (!(curNode->parent != nullptr && curNode->radius == curNode->parent->radius)) {
             break;
@@ -496,23 +495,25 @@ int LianSearch::tryToIncreaseRadius(Node* curNode) {
         ++k;
         curNode = curNode->parent;
     }
+    std::ptrdiff_t i;
+    bool change = false;
     if (k == settings_.numOfParentsToIncreaseRadius) {
-        for (i = listOfDistances_.size(); i >= 1; --i) {
-            if (curNode->radius == listOfDistances_[i - 1]) {
+        for (i = distanceLookup_.size() - 1; i >= 0; --i) {
+            if (curNode->radius == distanceLookup_[i]) {
                 break;
             }
         }
-        change = i > 1;
+        change = i > 0;
     }
     if (change) {
-        return listOfDistances_[i - 2];
+        return distanceLookup_[i - 1];
     }
     return curNode->radius;
 }
 
 bool LianSearch::tryToDecreaseRadius(Node& curNode) {
-    auto radiusIter = std::lower_bound(listOfDistances_.rbegin(), listOfDistances_.rend(), curNode.radius);
-    if (radiusIter == listOfDistances_.rbegin()) {
+    auto radiusIter = std::lower_bound(distanceLookup_.rbegin(), distanceLookup_.rend(), curNode.radius);
+    if (radiusIter == distanceLookup_.rbegin()) {
         return false;
     }
 
