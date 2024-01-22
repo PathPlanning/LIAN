@@ -50,11 +50,7 @@ struct Node {
     inline Node& operator=(const Node& other) = default;
 
     inline bool operator==(const Node& other) const {
-        // todo: change this to simple comparison and move this to equal() method
-        return i == other.i && j == other.j
-               && ((!parent && !other.parent)
-               || (parent && other.parent
-                   && parent->i == other.parent->i && parent->j == other.parent->j));
+        return i == other.i && j == other.j;
     }
 
     inline bool operator!=(const Node& other) const {
@@ -73,5 +69,11 @@ struct std::hash<Node> {
         return (size_t)node.i << 32 | (size_t)node.j;
     }
 };
+
+inline bool areFromSameSource(const Node& lhs, const Node& rhs) {
+    return ((!lhs.parent && !rhs.parent)
+            || (lhs.parent && rhs.parent
+                && lhs.parent->i == rhs.parent->i && lhs.parent->j == rhs.parent->j));
+}
 
 #endif

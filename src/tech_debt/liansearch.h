@@ -41,7 +41,7 @@ private:
     void calculateCircle(int radius); // Radius - radius of the circle in cells
 
     void calculatePivotCircle();
-    static void calculateLineSegment(std::vector<Node> &line, const Node &start, const Node &goal); // Method builds Bresenham's Line
+    static std::vector<Node> calculateLineSegment(const Node &start, const Node &goal); // Method builds Bresenham's Line
     static bool checkLineSegment(const Map &map, const Node &start, const Node &goal); // Method builds Bresenham's Line and check it for impassable parts
 
     // check that there are no obstacle in a safety radius from a turn point
