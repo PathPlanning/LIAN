@@ -8,18 +8,18 @@ add_subdirectory(contrib)
 add_executable(LianSearch
 		src/tech_debt/main.cpp
 		src/tech_debt/liansearch.cpp
-        src/tech_debt/search_tree.cpp
+		src/tech_debt/search_tree.cpp
 		src/tech_debt/config.cpp
 		src/tech_debt/map.cpp
 		src/tech_debt/mission.cpp
 		src/tech_debt/logger.cpp
 		src/tech_debt/xml_utils.cpp
 
-        src/tech_debt/search_result.h
+		src/tech_debt/search_result.h
 		src/tech_debt/gl_const.h
 		src/tech_debt/liansearch.h
 		src/tech_debt/node.h
-        src/tech_debt/search_tree.h
+		src/tech_debt/search_tree.h
 		src/tech_debt/config.h
 		src/tech_debt/map.h
 		src/tech_debt/logger.h
