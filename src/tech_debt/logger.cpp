@@ -2,7 +2,6 @@
 
 #include "logger.h"
 
-Logger::Tags Logger::tags = {};
 
 Logger::Logger(int loglvl, const std::string &configFileName) : doc_(configFileName.c_str()), logLevel_(loglvl) {
 	if (!doc_.LoadFile()) {
@@ -21,26 +20,26 @@ Logger::Logger(int loglvl, const std::string &configFileName) : doc_(configFileN
 	logFileName_ = value;
 
 
-	auto element = doc_.InsertEndChild(TiXmlElement(Logger::tags.log));
+	auto element = doc_.InsertEndChild(TiXmlElement(Logger::Tags::log));
 
-	element->InsertEndChild(TiXmlElement(Logger::tags.summary));
+	element->InsertEndChild(TiXmlElement(Logger::Tags::summary));
 
-	if (logLevel_ > CN_LOGLVL_TINY) {
-		element->InsertEndChild(TiXmlElement(Logger::tags.path));
+	if (logLevel_ > Logger::Levels::tiny) {
+		element->InsertEndChild(TiXmlElement(Logger::Tags::path));
 
-		element->InsertEndChild(TiXmlElement(Logger::tags.angles));
+		element->InsertEndChild(TiXmlElement(Logger::Tags::angles));
 
-		element->InsertEndChild(TiXmlElement(Logger::tags.lpLevel));
+		element->InsertEndChild(TiXmlElement(Logger::Tags::lpLevel));
 
-		element->InsertEndChild(TiXmlElement(Logger::tags.hpLevel));
+		element->InsertEndChild(TiXmlElement(Logger::Tags::hpLevel));
 	}
 
-	if (logLevel_ >= CN_LOGLVL_MED) {
-		element->InsertEndChild(TiXmlElement(Logger::tags.lowLevel));
+	if (logLevel_ >= Logger::Levels::med) {
+		element->InsertEndChild(TiXmlElement(Logger::Tags::lowLevel));
 	}
 
-	if (logLevel_ >= CN_LOGLVL_ITER) {
-		element->InsertEndChild(TiXmlElement(Logger::tags.iterations));
+	if (logLevel_ >= Logger::Levels::iter) {
+		element->InsertEndChild(TiXmlElement(Logger::Tags::iterations));
 	}
 }
 

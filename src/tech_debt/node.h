@@ -20,7 +20,9 @@ struct circleNode
 };
 
 struct Node {
-
+private:
+    static constexpr int defaultRadius = 4;
+public:
     Node*   parent;
 
     int     i, j;
@@ -30,11 +32,11 @@ struct Node {
 
     double angle;
 
-    Node() : parent(nullptr), i(-1), j(-1), radius(CN_PTD_D),
+    Node() : parent(nullptr), i(-1), j(-1), radius(defaultRadius),
              F(std::numeric_limits<float>::infinity()), g(std::numeric_limits<float>::infinity()), angle(0) {}
 
     Node(int x, int y, float g_=std::numeric_limits<float>::infinity(), float h_=std::numeric_limits<float>::infinity(),
-         int radius_=CN_PTD_D, Node *parent_=nullptr, float cweightdist_=0, double ang_=0) :
+         int radius_= defaultRadius, Node *parent_=nullptr, float cweightdist_=0, double ang_=0) :
         parent(parent_), i(x), j(y), radius(radius_), g(g_), angle(ang_) {
         if (parent) {
             F = g + h_ + cweightdist_ * (float)fabs(ang_ - parent->angle);

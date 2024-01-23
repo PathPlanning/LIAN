@@ -22,19 +22,11 @@ public:
         if (logLevel_ < loglvl) {
             return nullptr;
         }
-        return doc_.FirstChild(Logger::tags.log)->FirstChildElement(tagName.c_str());
+        return doc_.FirstChild(Logger::Tags::log)->FirstChildElement(tagName.c_str());
     }
-private:
+
     struct Tags {
-        //constexpr auto Logger::tags.root = "root";
-
-        //constexpr auto Logger::tags.lpLevel = "lplevel";
-        //constexpr auto Logger::tags.hpLevel = "hplevel";
-        //constexpr auto Logger::tags.log = "log";
-        //constexpr auto Logger::tags.lowLevel = "lowlevel";
-
-        //constexpr auto Logger::tags.mapFileName = "mapfilename";
-        const char
+        static constexpr const char
             *root = "root",
             *row = "row",
             *lpLevel = "lpLevel",
@@ -76,9 +68,18 @@ private:
             *accumAngle = "accum_angle";
     };
 
+    struct Levels {
+        static constexpr int
+            no = 0,
+            tiny = 1,
+            high = 2,
+            iter = 3,
+            med = 4,
+            low = 5;
+    };
+
+private:
     int logLevel_;
     std::string logFileName_;
     TiXmlDocument doc_;
-public:
-    static Tags tags;
 };

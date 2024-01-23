@@ -13,6 +13,7 @@ namespace {
     constexpr auto tagCellSize = "cellsize";
     constexpr auto tagGrid = "grid";
     constexpr auto tagRow = "row";
+    constexpr auto tagObstacle = 1;
 }
 
 std::vector<int>& Map::operator[](int i) {
@@ -23,11 +24,11 @@ const std::vector<int>& Map::operator[](int i) const {
 }
 
 bool Map::CellIsTraversable(int curr_i, int curr_j) const {
-    return (grid_[curr_i][curr_j] != CN_OBSTL);
+    return (grid_[curr_i][curr_j] != tagObstacle);
 }
 
 bool Map::CellIsObstacle(int curr_i, int curr_j) const {
-    return (grid_[curr_i][curr_j] == CN_OBSTL);
+    return (grid_[curr_i][curr_j] == tagObstacle);
 }
 
 bool Map::CellOnGrid(int curr_i, int curr_j) const {

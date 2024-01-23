@@ -8,22 +8,22 @@ double getCost(int a_i, int a_j, int b_i, int b_j) {
 }
 
 void saveIterationToLog(std::shared_ptr<Logger> &logger, int closeSize_, const Node& curNode) {
-    auto space = logger->logSpace<CN_LOGLVL_ITER>(Logger::tags.iterations);
+    auto space = logger->logSpace<Logger::Levels::iter>(Logger::Tags::iterations);
     if (!space) {
         return;
     }
 
-    TiXmlElement element(Logger::tags.step);
+    TiXmlElement element(Logger::Tags::step);
 
-    element.SetAttribute(Logger::tags.step, closeSize_);
-    element.SetAttribute(Logger::tags.parentX, curNode.j);
-    element.SetAttribute(Logger::tags.y, curNode.i);
+    element.SetAttribute(Logger::Tags::step, closeSize_);
+    element.SetAttribute(Logger::Tags::parentX, curNode.j);
+    element.SetAttribute(Logger::Tags::y, curNode.i);
     if (curNode.parent) {
-        element.SetAttribute(Logger::tags.parentX, curNode.parent->j);
-        element.SetAttribute(Logger::tags.parentY, curNode.parent->i);
+        element.SetAttribute(Logger::Tags::parentX, curNode.parent->j);
+        element.SetAttribute(Logger::Tags::parentY, curNode.parent->i);
     }
-    element.SetDoubleAttribute(Logger::tags.F, curNode.F);
-    element.SetDoubleAttribute(Logger::tags.g, curNode.g);
+    element.SetDoubleAttribute(Logger::Tags::F, curNode.F);
+    element.SetDoubleAttribute(Logger::Tags::g, curNode.g);
 
     space->InsertEndChild(element);
 }

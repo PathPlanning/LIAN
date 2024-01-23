@@ -56,13 +56,13 @@ void SearchTree::writeToXml(TiXmlNode *child) const {
         }
     }
     if (min.F != std::numeric_limits<float>::infinity()) {
-        TiXmlElement element(Logger::tags.node);
-        element.SetAttribute(Logger::tags.parentX, min.j);
-        element.SetAttribute(Logger::tags.y, min.i);
-        element.SetDoubleAttribute(Logger::tags.F, min.F);
-        element.SetDoubleAttribute(Logger::tags.g, min.g);
-        element.SetAttribute(Logger::tags.parentX, min.parent->j);
-        element.SetAttribute(Logger::tags.parentY, min.parent->i);
+        TiXmlElement element(Logger::Tags::node);
+        element.SetAttribute(Logger::Tags::parentX, min.j);
+        element.SetAttribute(Logger::Tags::y, min.i);
+        element.SetDoubleAttribute(Logger::Tags::F, min.F);
+        element.SetDoubleAttribute(Logger::Tags::g, min.g);
+        element.SetAttribute(Logger::Tags::parentX, min.parent->j);
+        element.SetAttribute(Logger::Tags::parentY, min.parent->i);
         child->InsertEndChild(element);
     }
 
@@ -70,14 +70,14 @@ void SearchTree::writeToXml(TiXmlNode *child) const {
         if (i.empty()) continue;
         for (const auto &it: i) {
             if (it != min) {
-                TiXmlElement element1(Logger::tags.node);
-                element1.SetAttribute(Logger::tags.parentX, it.j);
-                element1.SetAttribute(Logger::tags.y, it.i);
-                element1.SetDoubleAttribute(Logger::tags.F, it.F);
-                element1.SetDoubleAttribute(Logger::tags.g, it.g);
+                TiXmlElement element1(Logger::Tags::node);
+                element1.SetAttribute(Logger::Tags::parentX, it.j);
+                element1.SetAttribute(Logger::Tags::y, it.i);
+                element1.SetDoubleAttribute(Logger::Tags::F, it.F);
+                element1.SetDoubleAttribute(Logger::Tags::g, it.g);
                 if (it.g > 0) {
-                    element1.SetAttribute(Logger::tags.parentX, it.parent->j);
-                    element1.SetAttribute(Logger::tags.parentY, it.parent->i);
+                    element1.SetAttribute(Logger::Tags::parentX, it.parent->j);
+                    element1.SetAttribute(Logger::Tags::parentY, it.parent->i);
                 }
                 child->InsertEndChild(element1);
             }
@@ -86,7 +86,7 @@ void SearchTree::writeToXml(TiXmlNode *child) const {
 }
 
 void SearchTree::saveToLogOpenAndClose(std::shared_ptr<Logger> &logger) const {
-    auto space = logger->logSpace<CN_LOGLVL_LOW>(Logger::tags.lowLevel);
+    auto space = logger->logSpace<Logger::Levels::low>(Logger::Tags::lowLevel);
     if (!space) {
         return;
     }
@@ -99,15 +99,15 @@ void SearchTree::saveToLogOpenAndClose(std::shared_ptr<Logger> &logger) const {
     }
 
     {
-        TiXmlElement element(Logger::tags.step);
-        element.SetAttribute(Logger::tags.number, iterate);
+        TiXmlElement element(Logger::Tags::step);
+        element.SetAttribute(Logger::Tags::number, iterate);
         curNode->InsertEndChild(element);
         curNode = curNode->LastChild();
     }
 
     {
 
-        TiXmlElement element(Logger::tags.open);
+        TiXmlElement element(Logger::Tags::open);
         curNode->InsertEndChild(element);
         child = curNode->LastChild();
     }
@@ -115,20 +115,20 @@ void SearchTree::saveToLogOpenAndClose(std::shared_ptr<Logger> &logger) const {
     writeToXml(child);
 
     {
-        TiXmlElement element(Logger::tags.close);
+        TiXmlElement element(Logger::Tags::close);
         curNode->InsertEndChild(element);
         child = curNode->LastChild();
     }
 
     for (const auto &it: close_) {
-        TiXmlElement element(Logger::tags.node);
-        element.SetAttribute(Logger::tags.parentX, it.second.j);
-        element.SetAttribute(Logger::tags.y, it.second.i);
-        element.SetDoubleAttribute(Logger::tags.F, it.second.F);
-        element.SetDoubleAttribute(Logger::tags.g, it.second.g);
+        TiXmlElement element(Logger::Tags::node);
+        element.SetAttribute(Logger::Tags::parentX, it.second.j);
+        element.SetAttribute(Logger::Tags::y, it.second.i);
+        element.SetDoubleAttribute(Logger::Tags::F, it.second.F);
+        element.SetDoubleAttribute(Logger::Tags::g, it.second.g);
         if (it.second.g > 0) {
-            element.SetAttribute(Logger::tags.parentX, it.second.parent->j);
-            element.SetAttribute(Logger::tags.parentY, it.second.parent->i);
+            element.SetAttribute(Logger::Tags::parentX, it.second.parent->j);
+            element.SetAttribute(Logger::Tags::parentY, it.second.parent->i);
         }
         child->InsertEndChild(element);
     }

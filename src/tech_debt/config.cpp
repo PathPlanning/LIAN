@@ -20,6 +20,12 @@ namespace {
     constexpr auto tagNumOfParentsToIncRadius = "numOfParentsToIncreaseRadius";
     constexpr auto tagOptions = "options";
     constexpr auto tagLogLevel = "loglevel";
+ 
+    constexpr auto defaultWeight = 2;
+
+    constexpr auto CN_PTD_DDF = 1;// Value that divides distance in order to decrease radius of the step
+
+    constexpr auto CN_PTD_NOFPTOINCRAD = 2;// Number of parent vertecies that must have the same radius in order to start the increase of current radius
 }
 
 const SearchParams& Config::params() const {
@@ -56,7 +62,7 @@ Config::Config(const char* fileName) {
     // params_.doELian = serializeOrElse<int>(element, 0);
 
     element = algorithm->FirstChildElement(tagWeight);
-    params_.weight = serializeOrElse<float>(element, CN_PTD_W);
+    params_.weight = serializeOrElse<float>(element, defaultWeight);
 
     element = algorithm->FirstChildElement(tagStepLimit);
     params_.stepLimit = serializeOrElse<unsigned int>(element, 0);
