@@ -81,10 +81,10 @@ Input file should contain:
 
     * `<loglevel>` &mdash; defines the level of detalization of log-file. Default value is "1". Possible values:
         - "0" or "none" &mdash; log-file is not created.
-        - "0.5" or "tiny" &mdash; All the input data is copied to the log-file plus short `<summary>` is appended. `<summary>` contains info of the path length, number of steps, elapsed time, etc.
-        - "1" or "short" &mdash; 0.5 - log plus `<path>` is appended. It looks like `<grid>` but cells forming the path are marked by "\*" instead of "0". The following tags are also appended: `<hplevel>` and `<lplevel>`. `<lplevel>` is the sequence of coordinates of cells forming the path. `<hplevel>` is the sequence of sections forming the path.
-        - "1.5" or "medium" &mdash; 1 - log plus the information (explicit enumeration) on last iteration's OPEN and CLOSE lists.
-        - "2" or "full" &mdash; 1 - log plus OPEN and CLOSE lists are written into the log-file after each step of the algorithm. Can make log-files really huge and also slow down the whole algorithm.
+        - "2" or "short" &mdash; All the input data is copied to the log-file plus short `<summary>` is appended. `<summary>` contains info of the path length, number of steps, elapsed time, etc.
+        - "3" or "high" &mdash; 0.5 - log plus `<path>` is appended. It looks like `<grid>` but cells forming the path are marked by "\*" instead of "0". The following tags are also appended: `<hplevel>` and `<lplevel>`. `<lplevel>` is the sequence of coordinates of cells forming the path. `<hplevel>` is the sequence of sections forming the path.
+        - "4" or "medium" &mdash; 1 - log plus the information (explicit enumeration) on last iteration's OPEN and CLOSE lists.
+        - "5" or "full" &mdash; 1 - log plus OPEN and CLOSE lists are written into the log-file after each step of the algorithm. Can make log-files really huge and also slow down the whole algorithm.
 
         In order to understand differences between output files with different `<loglevel>` tags there are examples of each in [samples](https://github.com/PathPlanning/LIAN/tree/master/examples) folder.
 
