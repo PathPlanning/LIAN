@@ -21,7 +21,7 @@ Logger::Logger(int loglvl, const std::string &configFileName) : doc_(configFileN
 
 	auto root = doc_.FirstChild("root");
 
-	auto element = doc_.InsertEndChild(TiXmlElement(Logger::Tags::log));
+	auto element = root->InsertEndChild(TiXmlElement(Logger::Tags::log));
 
 	element->InsertEndChild(TiXmlElement(Logger::Tags::summary));
 
