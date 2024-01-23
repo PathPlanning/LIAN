@@ -59,6 +59,8 @@ public:
             return !(*this == other);
     }
 
+    // Warning: Order in which equal nodes would be is undefined and platform-specific.
+    // Result in different platforms may differ.
     inline bool operator<(const Node& other) const {
         return F > other.F || (F == other.F && g < other.g);
     }
