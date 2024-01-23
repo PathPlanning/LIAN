@@ -19,7 +19,7 @@ Logger::Logger(int loglvl, const std::string &configFileName) : doc_(configFileN
 	}
 	logFileName_ = value;
 
-	auto root = doc_.FirstChild(Logger::tags.root);
+	auto root = doc_.FirstChild("root");
 
 	auto element = doc_.InsertEndChild(TiXmlElement(Logger::Tags::log));
 

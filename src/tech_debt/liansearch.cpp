@@ -28,6 +28,55 @@ void saveIterationToLog(std::shared_ptr<Logger> &logger, int closeSize_, const N
     space->InsertEndChild(element);
 }
 
+void saveToLogOpenAndClose(std::shared_ptr<Logger> logger, const OpenList &open_,
+    const std::unordered_multimap<int, Node> &close_) {
+    auto space = logger->logSpace<Logger::Levels::low>(Logger::Tags::lowLevel);
+    if (!space) {
+        return;
+    }
+
+    int iterate = 0;
+    TiXmlNode *child = nullptr, *curNode = space;
+
+    while (child = curNode->IterateChildren(child)) {
+        iterate++;
+    }
+
+    {
+        TiXmlElement element(Logger::Tags::step);
+        element.SetAttribute(Logger::Tags::number, iterate);
+        curNode->InsertEndChild(element);
+        curNode = curNode->LastChild();
+    }
+
+    {
+
+        TiXmlElement element(Logger::Tags::open);
+        curNode->InsertEndChild(element);
+        child = curNode->LastChild();
+    }
+
+    open_.writeToXml(child);
+
+    {
+        TiXmlElement element(Logger::Tags::close);
+        curNode->InsertEndChild(element);
+        child = curNode->LastChild();
+    }
+
+    for (const auto &it : close_) {
+        TiXmlElement element(Logger::Tags::node);
+        element.SetAttribute(Logger::Tags::x, it.second.j);
+        element.SetAttribute(Logger::Tags::y, it.second.i);
+        element.SetDoubleAttribute(Logger::Tags::F, it.second.F);
+        element.SetDoubleAttribute(Logger::Tags::g, it.second.g);
+        if (it.second.g > 0) {
+            element.SetAttribute(Logger::Tags::parentX, it.second.parent->j);
+            element.SetAttribute(Logger::Tags::parentY, it.second.parent->i);
+        }
+        child->InsertEndChild(element);
+    }
+}
 
 std::vector<int> LianSearch::buildDistances() const {
     std::vector<int> result;
@@ -228,13 +277,13 @@ bool LianSearch::checkLineSegment(const Map& map, const Node& start, const Node&
 
 
 bool LianSearch::stopCriterion() {
-    if (search_tree_.empty()) {
+    if (open_.size() == 0) {
         std::cout << "OPEN list is empty!" << std::endl;
         return true;
     }
 
-    if (search_tree_.sizeClose() > settings_.stepLimit && settings_.stepLimit > 0) {
-        std::cout << "Algorithm exceeded step limit!" << std::endl;
+    if (close_.size() > settings_.stepLimit && settings_.stepLimit > 0) {
+        std::cout << "Algorithm esceeded step limit!" << std::endl;
         return true;
     }
     return false;
@@ -254,11 +303,12 @@ double LianSearch::calcAngle(const Node& dad, const Node& node, const Node& son)
 }
 
 SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& map) {
+    open_.resize(map.getHeight());
     Node curNode(map.start_i, map.start_j, 0.0, 0.0, 0.0);
     curNode.radius = settings_.distance;
     curNode.F = settings_.weight * getCost(curNode.i, curNode.j, map.goal_i, map.goal_j);
     bool pathFound = false;
-    search_tree_.addOpen(curNode);
+    open_.add(curNode);
     calculateCircle((int)curNode.radius);
     calculatePivotCircle();
 
@@ -266,13 +316,10 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
     begin = std::chrono::system_clock::now();
 
     while (!stopCriterion()) { // main cycle of the search
-        std::optional<Node> min = search_tree_.getOpen();
-        if (!min)
-            break;
-        curNode = *min;
-        search_tree_.addClose( curNode);
+        curNode = open_.getMin();
+        close_.insert({ curNode.convolution(map.getWidth()),curNode });
 
-        saveIterationToLog(logger, search_tree_.sizeClose(), curNode);
+        saveIterationToLog(logger, close_.size(), curNode);
 
         if (curNode.i == map.goal_i && curNode.j == map.goal_j) { // if current point is goal point - end of the cycle
             pathFound = true;
@@ -281,17 +328,17 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
 
         if (!expand(curNode, map) && distanceLookup_.size() > 1)
             while (curNode.radius > distanceLookup_[distanceLookup_.size() - 1])
-                if (tryToDecreaseRadius(curNode))
+                if (tryToDecreaseRadius(curNode, map.getWidth()))
                     if (expand(curNode, map))
                         break;
 
-        search_tree_.saveToLogOpenAndClose(logger);
+        saveToLogOpenAndClose(logger, open_, close_);
     }
 
-    search_tree_.saveToLogOpenAndClose(logger);
+    saveToLogOpenAndClose(logger, open_, close_);
 
-    sresult_.nodesCreated = search_tree_.sizeOpen() + search_tree_.sizeClose();
-    sresult_.numberOfSteps = search_tree_.sizeClose();
+    sresult_.nodesCreated = open_.size() + close_.size();
+    sresult_.numberOfSteps = close_.size();
     if (pathFound) {
         sresult_.pathLength = curNode.g;
         makePrimaryPath(&curNode);
@@ -332,18 +379,23 @@ void LianSearch::updateOpen(const Node& current_node, Node &new_node, bool& succ
         }
     }
 
-    auto range = search_tree_.findCloseRange(new_node);
-    for (auto it = range.first; it != range.second; ++it) {
-        Node *parent = it->second.parent;
-        if (parent == nullptr || *parent == current_node) {
-            return;
+    auto it = close_.find(new_node.convolution(map.getWidth()));
+    if (it != close_.end()) {
+        auto range = close_.equal_range(it->first);
+        for (auto it = range.first; it != range.second; ++it) {
+            if (it->second.parent == nullptr) {
+                return;
+            }
+            if (it->second.parent->i == current_node.i && it->second.parent->j == current_node.j) {
+                return;
+            }
         }
     }
 
     if (distanceLookup_.size() > 1) {
         new_node.radius = tryToIncreaseRadius(&new_node);
     }
-    search_tree_.addOpen(new_node);
+    open_.add(new_node);
     successors = true;
 }
 
@@ -352,7 +404,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
     std::vector<circleNode> circle_nodes = circleNodes_[distanceLookup_.rend() - radiusIter];
     
     bool successors_are_fine = false;
-    Node *curNodeFromClose = search_tree_.findClose(curNode);
+    auto parent = &(close_.find(curNode.convolution(map.getWidth()))->second);
     auto tryUpdateOpen = [&](auto& node, bool updateAngle = false, bool usesCurvatureHeuristicWeight = true) {
         double angle = fabs(curNode.angle - node.heading);
         if (!(angle <= 180 && angle <= settings_.angleLimit) && !(angle > 180 && 360 - angle <= settings_.angleLimit)) {
@@ -373,7 +425,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
                 settings_.curvatureHeuristicWeight * (float)settings_.distance * fabs(curNode.angle - newNode.angle) : 0.0);
         newNode.radius = curNode.radius;
         newNode.angle = node.heading;
-        newNode.parent = curNodeFromClose;
+        newNode.parent = parent;
 
         updateOpen(curNode, newNode, successors_are_fine, map);
         return true; // this is okay
@@ -421,7 +473,7 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
         if (fabs(angle * 180 / std::numbers::pi) <= settings_.angleLimit) {
             Node newNode = Node(map.goal_i, map.goal_j,
                 curNode.g + getCost(curNode.i, curNode.j, map.goal_i, map.goal_j), 0.0,
-                curNode.radius, curNodeFromClose, settings_.curvatureHeuristicWeight * settings_.distance, 0.0);
+                curNode.radius, parent, settings_.curvatureHeuristicWeight * settings_.distance, 0.0);
 
             updateOpen(curNode, newNode, successors_are_fine, map);
         }
@@ -454,18 +506,19 @@ int LianSearch::tryToIncreaseRadius(Node *curNode) {
     return curNode->radius;
 }
 
-bool LianSearch::tryToDecreaseRadius(Node &curNode) {
+bool LianSearch::tryToDecreaseRadius(Node &curNode, int width) {
     auto radiusIter = std::lower_bound(distanceLookup_.rbegin(), distanceLookup_.rend(), curNode.radius);
     if (radiusIter == distanceLookup_.rbegin()) {
         return false;
     }
 
     curNode.radius = *(radiusIter - 1);
-    auto range = search_tree_.findCloseRange(curNode);
-    for (auto &it = range.first; it != range.second; ++it) {
-        Node &nodeFromClose = it->second;
-        if (areFromSameSource(curNode, nodeFromClose)) {
-            nodeFromClose.radius = curNode.radius;
+    auto it = close_.find(curNode.convolution(width));
+    auto range = close_.equal_range(it->first);
+    for (auto it = range.first; it != range.second; ++it) {
+        if (it->second.parent && it->second.parent->i == curNode.parent->i
+            && it->second.parent->j == curNode.parent->j) {
+            it->second.radius = curNode.radius;
             break;
         }
     }
