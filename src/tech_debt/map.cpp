@@ -1,5 +1,19 @@
-#include "xmlUtils.h"
+#include "xml_utils.h"
 #include "map.h"
+
+namespace {
+    constexpr auto tagRoot = "root";
+    constexpr auto tagMap = "map";
+    constexpr auto tagHeight = "height";
+    constexpr auto tagWidth = "width";
+    constexpr auto tagStartX = "startx";
+    constexpr auto tagStartY = "starty";
+    constexpr auto tagFinishX = "finishx";
+    constexpr auto tagFinishY = "finishy";
+    constexpr auto tagCellSize = "cellsize";
+    constexpr auto tagGrid = "grid";
+    constexpr auto tagRow = "row";
+}
 
 std::vector<int>& Map::operator[](int i) {
     return grid_[i];
@@ -38,53 +52,53 @@ Map::Map(const char* FileName) {
         throw std::runtime_error("Error openning input XML file");
     }
 
-    auto root = doc.FirstChildElement(CNS_TAG_ROOT);
+    auto root = doc.FirstChildElement(tagRoot);
     if (!root) {
         std::ostringstream err_oss;
-        err_oss << "Error! No '" << CNS_TAG_ROOT << "' element found in XML file";
+        err_oss << "Error! No '" << tagRoot << "' element found in XML file";
         throw std::runtime_error(err_oss.str());
     }
 
-    TiXmlElement *map = getElement(root, CNS_TAG_MAP, CNS_TAG_ROOT);
+    TiXmlElement *map = getElement(root, tagMap, tagRoot);
 
-    auto element = getElement(map, CNS_TAG_HEIGHT, CNS_TAG_MAP);
+    auto element = getElement(map, tagHeight, tagMap);
     height_ = std::abs(serialize<int>(element));
 
-    element = getElement(map, CNS_TAG_WIDTH, CNS_TAG_MAP);
+    element = getElement(map, tagWidth, tagMap);
     width_ = std::abs(serialize<int>(element));
 
-    element = getElement(map, CNS_TAG_CELLSIZE, CNS_TAG_MAP);
+    element = getElement(map, tagCellSize, tagMap);
     cellSize_ = std::abs(serialize<int>(element));
 
 
-    element = getElement(map, CNS_TAG_SX, CNS_TAG_MAP);
+    element = getElement(map, tagStartX, tagMap);
     start_j = serialize<int>(element);
 
-    element = getElement(map, CNS_TAG_SY, CNS_TAG_MAP);
+    element = getElement(map, tagStartY, tagMap);
     start_i = serialize<int>(element);
 
-    element = getElement(map, CNS_TAG_FX, CNS_TAG_MAP);
+    element = getElement(map, tagFinishX, tagMap);
     goal_j = serialize<int>(element);
 
-    element = getElement(map, CNS_TAG_FY, CNS_TAG_MAP);
+    element = getElement(map, tagFinishY, tagMap);
     goal_i = serialize<int>(element);
 
-    element = getElement(map, CNS_TAG_GRID, CNS_TAG_MAP);
+    element = getElement(map, tagGrid, tagMap);
     grid_.reserve(height_);
 
-    element = element->FirstChildElement(CNS_TAG_ROW);
+    element = element->FirstChildElement(tagRow);
 
     for (int curY = 0; curY < height_; ++curY) {
         if (!element) {
             std::ostringstream err_oss;
-            err_oss << "Not enough '" << CNS_TAG_ROW << "' in '" << CNS_TAG_GRID << "' given.";
+            err_oss << "Not enough '" << tagRow << "' in '" << tagGrid << "' given.";
             throw std::runtime_error(err_oss.str());
         }
 
         grid_.push_back(serializeVector<int>(element));
         if (grid_.back().size() != width_) {
             std::ostringstream err_oss;
-            err_oss << "Wrong amount of cells in '" << CNS_TAG_ROW << "' " << curY << " given.";
+            err_oss << "Wrong amount of cells in '" << tagRow << "' " << curY << " given.";
             throw std::runtime_error(err_oss.str());
         }
         element = element->NextSiblingElement();

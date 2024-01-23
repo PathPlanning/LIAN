@@ -13,7 +13,7 @@ add_executable(LianSearch
 		src/tech_debt/map.cpp
 		src/tech_debt/mission.cpp
 		src/tech_debt/logger.cpp
-		src/tech_debt/xmlUtils.cpp
+		src/tech_debt/xml_utils.cpp
 
         src/tech_debt/search_result.h
 		src/tech_debt/gl_const.h
@@ -24,6 +24,6 @@ add_executable(LianSearch
 		src/tech_debt/map.h
 		src/tech_debt/logger.h
 		src/tech_debt/mission.h
-		src/tech_debt/xmlUtils.h)
+		src/tech_debt/xml_utils.h)
 target_link_libraries(LianSearch PUBLIC tinyxml)
 target_include_directories(LianSearch PUBLIC contrib)

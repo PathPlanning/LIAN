@@ -56,13 +56,13 @@ void SearchTree::writeToXml(TiXmlNode *child) const {
         }
     }
     if (min.F != std::numeric_limits<float>::infinity()) {
-        TiXmlElement element(CNS_TAG_NODE);
-        element.SetAttribute(CNS_TAG_ATTR_X, min.j);
-        element.SetAttribute(CNS_TAG_ATTR_Y, min.i);
-        element.SetDoubleAttribute(CNS_TAG_ATTR_F, min.F);
-        element.SetDoubleAttribute(CNS_TAG_ATTR_G, min.g);
-        element.SetAttribute(CNS_TAG_ATTR_PARX, min.parent->j);
-        element.SetAttribute(CNS_TAG_ATTR_PARY, min.parent->i);
+        TiXmlElement element(Logger::tags.node);
+        element.SetAttribute(Logger::tags.parentX, min.j);
+        element.SetAttribute(Logger::tags.y, min.i);
+        element.SetDoubleAttribute(Logger::tags.F, min.F);
+        element.SetDoubleAttribute(Logger::tags.g, min.g);
+        element.SetAttribute(Logger::tags.parentX, min.parent->j);
+        element.SetAttribute(Logger::tags.parentY, min.parent->i);
         child->InsertEndChild(element);
     }
 
@@ -70,14 +70,14 @@ void SearchTree::writeToXml(TiXmlNode *child) const {
         if (i.empty()) continue;
         for (const auto &it: i) {
             if (it != min) {
-                TiXmlElement element1(CNS_TAG_NODE);
-                element1.SetAttribute(CNS_TAG_ATTR_X, it.j);
-                element1.SetAttribute(CNS_TAG_ATTR_Y, it.i);
-                element1.SetDoubleAttribute(CNS_TAG_ATTR_F, it.F);
-                element1.SetDoubleAttribute(CNS_TAG_ATTR_G, it.g);
+                TiXmlElement element1(Logger::tags.node);
+                element1.SetAttribute(Logger::tags.parentX, it.j);
+                element1.SetAttribute(Logger::tags.y, it.i);
+                element1.SetDoubleAttribute(Logger::tags.F, it.F);
+                element1.SetDoubleAttribute(Logger::tags.g, it.g);
                 if (it.g > 0) {
-                    element1.SetAttribute(CNS_TAG_ATTR_PARX, it.parent->j);
-                    element1.SetAttribute(CNS_TAG_ATTR_PARY, it.parent->i);
+                    element1.SetAttribute(Logger::tags.parentX, it.parent->j);
+                    element1.SetAttribute(Logger::tags.parentY, it.parent->i);
                 }
                 child->InsertEndChild(element1);
             }
@@ -86,7 +86,7 @@ void SearchTree::writeToXml(TiXmlNode *child) const {
 }
 
 void SearchTree::saveToLogOpenAndClose(std::shared_ptr<Logger> &logger) const {
-    auto space = logger->logSpace<CN_LOGLVL_LOW>(CNS_TAG_LOWLEVEL);
+    auto space = logger->logSpace<CN_LOGLVL_LOW>(Logger::tags.lowLevel);
     if (!space) {
         return;
     }
@@ -99,15 +99,15 @@ void SearchTree::saveToLogOpenAndClose(std::shared_ptr<Logger> &logger) const {
     }
 
     {
-        TiXmlElement element(CNS_TAG_STEP);
-        element.SetAttribute(CNS_TAG_ATTR_NUM, iterate);
+        TiXmlElement element(Logger::tags.step);
+        element.SetAttribute(Logger::tags.number, iterate);
         curNode->InsertEndChild(element);
         curNode = curNode->LastChild();
     }
 
     {
 
-        TiXmlElement element(CNS_TAG_OPEN);
+        TiXmlElement element(Logger::tags.open);
         curNode->InsertEndChild(element);
         child = curNode->LastChild();
     }
@@ -115,20 +115,20 @@ void SearchTree::saveToLogOpenAndClose(std::shared_ptr<Logger> &logger) const {
     writeToXml(child);
 
     {
-        TiXmlElement element(CNS_TAG_CLOSE);
+        TiXmlElement element(Logger::tags.close);
         curNode->InsertEndChild(element);
         child = curNode->LastChild();
     }
 
     for (const auto &it: close_) {
-        TiXmlElement element(CNS_TAG_NODE);
-        element.SetAttribute(CNS_TAG_ATTR_X, it.second.j);
-        element.SetAttribute(CNS_TAG_ATTR_Y, it.second.i);
-        element.SetDoubleAttribute(CNS_TAG_ATTR_F, it.second.F);
-        element.SetDoubleAttribute(CNS_TAG_ATTR_G, it.second.g);
+        TiXmlElement element(Logger::tags.node);
+        element.SetAttribute(Logger::tags.parentX, it.second.j);
+        element.SetAttribute(Logger::tags.y, it.second.i);
+        element.SetDoubleAttribute(Logger::tags.F, it.second.F);
+        element.SetDoubleAttribute(Logger::tags.g, it.second.g);
         if (it.second.g > 0) {
-            element.SetAttribute(CNS_TAG_ATTR_PARX, it.second.parent->j);
-            element.SetAttribute(CNS_TAG_ATTR_PARY, it.second.parent->i);
+            element.SetAttribute(Logger::tags.parentX, it.second.parent->j);
+            element.SetAttribute(Logger::tags.parentY, it.second.parent->i);
         }
         child->InsertEndChild(element);
     }

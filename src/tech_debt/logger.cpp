@@ -2,46 +2,48 @@
 
 #include "logger.h"
 
-Logger::Logger(int loglvl, const std::string& configFileName) : doc_(configFileName.c_str()), logLevel_(loglvl) {
-    if (!doc_.LoadFile()) {
-        throw std::runtime_error("Error opening XML-file in getLog");
-    }
+Logger::Tags Logger::tags = {};
 
-    std::string value = configFileName;
-    size_t dotPos = value.find_last_of(".");
+Logger::Logger(int loglvl, const std::string &configFileName) : doc_(configFileName.c_str()), logLevel_(loglvl) {
+	if (!doc_.LoadFile()) {
+		throw std::runtime_error("Error opening XML-file in getLog");
+	}
 
-    if (dotPos != std::string::npos) {
-        value.insert(dotPos, CN_LOG);
-    }
-    else {
-        value += CN_LOG;
-    }
-    logFileName_ = value;
+	std::string value = configFileName;
+	size_t dotPos = value.find_last_of(".");
+
+	if (dotPos != std::string::npos) {
+		value.insert(dotPos, CN_LOG);
+	}
+	else {
+		value += CN_LOG;
+	}
+	logFileName_ = value;
 
 
-    auto element = doc_.InsertEndChild(TiXmlElement(CNS_TAG_LOG));
+	auto element = doc_.InsertEndChild(TiXmlElement(Logger::tags.log));
 
-    element->InsertEndChild(TiXmlElement(CNS_TAG_SUM));
+	element->InsertEndChild(TiXmlElement(Logger::tags.summary));
 
-    if (logLevel_ > CN_LOGLVL_TINY) {
-        element->InsertEndChild(TiXmlElement(CNS_TAG_PATH));
+	if (logLevel_ > CN_LOGLVL_TINY) {
+		element->InsertEndChild(TiXmlElement(Logger::tags.path));
 
-        element->InsertEndChild(TiXmlElement(CNS_TAG_ANGLES));
+		element->InsertEndChild(TiXmlElement(Logger::tags.angles));
 
-        element->InsertEndChild(TiXmlElement(CNS_TAG_LPLEVEL));
+		element->InsertEndChild(TiXmlElement(Logger::tags.lpLevel));
 
-        element->InsertEndChild(TiXmlElement(CNS_TAG_HPLEVEL));
-    }
+		element->InsertEndChild(TiXmlElement(Logger::tags.hpLevel));
+	}
 
-    if (logLevel_ >= CN_LOGLVL_MED) {
-        element->InsertEndChild(TiXmlElement(CNS_TAG_LOWLEVEL));
-    }
+	if (logLevel_ >= CN_LOGLVL_MED) {
+		element->InsertEndChild(TiXmlElement(Logger::tags.lowLevel));
+	}
 
-    if (logLevel_ >= CN_LOGLVL_ITER) {
-        element->InsertEndChild(TiXmlElement(CNS_TAG_ITERS));
-    }
+	if (logLevel_ >= CN_LOGLVL_ITER) {
+		element->InsertEndChild(TiXmlElement(Logger::tags.iterations));
+	}
 }
 
 Logger::~Logger() {
-    doc_.SaveFile(logFileName_.c_str());
+	doc_.SaveFile(logFileName_.c_str());
 }

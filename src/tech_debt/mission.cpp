@@ -3,7 +3,7 @@
 namespace {
     void saveSummaryToLog(std::shared_ptr<Logger> logger, const std::list<Node>& path, int numberofsteps, int nodescreated, float length, float length_scaled,
         long double time, float max_angle, float accum_angle, int sections) {
-        auto space = logger->logSpace<CN_LOGLVL_TINY>(CNS_TAG_SUM);
+        auto space = logger->logSpace<CN_LOGLVL_TINY>(Logger::tags.summary);
         if (!space) {
             return;
         }
@@ -16,51 +16,51 @@ namespace {
         stream.str("");
 
         if (path.size() == 0) {
-            space->SetAttribute(CNS_TAG_ATTR_PF, CNS_TAG_ATTR_FALSE);
+            space->SetAttribute(Logger::tags.pathFound, Logger::tags.tagFalse);
         }
         else {
-            space->SetAttribute(CNS_TAG_ATTR_PF, CNS_TAG_ATTR_TRUE);
+            space->SetAttribute(Logger::tags.pathFound, Logger::tags.tagTrue);
         }
 
-        space->SetAttribute(CNS_TAG_ATTR_NUMOFSTEPS, numberofsteps);
-        space->SetAttribute(CNS_TAG_ATTR_NODESCREATED, nodescreated);
-        space->SetAttribute(CNS_TAG_ATTR_SECTIONS, sections);
-        space->SetDoubleAttribute(CNS_TAG_ATTR_LENGTH, length);
-        space->SetDoubleAttribute(CNS_TAG_ATTR_LENGTHSC, length_scaled);
-        space->SetAttribute(CNS_TAG_ATTR_TIME, timeValue.c_str());
-        space->SetDoubleAttribute(CNS_TAG_ATTR_MAXANGLE, max_angle);
-        space->SetDoubleAttribute(CNS_TAG_ATTR_ACCUMANGLE, accum_angle);
+        space->SetAttribute(Logger::tags.numberOfSteps, numberofsteps);
+        space->SetAttribute(Logger::tags.nodesCreated, nodescreated);
+        space->SetAttribute(Logger::tags.sections, sections);
+        space->SetDoubleAttribute(Logger::tags.length, length);
+        space->SetDoubleAttribute(Logger::tags.lengthScaled, length_scaled);
+        space->SetAttribute(Logger::tags.time, timeValue.c_str());
+        space->SetDoubleAttribute(Logger::tags.maxAngle, max_angle);
+        space->SetDoubleAttribute(Logger::tags.accumAngle, accum_angle);
     }
 
     void savePathToLog(std::shared_ptr<Logger> logger, const std::list<Node>& path, const std::vector<float>& angles) {
-        auto space = logger->logSpace<CN_LOGLVL_HIGH>(CNS_TAG_LPLEVEL);
+        auto space = logger->logSpace<CN_LOGLVL_HIGH>(Logger::tags.lpLevel);
         if (!space) {
             return;
         }
 
         int64_t index = 0;
         for (auto iter = path.cbegin(); iter != path.cend(); ++iter, ++index) {
-            TiXmlElement point(CNS_TAG_NODE);
-            point.SetAttribute(CNS_TAG_ATTR_NUM, index);
-            point.SetAttribute(CNS_TAG_ATTR_X, iter->j);
-            point.SetAttribute(CNS_TAG_ATTR_Y, iter->i);
+            TiXmlElement point(Logger::tags.node);
+            point.SetAttribute(Logger::tags.number, index);
+            point.SetAttribute(Logger::tags.parentX, iter->j);
+            point.SetAttribute(Logger::tags.y, iter->i);
             space->InsertEndChild(point);
         }
 
         if (angles.size() == 0) return;
 
-        space = logger->logSpace<CN_LOGLVL_HIGH>(CNS_TAG_ANGLES);
+        space = logger->logSpace<CN_LOGLVL_HIGH>(Logger::tags.angles);
 
         for (auto iter = angles.crbegin(); iter != angles.crend(); ++iter) {
-            TiXmlElement point(CNS_TAG_ANGLE);
-            point.SetAttribute(CNS_TAG_ATTR_NUM, (iter - angles.crbegin()));
-            point.SetDoubleAttribute(CNS_TAG_ATTR_VALUE, *iter);
+            TiXmlElement point(Logger::tags.angle);
+            point.SetAttribute(Logger::tags.number, (iter - angles.crbegin()));
+            point.SetDoubleAttribute(Logger::tags.value, *iter);
             space->InsertEndChild(point);
         }
     }
 
     void saveMapToLog(std::shared_ptr<Logger> logger, const Map& map, const std::list<Node>& path) {
-        auto space = logger->logSpace<CN_LOGLVL_HIGH>(CNS_TAG_PATH);
+        auto space = logger->logSpace<CN_LOGLVL_HIGH>(Logger::tags.path);
         if (!space) {
             return;
         }
@@ -70,8 +70,8 @@ namespace {
         std::vector<int> curLine(map.getWidth(), 0);
 
         for (int i = 0; i < map.getHeight(); i++) {
-            TiXmlElement msg(CNS_TAG_ROW);
-            msg.SetAttribute(CNS_TAG_ATTR_NUM, i);
+            TiXmlElement msg(Logger::tags.row);
+            msg.SetAttribute(Logger::tags.number, i);
             text = "";
 
             for (auto iter = path.begin(); iter != path.end(); ++iter) {
@@ -100,7 +100,7 @@ namespace {
     }
 
     void saveToLogHpLevel(std::shared_ptr<Logger> logger, const std::list<Node>& path) {
-        auto space = logger->logSpace<CN_LOGLVL_HIGH>(CNS_TAG_HPLEVEL);
+        auto space = logger->logSpace<CN_LOGLVL_HIGH>(Logger::tags.hpLevel);
         if (!space) {
             return;
         }
@@ -108,13 +108,13 @@ namespace {
         auto it = path.cbegin();
 
         for (auto iter = ++path.cbegin(); iter != path.cend(); ++iter, ++it) {
-            TiXmlElement part(CNS_TAG_SECTION);
-            part.SetAttribute(CNS_TAG_ATTR_NUM, partnumber);
-            part.SetAttribute(CNS_TAG_ATTR_SX, it->j);
-            part.SetAttribute(CNS_TAG_ATTR_SY, it->i);
-            part.SetAttribute(CNS_TAG_ATTR_FX, iter->j);
-            part.SetAttribute(CNS_TAG_ATTR_FY, iter->i);
-            part.SetDoubleAttribute(CNS_TAG_ATTR_LENGTH, iter->g - it->g);
+            TiXmlElement part(Logger::tags.section);
+            part.SetAttribute(Logger::tags.number, partnumber);
+            part.SetAttribute(Logger::tags.startX, it->j);
+            part.SetAttribute(Logger::tags.startY, it->i);
+            part.SetAttribute(Logger::tags.finishX, iter->j);
+            part.SetAttribute(Logger::tags.finishY, iter->i);
+            part.SetDoubleAttribute(Logger::tags.length, iter->g - it->g);
             space->InsertEndChild(part);
             ++partnumber;
         }
