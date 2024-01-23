@@ -16,16 +16,14 @@ Algorithm supports XML files as input and output format. Input file contains map
 
 ## Getting Started
 
-To go and try this algorithm you can use QtCreator or CMake.
-Both `.pro` and `CMakeLists` files are available in the repository.
+To go and try this algorithm you can use CMake.
+`CMakeLists` file is available in the repository.
 
-Notice, that project uses C++11 standart. Make sure that your compiler supports it.
+Notice, that project uses C++20 standard. Make sure that your compiler supports it.
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-
-**[Qt Creator](https://info.qt.io/download-qt-for-device-creation?hsCtaTracking=c80600ba-f2ea-45ed-97ef-6949c1c4c236%7C643bd8f4-2c59-4c4c-ba1a-4aaa05b51086)**  &mdash; a cross-platform C++, JavaScript and QML integrated development environment which is part of the SDK for the Qt GUI Application development framework.
 
 **[CMake](https://cmake.org/)** &mdash; an open-source, cross-platform family of tools designed to build, test and package software.
 
