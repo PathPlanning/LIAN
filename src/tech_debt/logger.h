@@ -22,7 +22,7 @@ public:
         if (logLevel_ < loglvl) {
             return nullptr;
         }
-        return doc_.FirstChild(Logger::tags.log)->FirstChildElement(tagName.c_str());
+        return doc_.FirstChild(Logger::tags.root)->FirstChild(Logger::tags.log)->FirstChildElement(tagName.c_str());
     }
 private:
     struct Tags {
