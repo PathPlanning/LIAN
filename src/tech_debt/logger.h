@@ -42,7 +42,6 @@ public:
             *close = "close",
             *path = "path",
             *time = "time",
-            *x = "X",
             *y = "Y",
             *F = "F",
             *g = "g",

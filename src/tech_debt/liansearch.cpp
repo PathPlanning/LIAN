@@ -1,7 +1,7 @@
 #include "liansearch.h"
 
-#include <numbers>
 #include <cmath>
+#include <numbers>
 
 double getCost(int a_i, int a_j, int b_i, int b_j) {
     return sqrt(abs(a_i - b_i) * abs(a_i - b_i) + abs(a_j - b_j) * abs(a_j - b_j));
@@ -28,55 +28,15 @@ void saveIterationToLog(std::shared_ptr<Logger> &logger, int closeSize_, const N
     space->InsertEndChild(element);
 }
 
-void saveToLogOpenAndClose(std::shared_ptr<Logger> logger, const OpenList &open_,
-    const std::unordered_multimap<int, Node> &close_) {
-    auto space = logger->logSpace<Logger::Levels::low>(Logger::Tags::lowLevel);
-    if (!space) {
-        return;
-    }
-
-    int iterate = 0;
-    TiXmlNode *child = nullptr, *curNode = space;
-
-    while (child = curNode->IterateChildren(child)) {
-        iterate++;
-    }
-
-    {
-        TiXmlElement element(Logger::Tags::step);
-        element.SetAttribute(Logger::Tags::number, iterate);
-        curNode->InsertEndChild(element);
-        curNode = curNode->LastChild();
-    }
-
-    {
-
-        TiXmlElement element(Logger::Tags::open);
-        curNode->InsertEndChild(element);
-        child = curNode->LastChild();
-    }
-
-    open_.writeToXml(child);
-
-    {
-        TiXmlElement element(Logger::Tags::close);
-        curNode->InsertEndChild(element);
-        child = curNode->LastChild();
-    }
-
-    for (const auto &it : close_) {
-        TiXmlElement element(Logger::Tags::node);
-        element.SetAttribute(Logger::Tags::x, it.second.j);
-        element.SetAttribute(Logger::Tags::y, it.second.i);
-        element.SetDoubleAttribute(Logger::Tags::F, it.second.F);
-        element.SetDoubleAttribute(Logger::Tags::g, it.second.g);
-        if (it.second.g > 0) {
-            element.SetAttribute(Logger::Tags::parentX, it.second.parent->j);
-            element.SetAttribute(Logger::Tags::parentY, it.second.parent->i);
-        }
-        child->InsertEndChild(element);
-    }
-}
+/*
+ * // Use for more accurate time calculation
+ * #ifdef __linux__
+ *     #include <sys/time.h>
+ * #else
+ *     #include <windows.h>
+ * #endif
+ *
+*/
 
 std::vector<int> LianSearch::buildDistances() const {
     std::vector<int> result;
@@ -105,8 +65,7 @@ void LianSearch::calculateCircle(int radius) { //here radius - radius of the cir
     circleNodes_.resize(distanceLookup_.size());
     for (int k = 0; k < distanceLookup_.size(); ++k) {
         radius = distanceLookup_[k];
-        auto &circleNodesK = circleNodes_[k];
-        circleNodesK.clear();
+        circleNodes_[k].clear();
         std::vector<circleNode> circle_nodes(0);
         int x = 0;
         int y = radius;
@@ -137,29 +96,29 @@ void LianSearch::calculateCircle(int radius) { //here radius - radius of the cir
         }
 
         for (int i = 0; i < circle_nodes.size(); i += 4) {
-            circleNodesK.push_back(circle_nodes[i]);
+            circleNodes_[k].push_back(circle_nodes[i]);
         }
         for (int i = circle_nodes.size() - 7; i > 0; i -= 4) {
-            circleNodesK.push_back(circle_nodes[i]);
+            circleNodes_[k].push_back(circle_nodes[i]);
         }
         for (int i = 7; i < circle_nodes.size(); i += 4) {
-            circleNodesK.push_back(circle_nodes[i]);
+            circleNodes_[k].push_back(circle_nodes[i]);
         }
         for (int i = circle_nodes.size() - 6; i > 0; i -= 4) {
-            circleNodesK.push_back(circle_nodes[i]);
+            circleNodes_[k].push_back(circle_nodes[i]);
         }
-        circleNodesK.pop_back();
-        auto &start = circleNodesK[0];
-        for (auto &node : circleNodesK) {
-            double angle = acos((start.i * node.i + start.j * node.j)
-                / (sqrt(pow(start.i, 2) + pow(start.j, 2))
-                    * sqrt(pow(node.i, 2) + pow(node.j, 2))));
-            if (node.i >= 0) {
-                node.heading = angle * 180 / std::numbers::pi;
+        circleNodes_[k].pop_back();
+        for (size_t i = 0; i < circleNodes_[k].size(); ++i) {
+            double angle = acos((circleNodes_[k][0].i * circleNodes_[k][i].i + circleNodes_[k][0].j * circleNodes_[k][i].j)
+                / (sqrt(pow(circleNodes_[k][0].i, 2) + pow(circleNodes_[k][0].j, 2))
+                    * sqrt(pow(circleNodes_[k][i].i, 2) + pow(circleNodes_[k][i].j, 2))));
+            if (i < circleNodes_[k].size() / 2) {
+                circleNodes_[k][i].heading = angle * 180 / std::numbers::pi;
             }
             else {
-                node.heading = 360 - angle * 180 / std::numbers::pi;
+                circleNodes_[k][i].heading = 360 - angle * 180 / std::numbers::pi;
             }
+            //std::cout << circleNodes[k][i].heading  << std::endl;
         }
     }
 }
@@ -277,13 +236,13 @@ bool LianSearch::checkLineSegment(const Map& map, const Node& start, const Node&
 
 
 bool LianSearch::stopCriterion() {
-    if (open_.size() == 0) {
+    if (search_tree_.empty()) {
         std::cout << "OPEN list is empty!" << std::endl;
         return true;
     }
 
-    if (close_.size() > settings_.stepLimit && settings_.stepLimit > 0) {
-        std::cout << "Algorithm esceeded step limit!" << std::endl;
+    if (search_tree_.sizeClose() > settings_.stepLimit && settings_.stepLimit > 0) {
+        std::cout << "Algorithm exceeded step limit!" << std::endl;
         return true;
     }
     return false;
@@ -296,30 +255,43 @@ double LianSearch::calcAngle(const Node& dad, const Node& node, const Node& son)
     cos_angle /= getCost(son.i, son.j, node.i, node.j);
     cos_angle /= getCost(node.i, node.j, dad.i, dad.j);
 
-    cos_angle = std::min(cos_angle, 1.0);
-    cos_angle = std::max(cos_angle, -1.0);
+    cos_angle = std::min(cos_angle, (double)1);
+    cos_angle = std::max(cos_angle, (double)-1);
 
     return acos(cos_angle);
 }
 
 SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& map) {
-    open_.resize(map.getHeight());
     Node curNode(map.start_i, map.start_j, 0.0, 0.0, 0.0);
     curNode.radius = settings_.distance;
     curNode.F = settings_.weight * getCost(curNode.i, curNode.j, map.goal_i, map.goal_j);
     bool pathFound = false;
-    open_.add(curNode);
+    search_tree_.addOpen(curNode);
     calculateCircle((int)curNode.radius);
     calculatePivotCircle();
 
     std::chrono::time_point<std::chrono::system_clock> begin, end;
     begin = std::chrono::system_clock::now();
 
-    while (!stopCriterion()) { // main cycle of the search
-        curNode = open_.getMin();
-        close_.insert({ curNode.convolution(map.getWidth()),curNode });
+    /*
+     * #ifdef __linux__
+     *     timeval begin, end;
+     *     gettimeofday(&begin, NULL);
+     * #else
+     *     LARGE_INTEGER begin,end,freq;
+     *     QueryPerformanceCounter(&begin);
+     *     QueryPerformanceFrequency(&freq);
+     * #endif
+     */
 
-        saveIterationToLog(logger, close_.size(), curNode);
+    while (!stopCriterion()) { // main cycle of the search
+        std::optional<Node> min = search_tree_.getOpen();
+        if (!min)
+            break;
+        curNode = *min;
+        search_tree_.addClose( curNode);
+
+        saveIterationToLog(logger, search_tree_.sizeClose(), curNode);
 
         if (curNode.i == map.goal_i && curNode.j == map.goal_j) { // if current point is goal point - end of the cycle
             pathFound = true;
@@ -328,17 +300,17 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
 
         if (!expand(curNode, map) && distanceLookup_.size() > 1)
             while (curNode.radius > distanceLookup_[distanceLookup_.size() - 1])
-                if (tryToDecreaseRadius(curNode, map.getWidth()))
+                if (tryToDecreaseRadius(curNode))
                     if (expand(curNode, map))
                         break;
 
-        saveToLogOpenAndClose(logger, open_, close_);
+        search_tree_.saveToLogOpenAndClose(logger);
     }
 
-    saveToLogOpenAndClose(logger, open_, close_);
+    search_tree_.saveToLogOpenAndClose(logger);
 
-    sresult_.nodesCreated = open_.size() + close_.size();
-    sresult_.numberOfSteps = close_.size();
+    sresult_.nodesCreated = search_tree_.sizeOpen() + search_tree_.sizeClose();
+    sresult_.numberOfSteps = search_tree_.sizeClose();
     if (pathFound) {
         sresult_.pathLength = curNode.g;
         makePrimaryPath(&curNode);
@@ -356,6 +328,14 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
 
         end = std::chrono::system_clock::now();
         sresult_.time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()) / 1000000000;
+        /* // for more accurate time calculation
+       #ifdef __linux__
+           gettimeofday(&end, NULL);
+           sresult.time = (end.tv_sec - begin.tv_sec) + static_cast<double>(end.tv_usec - begin.tv_usec) / 1000000;
+       #else
+           QueryPerformanceCounter(&end);
+           sresult.time = static_cast<double long>(end.QuadPart-begin.QuadPart) / freq.QuadPart;
+       #endif */
 
         return sresult_;
     }
@@ -365,11 +345,20 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
         end = std::chrono::system_clock::now();
         sresult_.time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()) / 1000000000;
 
+        /* for more accurate time calculation
+       #ifdef __linux__
+           gettimeofday(&end, NULL);
+           sresult.time = (end.tv_sec - begin.tv_sec) + static_cast<double>(end.tv_usec - begin.tv_usec) / 1000000;
+       #else
+           QueryPerformanceCounter(&end);
+           sresult.time = static_cast<double long>(end.QuadPart-begin.QuadPart) / freq.QuadPart;
+       #endif */
+
         return sresult_;
     }
 }
 
-void LianSearch::updateOpen(const Node& current_node, Node &new_node, bool& successors, const Map& map) {
+void LianSearch::update(const Node& current_node, Node &new_node, bool& successors, const Map& map) {
     if (!checkLineSegment(map, *new_node.parent, new_node)) {
         return;
     }
@@ -379,66 +368,55 @@ void LianSearch::updateOpen(const Node& current_node, Node &new_node, bool& succ
         }
     }
 
-    auto it = close_.find(new_node.convolution(map.getWidth()));
-    if (it != close_.end()) {
-        auto range = close_.equal_range(it->first);
-        for (auto it = range.first; it != range.second; ++it) {
-            if (it->second.parent == nullptr) {
-                return;
-            }
-            if (it->second.parent->i == current_node.i && it->second.parent->j == current_node.j) {
-                return;
-            }
+    auto range = search_tree_.findCloseRange(new_node);
+    for (auto it = range.first; it != range.second; ++it) {
+        Node *parent = it->second.parent;
+        if (parent == nullptr || *parent == current_node) {
+            return;
         }
     }
 
     if (distanceLookup_.size() > 1) {
         new_node.radius = tryToIncreaseRadius(&new_node);
     }
-    open_.add(new_node);
+    search_tree_.addOpen(new_node);
     successors = true;
 }
 
 bool LianSearch::expand(const Node& curNode, const Map& map) {
-    auto radiusIter = std::upper_bound(distanceLookup_.rbegin(), distanceLookup_.rend(), curNode.radius);
-    std::vector<circleNode> circle_nodes = circleNodes_[distanceLookup_.rend() - radiusIter];
+    std::size_t current_distance;
+    for (current_distance = 0; current_distance < distanceLookup_.size(); ++current_distance) {
+        if (distanceLookup_[current_distance] == curNode.radius) {
+            break;
+        }
+    }
+
+    std::vector<circleNode> circle_nodes = circleNodes_[current_distance];
     
     bool successors_are_fine = false;
-    auto parent = &(close_.find(curNode.convolution(map.getWidth()))->second);
-    auto tryUpdateOpen = [&](auto& node, bool updateAngle = false, bool usesCurvatureHeuristicWeight = true) {
-        double angle = fabs(curNode.angle - node.heading);
-        if (!(angle <= 180 && angle <= settings_.angleLimit) && !(angle > 180 && 360 - angle <= settings_.angleLimit)) {
-            return false; // this is angle problem
-        }
-
-        int new_pos_i = curNode.i + node.i;
-        int new_pos_j = curNode.j + node.j;
-
-        if (!map.CellOnGrid(new_pos_i, new_pos_j) || map.CellIsObstacle(new_pos_i, new_pos_j)) {
-            return true; // this is okay
-        }
-        Node newNode = Node(new_pos_i, new_pos_j);
-        newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
-        newNode.angle = updateAngle ? node.heading : 0.0;
-        newNode.F = newNode.g + settings_.weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j) +
-            (usesCurvatureHeuristicWeight ?
-                settings_.curvatureHeuristicWeight * (float)settings_.distance * fabs(curNode.angle - newNode.angle) : 0.0);
-        newNode.radius = curNode.radius;
-        newNode.angle = node.heading;
-        newNode.parent = parent;
-
-        updateOpen(curNode, newNode, successors_are_fine, map);
-        return true; // this is okay
-        };
-
+    Node *curNodeFromClose = search_tree_.findClose(curNode);
     if (curNode.parent != nullptr) {
         int node_straight_ahead = (int)round(curNode.angle * circle_nodes.size() / 360) % circle_nodes.size();
-        tryUpdateOpen(circle_nodes[node_straight_ahead], true); // now we will expand neighbors that are closest to the node that lies straight ahead
+        double angle = fabs(curNode.angle - circle_nodes[node_straight_ahead].heading);
+        if ((angle <= 180 && angle <= settings_.angleLimit) || (angle > 180 && 360 - angle <= settings_.angleLimit)) {
+            int new_pos_i = curNode.i + circle_nodes[node_straight_ahead].i;
+            int new_pos_j = curNode.j + circle_nodes[node_straight_ahead].j;
+            if (map.CellOnGrid(new_pos_i, new_pos_j) && map.CellIsTraversable(new_pos_i, new_pos_j)) {
+                Node newNode = Node(new_pos_i, new_pos_j);
+                newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
+                newNode.angle = circle_nodes[node_straight_ahead].heading;
+                newNode.F = newNode.g + settings_.weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j) +
+                    settings_.curvatureHeuristicWeight * (float)settings_.distance * fabs(curNode.angle - newNode.angle);
+                newNode.radius = curNode.radius;
+                newNode.parent = curNodeFromClose;
+
+                update(curNode, newNode, successors_are_fine, map);
+            }
+        } // now we will expand neighbors that are closest to the node that lies straight ahead
 
         std::vector<int> candidates = std::vector<int>{ node_straight_ahead, node_straight_ahead };
         bool limit1 = true;
         bool limit2 = true;
-
         while (++candidates[0] != --candidates[1] && (limit1 || limit2)) { // untill the whole circle is explored or we exessed anglelimit somewhere
             if (candidates[0] >= circle_nodes.size()) {
                 candidates[0] = 0;
@@ -447,9 +425,25 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
                 candidates[1] = circle_nodes.size() - 1;
             }
 
-            for (auto &cand : candidates) {
-                if (tryUpdateOpen(circle_nodes[cand])) {
-                    continue;
+            for (auto cand : candidates) {
+                double angle = fabs(curNode.angle - circle_nodes[cand].heading);
+                if ((angle <= 180 && angle <= settings_.angleLimit) || (angle > 180 && 360 - angle <= settings_.angleLimit)) {
+                    int new_pos_i = curNode.i + circle_nodes[cand].i;
+                    int new_pos_j = curNode.j + circle_nodes[cand].j;
+
+                    if (!map.CellOnGrid(new_pos_i, new_pos_j) || map.CellIsObstacle(new_pos_i, new_pos_j)) {
+                        continue;
+                    }
+
+                    Node newNode = Node(new_pos_i, new_pos_j);
+                    newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
+                    newNode.F = newNode.g + settings_.weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j) +
+                        settings_.curvatureHeuristicWeight * (float)settings_.distance * fabs(curNode.angle - newNode.angle);
+                    newNode.radius = curNode.radius;
+                    newNode.angle = circle_nodes[cand].heading;
+                    newNode.parent = curNodeFromClose;
+
+                    update(curNode, newNode, successors_are_fine, map);
                 }
                 else if (cand == candidates[0]) {
                     limit1 = false;
@@ -461,30 +455,46 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
         }
     }
     else { // when we do not have parent, we should explore all neighbors
+        int angle_position(-1), new_pos_i, new_pos_j;
         for (auto& node : circle_nodes) {
-            tryUpdateOpen(node);
+            new_pos_i = curNode.i + node.i;
+            new_pos_j = curNode.j + node.j;
+            angle_position++;
+
+            if (!map.CellOnGrid(new_pos_i, new_pos_j) || map.CellIsObstacle(new_pos_i, new_pos_j)) {
+                continue;
+            }
+
+            Node newNode = Node(new_pos_i, new_pos_j);
+            newNode.g = curNode.g + getCost(curNode.i, curNode.j, new_pos_i, new_pos_j);
+            newNode.F = newNode.g + settings_.weight * getCost(new_pos_i, new_pos_j, map.goal_i, map.goal_j);
+            newNode.radius = curNode.radius;
+            newNode.angle = circle_nodes[angle_position].heading;
+            newNode.parent = curNodeFromClose;
+
+            update(curNode, newNode, successors_are_fine, map);
         }
     }
 
     // when we are near goal point, we should try to reach it
     if (getCost(curNode.i, curNode.j, map.goal_i, map.goal_j) <= curNode.radius) {
-        double angle = curNode.parent ? calcAngle(*curNode.parent, curNode, Node(map.goal_i, map.goal_j)) : 0.0;
+        double angle = curNode.parent != nullptr ? calcAngle(*curNode.parent, curNode, Node(map.goal_i, map.goal_j)) : 0.0;
 
         if (fabs(angle * 180 / std::numbers::pi) <= settings_.angleLimit) {
             Node newNode = Node(map.goal_i, map.goal_j,
                 curNode.g + getCost(curNode.i, curNode.j, map.goal_i, map.goal_j), 0.0,
-                curNode.radius, parent, settings_.curvatureHeuristicWeight * settings_.distance, 0.0);
+                                curNode.radius, curNodeFromClose, settings_.curvatureHeuristicWeight * settings_.distance, 0.0);
 
-            updateOpen(curNode, newNode, successors_are_fine, map);
+            update(curNode, newNode, successors_are_fine, map);
         }
     }
     return successors_are_fine;
 }
 
-int LianSearch::tryToIncreaseRadius(Node *curNode) {
+int LianSearch::tryToIncreaseRadius(Node* curNode) {
     std::size_t k = 0;
     while (k < settings_.numOfParentsToIncreaseRadius) {
-        if (!(curNode->parent && curNode->radius == curNode->parent->radius)) {
+        if (!(curNode->parent != nullptr && curNode->radius == curNode->parent->radius)) {
             break;
         }
         ++k;
@@ -506,39 +516,41 @@ int LianSearch::tryToIncreaseRadius(Node *curNode) {
     return curNode->radius;
 }
 
-bool LianSearch::tryToDecreaseRadius(Node &curNode, int width) {
+bool LianSearch::tryToDecreaseRadius(Node& curNode) {
     auto radiusIter = std::lower_bound(distanceLookup_.rbegin(), distanceLookup_.rend(), curNode.radius);
     if (radiusIter == distanceLookup_.rbegin()) {
         return false;
     }
 
     curNode.radius = *(radiusIter - 1);
-    auto it = close_.find(curNode.convolution(width));
-    auto range = close_.equal_range(it->first);
+    auto range = search_tree_.findCloseRange(curNode);
     for (auto it = range.first; it != range.second; ++it) {
-        if (it->second.parent && it->second.parent->i == curNode.parent->i
-            && it->second.parent->j == curNode.parent->j) {
-            it->second.radius = curNode.radius;
+        Node &nodeFromClose = it->second;
+        if (areFromSameSource(curNode, nodeFromClose)) {
+            nodeFromClose.radius = curNode.radius;
             break;
         }
     }
     return true;
 }
 
-void LianSearch::makePrimaryPath(Node *curNode) {
+void LianSearch::makePrimaryPath(Node* curNode) {
     while (curNode) {
         hppath_.push_front(*curNode);
         curNode = curNode->parent;
     }
 }
 
-bool LianSearch::checkAngle(const Node &dad, const Node &node, const Node &son) const {
+bool LianSearch::checkAngle(const Node& dad, const Node& node, const Node& son) const {
     double angle = calcAngle(dad, node, son) * 180 / std::numbers::pi;
-    return fabs(angle) <= settings_.angleLimit;
+    if (fabs(angle) <= settings_.angleLimit) {
+        return true;
+    }
+    return false;
 }
 
 
-std::list<Node> LianSearch::smoothPath(const std::list<Node> &path, const Map &map) {
+std::list<Node> LianSearch::smoothPath(const std::list<Node>& path, const Map& map) {
     std::list<Node> new_path;
     sresult_.pathLength = 0;
     auto it = path.begin();
@@ -549,7 +561,7 @@ std::list<Node> LianSearch::smoothPath(const std::list<Node> &path, const Map &m
     Node previous = *it++;
     while (end_section != path.back()) {
         for (it; it != path.end(); ++it) {
-            auto &next = ++it;
+            auto& next = ++it;
             --it;
             if (!first && !checkAngle(previous, start_section, *it)) {
                 continue;
@@ -573,6 +585,7 @@ std::list<Node> LianSearch::smoothPath(const std::list<Node> &path, const Map &m
 }
 
 void LianSearch::makeSecondaryPath() {
+    ;
     auto it = hppath_.begin();
     Node parent = *it++;
     while (it != hppath_.end()) {

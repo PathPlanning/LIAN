@@ -62,9 +62,13 @@ public:
     inline bool operator<(const Node& other) const {
         return F > other.F || (F == other.F && g < other.g);
     }
+};
 
-    int convolution(int width) const {
-        return i * width + j;
+template<>
+struct std::hash<Node> {
+    std::size_t operator()(const Node& node) const
+    {
+        return (size_t)node.i << 32 | (size_t)node.j;
     }
 };
 

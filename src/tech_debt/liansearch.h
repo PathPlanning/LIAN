@@ -4,7 +4,7 @@
 #include "gl_const.h"
 #include "map.h"
 #include "node.h"
-#include "open_list.h"
+#include "search_tree.h"
 #include "search_result.h"
 #include "config.h"
 #include "logger.h"
@@ -15,7 +15,6 @@
 #include <limits>
 #include <vector>
 #include <memory>
-#include <unordered_map>
 
 class LianSearch {
 public:
@@ -31,10 +30,9 @@ private:
     std::vector<std::pair<int,int> > pivotCircle_;  // Vector of nodes (shifts) for pivot security check
     std::vector<float> angles_;
     std::list<Node> lppath_, hppath_; // Final path in two representations
-    OpenList open_; // consists of `open` (list of nodes waiting for expanding) \
+    SearchTree search_tree_; // consists of `open` (list of nodes waiting for expanding) \
                              // and `close` (list of nodes that were already expanded)
 
-    std::unordered_multimap<int, Node> close_;
      // Called on construction
     std::vector<int> buildDistances() const;
 
@@ -55,9 +53,9 @@ private:
 
     // todo: what is this?!
     int tryToIncreaseRadius(Node* curNode);
-    bool tryToDecreaseRadius(Node &curNode, int width);
+    bool tryToDecreaseRadius(Node &curNode);
 
-    void updateOpen(const Node& current_node, Node &new_node, bool &successors, const Map &map);
+    void update(const Node& current_node, Node &new_node, bool &successors, const Map &map);
     bool expand(const Node& curNode, const Map &map);
     std::list<Node> smoothPath(const std::list<Node>& path, const Map& map);
     void makePrimaryPath(Node* curNode);
