@@ -1,8 +1,6 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include "gl_const.h"
-
 #include <limits>
 #include <list>
 #include <iostream>

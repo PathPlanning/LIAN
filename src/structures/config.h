@@ -1,7 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "gl_const.h"
 #include "tinyxml/tinyxml.h"
 #include "tinyxml/tinystr.h"
 

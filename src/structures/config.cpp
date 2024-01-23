@@ -1,9 +1,7 @@
 #include "config.h"
 
-#include "gl_const.h"
 #include "tinyxml/tinyxml.h"
-#include "tinyxml/tinystr.h"
-#include "xml_utils.h"
+#include "../log/xml_utils.h"
 
 namespace {
     constexpr auto tagRoot = "root";

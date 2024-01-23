@@ -3,7 +3,7 @@
 
 #include "node.h"
 #include "map.h"
-#include "logger.h"
+#include "../log/logger.h"
 #include "tinyxml/tinyxml.h"
 #include "tinyxml/tinystr.h"
 

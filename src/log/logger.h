@@ -5,9 +5,6 @@
 #include "gl_const.h"
 #include "tinyxml/tinyxml.h"
 
-
-
-
 class Logger {
 public:
     Logger(int loglvl, const std::string& configFileName);

@@ -2,8 +2,8 @@
 #define MISSION_H
 
 #include "config.h"
-#include "liansearch.h"
-#include "logger.h"
+#include "../liansearch.h"
+#include "../log/logger.h"
 #include "map.h"
 #include "search_result.h"
 

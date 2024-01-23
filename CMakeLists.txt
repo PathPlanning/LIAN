@@ -6,24 +6,24 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -Wall")
 add_subdirectory(contrib)
 
 add_executable(LianSearch
-		src/tech_debt/main.cpp
-		src/tech_debt/liansearch.cpp
-		src/tech_debt/search_tree.cpp
-		src/tech_debt/config.cpp
-		src/tech_debt/map.cpp
-		src/tech_debt/mission.cpp
-		src/tech_debt/logger.cpp
-		src/tech_debt/xml_utils.cpp
+		src/main.cpp
+		src/liansearch.cpp
+		src/structures/search_tree.cpp
+		src/structures/config.cpp
+		src/structures/map.cpp
+		src/structures/mission.cpp
+		src/log/logger.cpp
+		src/log/xml_utils.cpp
 
-		src/tech_debt/search_result.h
-		src/tech_debt/gl_const.h
-		src/tech_debt/liansearch.h
-		src/tech_debt/node.h
-		src/tech_debt/search_tree.h
-		src/tech_debt/config.h
-		src/tech_debt/map.h
-		src/tech_debt/logger.h
-		src/tech_debt/mission.h
-		src/tech_debt/xml_utils.h)
+		src/structures/search_result.h
+		src/log/gl_const.h
+		src/liansearch.h
+		src/structures/node.h
+		src/structures/search_tree.h
+		src/structures/config.h
+		src/structures/map.h
+		src/log/logger.h
+		src/structures/mission.h
+		src/log/xml_utils.h)
 target_link_libraries(LianSearch PUBLIC tinyxml)
 target_include_directories(LianSearch PUBLIC contrib)

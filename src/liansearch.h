@@ -1,13 +1,12 @@
 #ifndef LIANSEARCH_H
 #define LIANSEARCH_H
 
-#include "gl_const.h"
-#include "map.h"
-#include "node.h"
-#include "search_tree.h"
-#include "search_result.h"
-#include "config.h"
-#include "logger.h"
+#include "structures/map.h"
+#include "structures/node.h"
+#include "structures/search_tree.h"
+#include "structures/search_result.h"
+#include "structures/config.h"
+#include "log/logger.h"
 
 #include <chrono>
 #include <cmath>
