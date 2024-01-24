@@ -50,9 +50,8 @@ private:
 
     bool stopCriterion(); // Check for the ending criteria. Return true if the algorithm should be stopped
 
-    // todo: what is this?!
-    int tryToIncreaseRadius(Node* curNode);
-    bool tryToDecreaseRadius(Node &curNode);
+    bool tryIncreaseRadius(Node &node);
+    bool tryDecreaseRadius(Node &node);
 
     void update(const Node& current_node, Node &new_node, bool &successors, const Map &map);
     bool expand(const Node& curNode, const Map &map);

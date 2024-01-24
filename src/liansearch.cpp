@@ -300,7 +300,7 @@ SearchResult LianSearch::startSearch(std::shared_ptr<Logger> logger, const Map& 
 
         if (!expand(curNode, map) && distanceLookup_.size() > 1)
             while (curNode.radius > distanceLookup_[distanceLookup_.size() - 1])
-                if (tryToDecreaseRadius(curNode))
+                if (tryDecreaseRadius(curNode))
                     if (expand(curNode, map))
                         break;
 
@@ -377,7 +377,7 @@ void LianSearch::update(const Node& current_node, Node &new_node, bool& successo
     }
 
     if (distanceLookup_.size() > 1) {
-        new_node.radius = tryToIncreaseRadius(&new_node);
+        tryIncreaseRadius(new_node);
     }
     search_tree_.addOpen(new_node);
     successors = true;
@@ -491,43 +491,40 @@ bool LianSearch::expand(const Node& curNode, const Map& map) {
     return successors_are_fine;
 }
 
-int LianSearch::tryToIncreaseRadius(Node* curNode) {
+bool LianSearch::tryIncreaseRadius(Node &node) {
+	Node *iterNode = &node;
     std::size_t k = 0;
     while (k < settings_.numOfParentsToIncreaseRadius) {
-        if (!(curNode->parent != nullptr && curNode->radius == curNode->parent->radius)) {
+        if (!(iterNode->parent != nullptr && iterNode->radius == iterNode->parent->radius)) {
             break;
         }
         ++k;
-        curNode = curNode->parent;
+		iterNode = iterNode->parent;
     }
-    std::ptrdiff_t i;
-    bool change = false;
+	int result_radius = iterNode->radius;
     if (k == settings_.numOfParentsToIncreaseRadius) {
-        for (i = distanceLookup_.size() - 1; i >= 0; --i) {
-            if (curNode->radius == distanceLookup_[i]) {
-                break;
-            }
-        }
-        change = i > 0;
+		auto radiusIter = std::lower_bound(distanceLookup_.rbegin(), distanceLookup_.rend(), node.radius);
+		if ((radiusIter + 1) != distanceLookup_.rend()) {
+			result_radius = *(radiusIter + 1);
+		}
     }
-    if (change) {
-        return distanceLookup_[i - 1];
-    }
-    return curNode->radius;
+	bool change = (result_radius != node.radius);
+	node.radius = result_radius;
+	return change;
 }
 
-bool LianSearch::tryToDecreaseRadius(Node& curNode) {
-    auto radiusIter = std::lower_bound(distanceLookup_.rbegin(), distanceLookup_.rend(), curNode.radius);
+bool LianSearch::tryDecreaseRadius(Node& node) {
+    auto radiusIter = std::lower_bound(distanceLookup_.rbegin(), distanceLookup_.rend(), node.radius);
     if (radiusIter == distanceLookup_.rbegin()) {
         return false;
     }
 
-    curNode.radius = *(radiusIter - 1);
-    auto range = search_tree_.findCloseRange(curNode);
+	node.radius = *(radiusIter - 1);
+    auto range = search_tree_.findCloseRange(node);
     for (auto it = range.first; it != range.second; ++it) {
         Node &nodeFromClose = it->second;
-        if (areFromSameSource(curNode, nodeFromClose)) {
-            nodeFromClose.radius = curNode.radius;
+        if (areFromSameSource(node, nodeFromClose)) {
+            nodeFromClose.radius = node.radius;
             break;
         }
     }
