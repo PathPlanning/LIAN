@@ -16,16 +16,14 @@ Algorithm supports XML files as input and output format. Input file contains map
 
 ## Getting Started
 
-To go and try this algorithm you can use QtCreator or CMake.
-Both `.pro` and `CMakeLists` files are available in the repository.
+To go and try this algorithm you can use CMake.
+`CMakeLists` file is available in the repository.
 
-Notice, that project uses C++11 standart. Make sure that your compiler supports it.
+Notice, that project uses C++20 standard. Make sure that your compiler supports it.
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-
-**[Qt Creator](https://info.qt.io/download-qt-for-device-creation?hsCtaTracking=c80600ba-f2ea-45ed-97ef-6949c1c4c236%7C643bd8f4-2c59-4c4c-ba1a-4aaa05b51086)**  &mdash; a cross-platform C++, JavaScript and QML integrated development environment which is part of the SDK for the Qt GUI Application development framework.
 
 **[CMake](https://cmake.org/)** &mdash; an open-source, cross-platform family of tools designed to build, test and package software.
 
@@ -83,10 +81,10 @@ Input file should contain:
 
     * `<loglevel>` &mdash; defines the level of detalization of log-file. Default value is "1". Possible values:
         - "0" or "none" &mdash; log-file is not created.
-        - "0.5" or "tiny" &mdash; All the input data is copied to the log-file plus short `<summary>` is appended. `<summary>` contains info of the path length, number of steps, elapsed time, etc.
-        - "1" or "short" &mdash; 0.5 - log plus `<path>` is appended. It looks like `<grid>` but cells forming the path are marked by "\*" instead of "0". The following tags are also appended: `<hplevel>` and `<lplevel>`. `<lplevel>` is the sequence of coordinates of cells forming the path. `<hplevel>` is the sequence of sections forming the path.
-        - "1.5" or "medium" &mdash; 1 - log plus the information (explicit enumeration) on last iteration's OPEN and CLOSE lists.
-        - "2" or "full" &mdash; 1 - log plus OPEN and CLOSE lists are written into the log-file after each step of the algorithm. Can make log-files really huge and also slow down the whole algorithm.
+        - "2" or "short" &mdash; All the input data is copied to the log-file plus short `<summary>` is appended. `<summary>` contains info of the path length, number of steps, elapsed time, etc.
+        - "3" or "high" &mdash; 0.5 - log plus `<path>` is appended. It looks like `<grid>` but cells forming the path are marked by "\*" instead of "0". The following tags are also appended: `<hplevel>` and `<lplevel>`. `<lplevel>` is the sequence of coordinates of cells forming the path. `<hplevel>` is the sequence of sections forming the path.
+        - "4" or "medium" &mdash; 1 - log plus the information (explicit enumeration) on last iteration's OPEN and CLOSE lists.
+        - "5" or "full" &mdash; 1 - log plus OPEN and CLOSE lists are written into the log-file after each step of the algorithm. Can make log-files really huge and also slow down the whole algorithm.
 
         In order to understand differences between output files with different `<loglevel>` tags there are examples of each in [samples](https://github.com/PathPlanning/LIAN/tree/master/examples) folder.
 

@@ -50,7 +50,7 @@
         <numOfParentsToIncreaseRadius>2</numOfParentsToIncreaseRadius>
     </algorithm>
     <options>
-        <loglevel>1</loglevel>
+        <loglevel>3</loglevel>
         <logpath />
         <logfilename />
     </options>
